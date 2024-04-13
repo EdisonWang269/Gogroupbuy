@@ -8,7 +8,7 @@ import git
 
 app = Flask(__name__)
 
-config_path = '/home/wangpython/Gogroupbuy/config.ini'
+config_path = '/home/wangpython/Gogroupbuy/backend/config.ini'
 
 config = configparser.ConfigParser()
 config.read(config_path)
