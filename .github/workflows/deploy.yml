@@ -18,6 +18,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PYTHONANYWHERE_SSH_KEY }}
 
-      - name: Deploy to PythonAnywhere
+      - name: Run deployment script on PythonAnywhere
         run: |
-          rsync -avz --exclude='.git/' --exclude='*.pyc' ./backend/ wangpython@ssh.pythonanywhere.com:/home/wangpython/Gogroupbuy/backend
+          ssh wangpython@wangpython.pythonanywhere.com 'bash -s' << 'ENDSSH'
+          cd /home/wangpython/Gogroupbuy
+          git pull origin master
+          # Add any additional deployment steps here
+          touch /var/www/wangpython_pythonanywhere_com_wsgi.py
+          echo "Deployment completed."
+          ENDSSH
