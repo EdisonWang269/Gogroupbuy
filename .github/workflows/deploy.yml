@@ -3,7 +3,7 @@ name: Deploy Backend to PythonAnywhere
 on:
   push:
     branches:
-      - master  # 可以更改為你的主要分支
+      - master
 
 jobs:
   deploy:
@@ -20,4 +20,4 @@ jobs:
 
       - name: Deploy to PythonAnywhere
         run: |
-          rsync -avz --exclude='.git/' --exclude='*.pyc' ./backend/ username@ssh.pythonanywhere.com:/path/to/backend
+          rsync -avz --exclude='.git/' --exclude='*.pyc' ./backend/ wangpython@ssh.pythonanywhere.com:/home/wangpython/Gogroupbuy/backend
