@@ -18,10 +18,8 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PYTHONANYWHERE_SSH_KEY }}
 
-      - name: Add PythonAnywhere host key to known_hosts
-        run: ssh-keyscan -H ssh.pythonanywhere.com >> ~/.ssh/known_hosts
-
       - name: Deploy to PythonAnywhere
         run: |
-          rsync -avz --exclude='.git/' --exclude='*.pyc' ./backend/ wangpython@ssh.pythonanywhere.com:/home/wangpython/Gogroupbuy/backend
+          rsync -avz --exclude='.git/' --exclude='*.pyc' -e "ssh -o StrictHostKeyChecking=no" ./backend/ wangpython@ssh.pythonanywhere.com:/home/wangpython/Gogroupbuy/backend
+
 
