@@ -17,8 +17,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
           ssh-keyscan wangpython.pythonanywhere.com >> ~/.ssh/known_hosts
-          eval $(ssh-agent)
-          ssh-add - <<< "${{ secrets.PYTHONANYWHERE_SSH_KEY }}"
+          echo "${{ secrets.PYTHONANYWHERE_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: Run deployment script on PythonAnywhere
         run: |
