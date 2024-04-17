@@ -25,9 +25,10 @@ jobs:
 
     - name: Pull latest code on PythonAnywhere
       run: |
-        curl -X POST \
-             -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
-              https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/consoles/33326347/send_input/?input=git pull origin master
+    curl -X POST \
+         -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
+         -F script=@"update_backend.sh" \
+         https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/home/wangpython/Gogroupbuy/backend
 
     - name: Reload webapp
       uses: jensvog/pythonanywhere-webapp-reload-action@v1
