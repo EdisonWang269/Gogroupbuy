@@ -32,7 +32,7 @@ jobs:
         curl -X POST \
              -u $PYTHONANYWHERE_USERNAME:$PYTHONANYWHERE_API_KEY \
              https://www.pythonanywhere.com/api/v0/user/$PYTHONANYWHERE_USERNAME/consoles/bash/ \
-             -d command="cd /home/wangpython/Gogroupbuy/backend && git pull origin master"
+             -d command="cd /home/wangpython/Gogroupbuy && git pull origin master"
 
     - name: Reload webapp
       uses: jensvog/pythonanywhere-webapp-reload-action@v1
