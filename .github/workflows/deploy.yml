@@ -24,10 +24,6 @@ jobs:
       run: pip install -r backend/requirements.txt
 
     - name: Pull latest code on PythonAnywhere
-      env:
-        PYTHONANYWHERE_USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
-        PYTHONANYWHERE_API_KEY: ${{ secrets.PYTHONANYWHERE_API_KEY }}
-        PYTHONANYWHERE_DOMAIN_NAME: ${{ secrets.PYTHONANYWHERE_DOMAIN_NAME }}
       run: |
         curl -X GET \
              -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
