@@ -30,8 +30,8 @@ jobs:
         PYTHONANYWHERE_DOMAIN_NAME: ${{ secrets.PYTHONANYWHERE_DOMAIN_NAME }}
       run: |
         curl -X GET \
-             -H 'Authorization: Token $PYTHONANYWHERE_API_KEY' \
-              https://www.pythonanywhere.com/api/v0/user/$PYTHONANYWHERE_USERNAME/consoles/bash/ \
+             -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
+              https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/consoles/bash/ \
              -d command="cd /home/wangpython/Gogroupbuy/backend && git pull origin master"
 
     - name: Reload webapp
