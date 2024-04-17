@@ -27,8 +27,7 @@ jobs:
       run: |
         curl -X GET \
              -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
-              https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/consoles/bash/ \
-             -d command="cd /home/wangpython/Gogroupbuy/backend && git pull origin master"
+              https://www.pythonanywhere.com/api/v0/user/{username}/consoles/33326347/send_input/?input=git pull origin master
 
     - name: Reload webapp
       uses: jensvog/pythonanywhere-webapp-reload-action@v1
