@@ -35,11 +35,11 @@ def callback():
 
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-    
+
     try:
         print(body, signature)
         handler.handle(body, signature)
-        
+
     except InvalidSignatureError:
         abort(400)
 
@@ -47,9 +47,9 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def pretty_echo(event):
-    
+
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef":
-        
+
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=event.message.text)
