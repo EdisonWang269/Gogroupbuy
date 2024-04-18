@@ -23,11 +23,18 @@ jobs:
     - name: Install dependencies
       run: pip install -r backend/requirements.txt
 
+    - name: Execute cd on PythonAnywhere
+      run: |
+        curl -X POST \
+            -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
+            -d 'input=cd /home/wangpython/Gogroupbuy + "\n"' \
+            https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/consoles/33326347/send_input/
+
     - name: Pull latest code on PythonAnywhere
       run: |
         curl -X POST \
             -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
-            -d 'input=cd /home/wangpython/Gogroupbuy \&\& git pull\n' \
+            -d 'input=git pull + "\n"' \
             https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/consoles/33326347/send_input/
 
 
