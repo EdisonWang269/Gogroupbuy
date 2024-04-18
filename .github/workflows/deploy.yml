@@ -34,7 +34,7 @@ jobs:
       run: |
         curl -X POST \
             -H 'Authorization: Token ${{ secrets.PYTHONANYWHERE_API_KEY }}' \
-            -d 'input=cd /home/wangpython/Gogroupbuy %0A' \
+            -d 'input=cd /home/wangpython/Gogroupbuy %0A;git pull %0A' \
             https://www.pythonanywhere.com/api/v0/user/${{ secrets.PYTHONANYWHERE_USERNAME }}/consoles/33326347/send_input/
 
 
