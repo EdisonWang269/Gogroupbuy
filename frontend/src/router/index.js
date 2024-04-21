@@ -17,6 +17,11 @@ const router = createRouter({
             path: '/home',
             name: 'homePage',
             component: () => import('../views/HomePage.vue'),
+        },
+        {
+            path: '/home/item/:itemID',
+            name: 'itemDetail',
+            component: () => import('../views/ItemDetail.vue'),   
         }
     ]
 });

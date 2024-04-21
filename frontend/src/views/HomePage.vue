@@ -1,4 +1,5 @@
-<template class="all">   
+<template class="all">
+    <router-view />   
     <div class="header">
         <h1><i class="bi bi-house" id="homeIcon"></i>恩恩的團購商品</h1>
         <p>歡迎大家加入我的團購</p>
@@ -8,12 +9,13 @@
         <!-- 已寫好資料和模板綁定，到時將資料庫資料傳到 item 加入 items array 即可顯示 -->
         <!-- <item-card v-for="item in items" :key="item.ID" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate"/> -->
         <!-- 下面是顯示布局用，有資料後就可刪掉 -->
-        <item-card-test v-for="item in 8" :key="item" />
+        <item-card-test v-for="item in 8" :key="item" @click="checkDetail(1)"/>
     </div>
 </template>
 
 <script>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import SearchBar from '../components/SearchBar.vue';
 // import ItemCard from '../components/ItemCard.vue';
 import ItemCardTest from '../components/ItemCardTest.vue';
@@ -24,7 +26,7 @@ export default {
         SearchBar,
     },
     setup(){
-        
+        const router = useRouter();
         // 一個商品的物件
         const item = {
             ID: 0,
@@ -48,12 +50,17 @@ export default {
             console.log(searchQuery.value);
         };
 
+        const checkDetail = (itemID) => {
+            router.push(`/home/item/${itemID}`);
+        };
+
         return{
             item,
             items,
             searchQuery,
             check,
             getValue,
+            checkDetail,
 
         };
     }
