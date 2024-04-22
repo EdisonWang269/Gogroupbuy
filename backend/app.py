@@ -5,6 +5,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 import configparser
 import git
+import mysql.connector
 
 app = Flask(__name__)
 
@@ -16,14 +17,23 @@ config.read(config_path)
 line_bot_api = LineBotApi(config['line-bot']['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(config['line-bot']['CHANNEL_SECRET'])
 
-@app.route('/git_update', methods=['POST'])
-def git_update():
-    repo = git.Repo('./Gogroupbuy')
-    origin = repo.remotes.origin
-    repo.create_head('main',
-                     origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
-    origin.pull()
-    return '', 200
+host = 'wangpython.mysql.pythonanywhere-services.com'
+database = 'wangpython$test'
+username = 'wangpython'
+password = 'gogroupbuy'
+
+def check_db_connection():
+    try:
+        conn = mysql.connector.connect(
+            host = host,
+            database = database,
+            username = username,
+            password = password
+        )
+        return True
+    except mysql.connector.Error as e:
+        return False
+
 
 @app.route('/')
 def home():
@@ -44,6 +54,10 @@ def callback():
         abort(400)
 
     return 'OK'
+
+@app.route("/db")
+def db():
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def pretty_echo(event):
