@@ -25,7 +25,7 @@ password = 'gogroupbuy'
 
 app.config['MYSQL_DATABASE_HOST'] = host
 app.config['MYSQL_DATABASE_USER'] = username
-app.config['MYSQL_DATABASE_PASSWORD	'] = password
+app.config['MYSQL_DATABASE_PASSWORD'] = password
 app.config['MYSQL_DATABASE_DB'] = database
 
 mysql = MySQL(app)
