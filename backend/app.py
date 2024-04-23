@@ -2,9 +2,9 @@ from flask import Flask, abort, render_template, request
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from flaskext.mysql import MySQL
 
 import configparser
-import git
 import mysql.connector
 
 app = Flask(__name__)
@@ -17,26 +17,24 @@ config.read(config_path)
 line_bot_api = LineBotApi(config['line-bot']['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(config['line-bot']['CHANNEL_SECRET'])
 
+
 host = 'wangpython.mysql.pythonanywhere-services.com'
 database = 'wangpython$test'
 username = 'wangpython'
 password = 'gogroupbuy'
 
-def check_db_connection():
-    try:
-        conn = mysql.connector.connect(
-            host = host,
-            database = database,
-            username = username,
-            password = password
-        )
-        return True
-    except mysql.connector.Error as e:
-        return False
+app.config['MYSQL_DATABASE_HOST'] = host
+app.config['MYSQL_DATABASE_USER'] = username
+app.config['MYSQL_DATABASE_PASSWORD	'] = password
+app.config['MYSQL_DATABASE_DB'] = database
 
+mysql = MySQL(app)
 
 @app.route('/')
 def home():
+    cursor = mysql.get_db().cursor()
+    cursor.execute('''INSERT INTO `goods` VALUES ('4710367347574', '喔規', '高雄市左營區', '2023-12-17 10:28:31');''')
+    mysql.get_db().commit()
     return render_template("index.html")
 
 @app.route("/callback", methods=['POST'])
