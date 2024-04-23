@@ -17,12 +17,6 @@ config.read(config_path)
 line_bot_api = LineBotApi(config['line-bot']['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(config['line-bot']['CHANNEL_SECRET'])
 
-
-# host = 'wangpython.mysql.pythonanywhere-services.com'
-# database = 'wangpython$test'
-# username = 'wangpython'
-# password = 'gogroupbuy'
-
 app.config['MYSQL_DATABASE_HOST'] = config['db']['host']
 app.config['MYSQL_DATABASE_USER'] = config['db']['username']
 app.config['MYSQL_DATABASE_PASSWORD'] = config['db']['password']
@@ -33,9 +27,9 @@ mysql = MySQL(app)
 @app.route('/')
 def home():
 
-    cursor = mysql.get_db().cursor()
-    cursor.execute('''INSERT INTO `goods` VALUES ('4710367347574', '喔規', '高雄市左營區', '2023-12-17 10:28:31');''')
-    mysql.get_db().commit()
+    # cursor = mysql.get_db().cursor()
+    # cursor.execute('''INSERT INTO `goods` VALUES ('4710367347574', '喔規', '高雄市左營區', '2023-12-17 10:28:31');''')
+    # mysql.get_db().commit()
 
     return render_template("index.html")
 
