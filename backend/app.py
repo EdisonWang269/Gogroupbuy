@@ -53,10 +53,6 @@ def callback():
 
     return 'OK'
 
-@app.route("/db")
-def db():
-
-
 @handler.add(MessageEvent, message=TextMessage)
 def pretty_echo(event):
 
