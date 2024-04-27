@@ -22,6 +22,16 @@ const router = createRouter({
             path: '/home/item/:itemID',
             name: 'itemDetail',
             component: () => import('../views/ItemDetail.vue'),   
+        },
+        {
+            path: '/pop',
+            name: 'confirm',
+            component: () => import('../components/ConfirmPop.vue'),
+        },
+        {
+            path: '/home/item/confirm',
+            name: 'confirmPage',
+            component: () => import('../views/ConfirmPage.vue'),
         }
     ]
 });

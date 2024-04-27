@@ -27,9 +27,10 @@ export default {
     },
     setup(){
         const router = useRouter();
+        const currentID = ref(0);
         // 一個商品的物件
         const item = {
-            ID: 0,
+            ID: currentID.value++,
             name: "",
             price: 240,
             measure: "",

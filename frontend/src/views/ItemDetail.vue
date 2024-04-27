@@ -3,7 +3,7 @@
         <router-link to="/home"><i class="bi bi-arrow-left-short"></i></router-link>
         <h1>恩恩的團購</h1>
     </div>
-    <img src="../assets/cakeItem.png">
+    <img src="../assets/cakeItem.png"> 
     <div class="main">
         <div class="namePart">
             <p class="name">{{ item.name }}
@@ -19,19 +19,26 @@
             </div>
         </div>
     </div>
-    <button>立即下單</button>
+    <big-button :action="buttonAct" @click="order"/>
     <div class="content">
         <span>結單日期：{{ item.endDate }}</span>
         <span>商品說明：</span>
         <span id="content">{{ item.content }}</span>
     </div>
-    
+    <confirm-pop v-if="ordercheck" class="pop" :name="item.name" :orderNum="orderNum" @isCancelled="cancel"></confirm-pop>
 </template>
 
 <script>
 import { ref } from 'vue';
+import BigButton from '../components/BigButton.vue';
+import ConfirmPop from '@/components/ConfirmPop.vue';
 export default {
+    components:{
+        BigButton,
+        ConfirmPop,
+    },  
     setup(){
+        const buttonAct = "立即下單";
         const orderNum = ref(1);
         const item = {
             name: "香帥芋頭蛋糕",
@@ -51,11 +58,28 @@ export default {
             }
         };
 
+        const ordercheck = ref(false);
+        const order = () => {
+            if(orderNum.value > 0){
+                ordercheck.value = true;
+            }
+        };
+
+        const cancel = (value) => {
+            if(value == true){
+                ordercheck.value = false;
+            }
+        };
+
         return{
             orderNum,
             item,
             addOrder,
             minOrder,
+            buttonAct,
+            ordercheck,
+            order,
+            cancel,
         };
     }
 
@@ -84,7 +108,7 @@ h1{
 }
 
 img{
-    width:90%;
+    width:88%;
     height: auto;
     /* border: 1px solid gray; */
     display: block;
@@ -103,6 +127,7 @@ img{
 
 .namePart{
     display: block;
+    margin-bottom: 0;
     
 }
 .name{
@@ -141,12 +166,15 @@ i{
 }
 .num >p {
     font-size: 24px;
+    padding: 0;
+    margin-bottom: 0;
 }
 
-button{
+/* button{
     background-color:#3C2F2F;
     border: none;
     border-radius: 20px;
+    box-shadow: 3px 3px 8px 3px rgba(0, 0, 0, 0.2);
     display: block;
     width: 90%;
     font-size: 32px;
@@ -154,17 +182,26 @@ button{
     color: white;
     margin: 0 auto;
     padding: 10px 0;
-}
+} */
 .content{
+    margin-top: 5px;
     display: flex;
     flex-direction: column;
     gap: 7px;
     font-size:24px;
     padding: 5px 5%;
+    color: #3C2F2F;
 }
 
 #content{
-    font-size: 16px
+    font-size: 16px;
+    color: #6A6A6A;
+}
+
+.pop{
+    position:absolute;
+    top: 0;
+    left: 0;
 }
 
 </style>
