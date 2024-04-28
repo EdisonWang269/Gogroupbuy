@@ -1,1 +1,50 @@
-createTable
+CREATE DATABASE goGroupBuy;
+USE goGroupBuy;
+CREATE TABLE groupBuyingMerchant(
+    merchantLineId VARCHAR(255) NOT NULL,
+	storeName VARCHAR(255),
+	address VARCHAR(255),
+    businessHours VARCHAR(255),
+    CONSTRAINT groupBuyingMerchant_PK  PRIMARY KEY(`merchantLineId`)    
+);
+CREATE TABLE `Customer`(
+    `customerLineId` VARCHAR(255) NOT NULL,
+    `phone` INT NOT NULL,
+    `blacklist` TINYINT(1) ,
+	`memberLevel` VARCHAR(255),
+    CONSTRAINT Customer_PK PRIMARY KEY(`customerLineId`)
+);
+CREATE TABLE `Product`(
+    `productId` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `price` BIGINT,
+    `productDescribe` TEXT,
+    `supplierName` VARCHAR(255),
+    `productName` VARCHAR(255),
+    `productPicture` BLOB 
+);
+
+CREATE TABLE `groupBuyingProduct`(
+	groupBuyingNumber BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    merchantLineId VARCHAR(255) NOT NULL,
+    purchaseQuantity INT,
+    launchDate DATETIME,
+    statementDate DATETIME,
+    arrivalDate DATETIME,
+    dueDays SMALLINT,
+    inventory INT,
+    income DOUBLE(8, 2),
+    cost DOUBLE(8, 2),
+    productId BIGINT UNSIGNED,
+    CONSTRAINT groupBuyingProduct_FK1 FOREIGN KEY(merchantLineId) REFERENCES groupBuyingMerchant(merchantLineId),
+    CONSTRAINT groupBuyingProduct_FK2 FOREIGN KEY(productId) REFERENCES Product(productId)
+);
+
+CREATE TABLE `Order`(
+    `orderNumber` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `customerLineId` VARCHAR(255) NOT NULL,
+    `groupBuyNum` BIGINT UNSIGNED NOT NULL ,
+    `quantity` INT,
+    `receiveStatus` Boolean,
+    CONSTRAINT Order_FK1 FOREIGN KEY(customerLineId) REFERENCES Customer(customerLineId),
+    CONSTRAINT Order_FK2 FOREIGN KEY(groupBuyNum) REFERENCES groupBuyingProduct(groupBuyingNumber)
+);
