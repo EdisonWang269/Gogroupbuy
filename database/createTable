@@ -1,50 +1,50 @@
-CREATE DATABASE goGroupBuy;
-USE goGroupBuy;
-CREATE TABLE groupBuyingMerchant(
-    merchantLineId VARCHAR(255) NOT NULL,
-	storeName VARCHAR(255),
+CREATE DATABASE Groupbuy;
+USE Groupbuy;
+CREATE TABLE Group_buying_merchant(
+	merchant_lineid VARCHAR(255) NOT NULL,
+	store_name VARCHAR(255),
 	address VARCHAR(255),
-    businessHours VARCHAR(255),
-    CONSTRAINT groupBuyingMerchant_PK  PRIMARY KEY(`merchantLineId`)    
+	business_hours VARCHAR(255),
+	CONSTRAINT Group_buying_merchant_PK  PRIMARY KEY(merchant_lineid)    
 );
-CREATE TABLE `Customer`(
-    `customerLineId` VARCHAR(255) NOT NULL,
-    `phone` INT NOT NULL,
-    `blacklist` TINYINT(1) ,
-	`memberLevel` VARCHAR(255),
-    CONSTRAINT Customer_PK PRIMARY KEY(`customerLineId`)
+CREATE TABLE Customer(
+	customer_lineid VARCHAR(255) NOT NULL,
+	phone INT NOT NULL,
+	blacklist TINYINT(1) ,
+	member_level VARCHAR(255),
+	CONSTRAINT Customer_PK PRIMARY KEY(customer_lineid)
 );
-CREATE TABLE `Product`(
-    `productId` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `price` BIGINT,
-    `productDescribe` TEXT,
-    `supplierName` VARCHAR(255),
-    `productName` VARCHAR(255),
-    `productPicture` BLOB 
+CREATE TABLE Product(
+	product_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	price BIGINT,
+	product_describe TEXT,
+	supplier_name VARCHAR(255),
+	product_name VARCHAR(255),
+	product_picture BLOB 
 );
 
-CREATE TABLE `groupBuyingProduct`(
-	groupBuyingNumber BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    merchantLineId VARCHAR(255) NOT NULL,
-    purchaseQuantity INT,
-    launchDate DATETIME,
-    statementDate DATETIME,
-    arrivalDate DATETIME,
-    dueDays SMALLINT,
-    inventory INT,
-    income DOUBLE(8, 2),
-    cost DOUBLE(8, 2),
-    productId BIGINT UNSIGNED,
-    CONSTRAINT groupBuyingProduct_FK1 FOREIGN KEY(merchantLineId) REFERENCES groupBuyingMerchant(merchantLineId),
-    CONSTRAINT groupBuyingProduct_FK2 FOREIGN KEY(productId) REFERENCES Product(productId)
+CREATE TABLE Group_buying_product(
+	group_buying_number BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	merchant_lineid VARCHAR(255) NOT NULL,
+	purchase_quantity INT,
+	launch_date DATETIME,
+	statement_date DATETIME,
+	arrival_date DATETIME,
+	due_days SMALLINT,
+	inventory INT,
+	income DOUBLE(8, 2),
+	cost DOUBLE(8, 2),
+	product_id BIGINT UNSIGNED,
+	CONSTRAINT Group_buying_product_FK1 FOREIGN KEY(merchant_lineid) REFERENCES Group_buying_merchant(merchant_lineid),
+	CONSTRAINT Group_buying_product_FK2 FOREIGN KEYproduct_id) REFERENCES Product(product_id)
 );
 
 CREATE TABLE `Order`(
-    `orderNumber` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `customerLineId` VARCHAR(255) NOT NULL,
-    `groupBuyNum` BIGINT UNSIGNED NOT NULL ,
-    `quantity` INT,
-    `receiveStatus` Boolean,
-    CONSTRAINT Order_FK1 FOREIGN KEY(customerLineId) REFERENCES Customer(customerLineId),
-    CONSTRAINT Order_FK2 FOREIGN KEY(groupBuyNum) REFERENCES groupBuyingProduct(groupBuyingNumber)
+	order_number BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	customer_lineid VARCHAR(255) NOT NULL,
+	group_buy_num BIGINT UNSIGNED NOT NULL ,
+	quantity INT,
+	receive_status Boolean,
+	CONSTRAINT Order_FK1 FOREIGN KEY(customer_lineid) REFERENCES Customer(customer_lineid),
+	CONSTRAINT Order_FK2 FOREIGN KEY(group_buy_num) REFERENCES Group_buying_product(group_buying_number)
 );
