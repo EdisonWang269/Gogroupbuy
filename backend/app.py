@@ -73,7 +73,7 @@ def create_user(company_id):
     name = data.get('customer_name')
     picture = data.get('customer_picture')
     email = data.get('customer_mail')
-    phone = data.get('phone')
+    phone = int(data.get('phone'))
 
     try:
         conn = mysql.connect()
