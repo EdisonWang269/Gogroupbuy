@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template, request
+from flask import Flask, abort, render_template, request, jsonify
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
@@ -30,6 +30,12 @@ def home():
     # cursor = mysql.get_db().cursor()
     # cursor.execute('''INSERT INTO `goods` VALUES ('4710367347574', '喔規', '高雄市左營區', '2023-12-17 10:28:31');''')
     # mysql.get_db().commit()
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute('''INSERT INTO `goods` VALUES ('4710367347574', '喔規', '高雄市左營區', '2023-12-17 10:28:31');''')
+    conn.commit()
+    cursor.close()
+    conn.close()
 
     return render_template("index.html")
 
@@ -58,6 +64,86 @@ def pretty_echo(event):
             event.reply_token,
             TextSendMessage(text=event.message.text)
         )
+
+# 建立用戶資料
+@app.route("/api/<string:company_id>/user", methods=["POST"])
+def create_user(company_id):
+    data = request.json
+    line_id = data.get('customer_lineid')
+    name = data.get('customer_name')
+    picture = data.get('customer_picture')
+    email = data.get('customer_mail')
+    phone = data.get('phone')
+
+    # try:
+    #     cursor = mysql.get_db().cursor()
+
+    # except Exception as e:
+    #     # 出錯時回滾
+    #     conn.rollback()
+    #     return jsonify({'error': str(e)}), 500
+
+
+
+# 回傳一筆用戶資料
+@app.route("/api/<string:company_id>/user/<string:customer_id>", methods=["GET"])
+def get_user(company_id, customer_id):
+    pass
+
+# 回傳所有用戶資料
+@app.route("/api/<string:company_id>/user", methods=["GET"])
+def get_users(company_id):
+    pass
+
+# 獲取商家的所有商品列表
+@app.route("/api/<string:company_id>/product", methods=["GET"])
+def get_products(company_id):
+    pass
+    # if company_id not in products_db:
+    #     abort(404, "Company not found")
+
+    # return jsonify()
+
+# 獲取商家的一筆商品
+@app.route("/api/<string:company_id>/product/<int:product_id>", methods=["GET"])
+def get_product(company_id, product_id):
+    pass
+
+# 提交訂單
+@app.route("/api/<string:company_id>/order", methods=["POST"])
+def create_order(company_id):
+    pass
+    # if company_id not in products_db:
+    #     abort(404, "Company not found")
+    
+    # data = request.json
+    # product_id = data.get("product_id")
+    # quantity = data.get("quantity")
+
+    # # 確認商品是否存在
+    # products = products_db[company_id]
+    # product = next((p for p in products if p["id"] == product_id), None)
+    # if product is None:
+    #     abort(404, "Product not found")
+    
+    # # 創建訂單
+    # order = {
+    #     "product_id": product_id,
+    #     "quantity": quantity,
+    #     "company_id": company_id
+    # }
+    # orders_db.append(order)
+    # return jsonify(order), 201
+
+# 查詢一筆訂單
+@app.route("/api/<string:company_id>/order/<int:order_id>", methods=["GET"])
+def get_order(company_id, order_id):
+    pass
+
+# 查詢所有定單
+@app.route("/api/<string:company_id>/order", methods=["GET"])
+def get_orders(company_id):
+    pass
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
