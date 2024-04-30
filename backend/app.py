@@ -77,7 +77,6 @@ def create_user(company_id):
 
     # try:
     #     cursor = mysql.get_db().cursor()
-
     # except Exception as e:
     #     # 出錯時回滾
     #     conn.rollback()
