@@ -75,13 +75,21 @@ def create_user(company_id):
     email = data.get('customer_mail')
     phone = data.get('phone')
 
-    # try:
-    #     cursor = mysql.get_db().cursor()
-    # except Exception as e:
-    #     # 出錯時回滾
-    #     conn.rollback()
-    #     return jsonify({'error': str(e)}), 500
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO Customer (customer_lineid, phone) VALUES (%s, %d)", (line_id, phone))
+        conn.commit()
 
+        return jsonify({'message': 'New user created successfully'}), 200
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        cursor.close()
+        conn.close()
 
 
 # 回傳一筆用戶資料
