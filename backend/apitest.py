@@ -41,5 +41,25 @@ def create_user(company_id):
     finally:
         conn.close()
 
+# 回傳一筆用戶資料
+@app.route("/api/<string:company_id>/user/<string:customer_id>", methods=["GET"])
+def get_user(company_id, customer_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM customer WHERE customer_lineid = %s", (customer_id,))
+    user_data = cursor.fetchone()
+    conn.close()
+    if user_data:
+        user_dict = {
+            "customer_id": user_data[0],
+            "customer_name": user_data[1],
+        }
+        return jsonify(user_dict)
+    
+    else:
+        return "User not found", 404
+
+
+
 if __name__ == "__main__":
     app.run()
