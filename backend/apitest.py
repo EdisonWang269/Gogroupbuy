@@ -59,7 +59,28 @@ def get_user(company_id, customer_id):
     else:
         return "User not found", 404
 
-
+# 回傳所有用戶資料
+@app.route("/api/<string:company_id>/user", methods=["GET"])
+def get_users(company_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM customer")
+    user_datas = cursor.fetchall()
+    conn.close()
+    
+    data = []
+    if user_datas:
+        for user_data in user_datas:
+            data.append(
+                {
+                    "customer_id": user_data[0],
+                    "customer_name": user_data[1],
+                }
+            )
+        return jsonify(data)
+    
+    else:
+        return "User not found", 404
 
 if __name__ == "__main__":
     app.run()
