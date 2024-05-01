@@ -81,6 +81,30 @@ def get_users(company_id):
     
     else:
         return "User not found", 404
+    
+# 獲取商家的所有商品列表
+@app.route("/api/<string:company_id>/product", methods=["GET"])
+def get_products(company_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM Product WHERE company_name = %s", (company_id,))
+    products = cursor.fetchall()
+    conn.close()
+
+    data = []
+    if products:
+        for product in products:
+            data.append(
+                {
+                    "product_id" : product[0],
+                    "company_name" : product[1],
+                    "product_name" : product[2]
+                }
+            )
+        return jsonify(data)
+
+    else:
+        return "Products not found", 404
 
 if __name__ == "__main__":
     app.run()
