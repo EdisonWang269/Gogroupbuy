@@ -138,7 +138,7 @@ def create_order(company_id):
     try:
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO `Order` VALUES (%s, %s, %s, %s)", (order_id, product_id, product_name, customer_id))
+        cursor.execute("INSERT INTO `Order` VALUES (%s, %s, %s, %s, %s)", (order_id, product_id, product_name, customer_id, company_id))
         conn.commit()
 
         return jsonify({'message': 'Order created successfully'}), 200
@@ -150,6 +150,25 @@ def create_order(company_id):
     finally:
         conn.close()
 
+# 查詢一筆訂單
+@app.route("/api/<string:company_id>/order/<string:order_id>", methods=["GET"])
+def get_order(company_id, order_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM `Order` WHERE company_id = %s AND order_id = %s", (company_id, order_id,))
+    order = cursor.fetchone()
+    conn.close()
+    if order:
+        order_dict = {
+            "order_id": order[0],
+            "product_id": order[1],
+            "product_name": order[2],
+            "customer_id": order[3]
+        }
+        return jsonify(order_dict)
+    
+    else:
+        return "Order not found", 404
 
 if __name__ == "__main__":
     app.run()
