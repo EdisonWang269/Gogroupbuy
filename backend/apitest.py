@@ -170,5 +170,33 @@ def get_order(company_id, order_id):
     else:
         return "Order not found", 404
 
+# 查詢一名客戶所有定單
+@app.route("/api/<string:company_id>/order", methods=["GET"])
+def get_orders(company_id):
+    conn = mysql.connector.connect(**config)
+    cursor = conn.cursor()
+    # cursor.execute("SELECT * FROM `Order` WHERE customer_id = %s", (customer_id,))
+    cursor.execute("SELECT * FROM `Order`")
+    orders = cursor.fetchall()
+    conn.close()
+
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                    "order_id" : order[0],
+                    "product_id" : order[1],
+                    "product_name" : order[2],
+                    "customer_id" : order[3],
+                    "company_id" : order[4]
+                }
+            )
+        return jsonify(data)
+
+    else:
+        return "OrdersA not found", 404
+
+
 if __name__ == "__main__":
     app.run()
