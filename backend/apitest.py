@@ -124,6 +124,32 @@ def get_product(company_id, product_id):
     
     else:
         return "Product not found", 404
+    
+# 提交訂單
+@app.route("/api/<string:company_id>/order", methods=["POST"])
+def create_order(company_id):
+    data = request.json
+
+    order_id = data.get('order_id')
+    product_id = data.get('product_id')
+    product_name = data.get('product_name')
+    customer_id = data.get('customer_id')
+
+    try:
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO `Order` VALUES (%s, %s, %s, %s)", (order_id, product_id, product_name, customer_id))
+        conn.commit()
+
+        return jsonify({'message': 'Order created successfully'}), 200
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    
+    finally:
+        conn.close()
+
 
 if __name__ == "__main__":
     app.run()
