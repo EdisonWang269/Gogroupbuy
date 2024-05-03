@@ -1,4 +1,4 @@
-from flask import Flask, abort, render_template, request, jsonify
+from flask import Flask, request, jsonify
 
 import mysql.connector
 
@@ -8,9 +8,8 @@ config = {
   'user': 'root',
   'password': 'root',
   'host': '127.0.0.1',
-  'database': 'gogroupbuy',
+  'database': 'Groupbuy',
 }
-
 
 @app.route('/')
 def home():
@@ -77,17 +76,43 @@ def get_users(company_id):
                     "customer_name": user_data[1],
                 }
             )
-        return jsonify(data)
+        return jsonify(data), 200
     
     else:
         return "User not found", 404
     
 # 獲取商家的所有商品列表
-@app.route("/api/<string:company_id>/product", methods=["GET"])
-def get_products(company_id):
+@app.route("/api/<string:merchant_lineid>/product", methods=["GET"])
+def get_products(merchant_lineid):
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Product WHERE company_name = %s", (company_id,))
+    query = """
+                SELECT 
+                    gb.group_buying_number,
+                    gb.merchant_lineid,
+                    gb.purchase_quantity,
+                    gb.launch_date,
+                    gb.statement_date,
+                    gb.arrival_date,
+                    gb.due_days,
+                    gb.inventory,
+                    gb.income,
+                    gb.cost,
+                    p.product_id,
+                    p.price,
+                    p.product_describe,
+                    p.supplier_name,
+                    p.product_name,
+                    p.product_picture
+                FROM 
+                    Group_buying_product AS gb
+                INNER JOIN 
+                    Product AS p ON gb.product_id = p.product_id
+                WHERE 
+                    gb.merchant_lineid = %s;
+            """
+
+    cursor.execute(query, (merchant_lineid,))
     products = cursor.fetchall()
     conn.close()
 
@@ -96,34 +121,85 @@ def get_products(company_id):
         for product in products:
             data.append(
                 {
-                    "product_id" : product[0],
-                    "company_name" : product[1],
-                    "product_name" : product[2]
+                    "group_buying_number" : product[0],
+                    "merchant_lineid" : product[1],
+                    "purchase_quantity" : product[2],
+                    "launch_date" : product[3],
+                    "statement_date" : product[4],
+                    "arrival_date" : product[5],
+                    "due_days" : product[6],
+                    "inventory" : product[7],
+                    "income" : product[8],
+                    "cost" : product[9],
+                    "product_id" : product[10],
+                    "price" : product[11],
+                    "product_describe" : product[12],
+                    "supplier_name" : product[13],
+                    "product_name" : product[14],
+                    "product_picture" : product[15]
                 }
             )
-        return jsonify(data)
+        return jsonify(data), 200
 
-    else:
-        return "Products not found", 404
+    return jsonify({"message": "Products not found"}), 404
 
-# 獲取商家的一筆商品
-@app.route("/api/<string:company_id>/product/<int:product_id>", methods=["GET"])
-def get_product(company_id, product_id):
+# 獲取一筆團購訂單
+@app.route("/api/<string:merchant_lineid>/product/<int:group_buying_number>", methods=["GET"])
+def get_product(merchant_lineid, group_buying_number):
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Product WHERE company_name = %s AND product_id = %s", (company_id, product_id,))
+    query = """
+                SELECT 
+                    gb.group_buying_number,
+                    gb.merchant_lineid,
+                    gb.purchase_quantity,
+                    gb.launch_date,
+                    gb.statement_date,
+                    gb.arrival_date,
+                    gb.due_days,
+                    gb.inventory,
+                    gb.income,
+                    gb.cost,
+                    p.product_id,
+                    p.price,
+                    p.product_describe,
+                    p.supplier_name,
+                    p.product_name,
+                    p.product_picture
+                FROM 
+                    Group_buying_product AS gb
+                INNER JOIN 
+                    Product AS p ON gb.product_id = p.product_id
+                WHERE 
+                    gb.merchant_lineid = %s
+                AND
+                    gb.group_buying_number = %s;
+            """
+    cursor.execute(query, (merchant_lineid, group_buying_number,))
     product = cursor.fetchone()
     conn.close()
     if product:
         product_dict = {
-            "product_id": product[0],
-            "company_name": product[1],
-            "product_name": product[2] 
-        }
-        return jsonify(product_dict)
-    
-    else:
-        return "Product not found", 404
+                            "group_buying_number" : product[0],
+                            "merchant_lineid" : product[1],
+                            "purchase_quantity" : product[2],
+                            "launch_date" : product[3],
+                            "statement_date" : product[4],
+                            "arrival_date" : product[5],
+                            "due_days" : product[6],
+                            "inventory" : product[7],
+                            "income" : product[8],
+                            "cost" : product[9],
+                            "product_id" : product[10],
+                            "price" : product[11],
+                            "product_describe" : product[12],
+                            "supplier_name" : product[13],
+                            "product_name" : product[14],
+                            "product_picture" : product[15]
+                        }
+        return jsonify(product_dict), 200
+
+    return jsonify({"message": "Product not found"}), 404
     
 # 提交訂單
 @app.route("/api/<string:company_id>/order", methods=["POST"])
@@ -199,4 +275,4 @@ def get_orders(company_id):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
