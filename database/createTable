@@ -9,7 +9,7 @@ CREATE TABLE Group_buying_merchant(
 );
 CREATE TABLE Customer(
 	customer_lineid VARCHAR(255) NOT NULL,
-	phone INT NOT NULL,
+	phone VARCHAR(10),
 	blacklist TINYINT(1) ,
 	member_level VARCHAR(255),
 	CONSTRAINT Customer_PK PRIMARY KEY(customer_lineid)
