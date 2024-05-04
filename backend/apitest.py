@@ -11,9 +11,45 @@ config = {
   'database': 'Groupbuy',
 }
 
+DB_CONFIG = {
+  'user': 'root',
+  'password': 'root',
+  'host': '127.0.0.1',
+  'database': 'Groupbuy',
+}
+
+def get_database_connection():
+    return mysql.connector.connect(**DB_CONFIG)
+
+def execute_query(query, params=None, fetchall=False, commit=False):
+    try:
+        conn = get_database_connection()
+        cursor = conn.cursor()
+        print(1)
+        cursor.execute(query, params)
+        print(2)
+        if commit:
+            conn.commit()
+        else:
+            if fetchall:
+                print(3)
+                return cursor.fetchall()
+
+            else:
+                print(4)
+                return cursor.fetchone()
+    except Exception as e:
+        print(str(e))
+        print(5)
+        conn.rollback()
+    finally:
+        cursor.close()
+        conn.close()
+
 @app.route('/')
 def home():
     return 'server ok'
+    
 
 # 建立用戶資料
 @app.route("/api/<string:company_id>/user", methods=["POST"])
@@ -96,137 +132,118 @@ def get_users(company_id):
 # 獲取商家的所有商品列表
 @app.route("/api/<string:merchant_lineid>/product", methods=["GET"])
 def get_products(merchant_lineid):
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-        query = """
-                    SELECT 
-                        gb.group_buying_number,
-                        gb.merchant_lineid,
-                        gb.purchase_quantity,
-                        gb.launch_date,
-                        gb.statement_date,
-                        gb.arrival_date,
-                        gb.due_days,
-                        gb.inventory,
-                        gb.income,
-                        gb.cost,
-                        p.product_id,
-                        p.price,
-                        p.product_describe,
-                        p.supplier_name,
-                        p.product_name,
-                        p.product_picture
-                    FROM 
-                        Group_buying_product AS gb
-                    INNER JOIN 
-                        Product AS p ON gb.product_id = p.product_id
-                    WHERE 
-                        gb.merchant_lineid = %s;
-                """
+    query = """
+                SELECT 
+                    gb.group_buying_number,
+                    gb.merchant_lineid,
+                    gb.purchase_quantity,
+                    gb.launch_date,
+                    gb.statement_date,
+                    gb.arrival_date,
+                    gb.due_days,
+                    gb.inventory,
+                    gb.income,
+                    gb.cost,
+                    p.product_id,
+                    p.price,
+                    p.product_describe,
+                    p.supplier_name,
+                    p.product_name,
+                    p.product_picture
+                FROM 
+                    Group_buying_product AS gb
+                INNER JOIN 
+                    Product AS p ON gb.product_id = p.product_id
+                WHERE 
+                    gb.merchant_lineid = %s;
+            """
+        
+    products = execute_query(query, (merchant_lineid,), True)
 
-        cursor.execute(query, (merchant_lineid,))
-        products = cursor.fetchall()
+    data = []
+    if products:
+        for product in products:
+            data.append(
+                {
+                    "group_buying_number" : product[0],
+                    "merchant_lineid" : product[1],
+                    "purchase_quantity" : product[2],
+                    "launch_date" : product[3],
+                    "statement_date" : product[4],
+                    "arrival_date" : product[5],
+                    "due_days" : product[6],
+                    "inventory" : product[7],
+                    "income" : product[8],
+                    "cost" : product[9],
+                    "product_id" : product[10],
+                    "price" : product[11],
+                    "product_describe" : product[12],
+                    "supplier_name" : product[13],
+                    "product_name" : product[14],
+                    "product_picture" : product[15]
+                }
+            )
+        return jsonify(data), 200
 
-        data = []
-        if products:
-            for product in products:
-                data.append(
-                    {
-                        "group_buying_number" : product[0],
-                        "merchant_lineid" : product[1],
-                        "purchase_quantity" : product[2],
-                        "launch_date" : product[3],
-                        "statement_date" : product[4],
-                        "arrival_date" : product[5],
-                        "due_days" : product[6],
-                        "inventory" : product[7],
-                        "income" : product[8],
-                        "cost" : product[9],
-                        "product_id" : product[10],
-                        "price" : product[11],
-                        "product_describe" : product[12],
-                        "supplier_name" : product[13],
-                        "product_name" : product[14],
-                        "product_picture" : product[15]
-                    }
-                )
-            return jsonify(data), 200
-
-        return jsonify({"message": "Products not found"}), 404
+    return jsonify({"message": "Products not found"}), 404
     
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'error': str(e)}), 500
-    
-    finally:
-        conn.close()
-
 # 獲取一筆團購訂單
 @app.route("/api/<string:merchant_lineid>/product/<int:group_buying_number>", methods=["GET"])
 def get_product(merchant_lineid, group_buying_number):
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-        query = """
-                    SELECT 
-                        gb.group_buying_number,
-                        gb.merchant_lineid,
-                        gb.purchase_quantity,
-                        gb.launch_date,
-                        gb.statement_date,
-                        gb.arrival_date,
-                        gb.due_days,
-                        gb.inventory,
-                        gb.income,
-                        gb.cost,
-                        p.product_id,
-                        p.price,
-                        p.product_describe,
-                        p.supplier_name,
-                        p.product_name,
-                        p.product_picture
-                    FROM 
-                        Group_buying_product AS gb
-                    INNER JOIN 
-                        Product AS p ON gb.product_id = p.product_id
-                    WHERE 
-                        gb.merchant_lineid = %s
-                    AND
-                        gb.group_buying_number = %s;
-                """
-        cursor.execute(query, (merchant_lineid, group_buying_number,))
-        product = cursor.fetchone()
 
-        if product:
-            product_dict = {
-                                "group_buying_number" : product[0],
-                                "merchant_lineid" : product[1],
-                                "purchase_quantity" : product[2],
-                                "launch_date" : product[3],
-                                "statement_date" : product[4],
-                                "arrival_date" : product[5],
-                                "due_days" : product[6],
-                                "inventory" : product[7],
-                                "income" : product[8],
-                                "cost" : product[9],
-                                "product_id" : product[10],
-                                "price" : product[11],
-                                "product_describe" : product[12],
-                                "supplier_name" : product[13],
-                                "product_name" : product[14],
-                                "product_picture" : product[15]
-                            }
-            return jsonify(product_dict), 200
+    query = """
+                SELECT 
+                    gb.group_buying_number,
+                    gb.merchant_lineid,
+                    gb.purchase_quantity,
+                    gb.launch_date,
+                    gb.statement_date,
+                    gb.arrival_date,
+                    gb.due_days,
+                    gb.inventory,
+                    gb.income,
+                    gb.cost,
+                    p.product_id,
+                    p.price,
+                    p.product_describe,
+                    p.supplier_name,
+                    p.product_name,
+                    p.product_picture
+                FROM 
+                    Group_buying_product AS gb
+                INNER JOIN 
+                    Product AS p ON gb.product_id = p.product_id
+                WHERE 
+                    gb.merchant_lineid = %s
+                AND
+                    gb.group_buying_number = %s;
+            """
 
-        return jsonify({"message": "Product not found"}), 404
+    product = execute_query(query, (merchant_lineid, group_buying_number))
+
+    if product:
+        product_dict = {
+                            "group_buying_number" : product[0],
+                            "merchant_lineid" : product[1],
+                            "purchase_quantity" : product[2],
+                            "launch_date" : product[3],
+                            "statement_date" : product[4],
+                            "arrival_date" : product[5],
+                            "due_days" : product[6],
+                            "inventory" : product[7],
+                            "income" : product[8],
+                            "cost" : product[9],
+                            "product_id" : product[10],
+                            "price" : product[11],
+                            "product_describe" : product[12],
+                            "supplier_name" : product[13],
+                            "product_name" : product[14],
+                            "product_picture" : product[15]
+                        }
+        return jsonify(product_dict), 200
+
+    return jsonify({"message": "Product not found"}), 404
     
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'error': str(e)}), 500
-    
-    finally:
-        conn.close()
     
 # 提交一筆訂單
 @app.route("/api/<string:merchant_lineid>/order", methods=["POST"])
@@ -238,21 +255,12 @@ def create_order(merchant_lineid):
     quantity = data.get('quantity')
     receive_status = data.get('receive_status')
 
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-        query = "INSERT INTO `Order` VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(query, (order_number, customer_lineid, group_buy_num, quantity, receive_status))
-        conn.commit()
 
-        return jsonify({'message': 'Order created successfully'}), 200
+    query = "INSERT INTO `Order` VALUES (%s, %s, %s, %s, %s)"
+    result = execute_query(query, (order_number, customer_lineid, group_buy_num, quantity, receive_status), commit=True)
 
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'error': str(e)}), 500
-    
-    finally:
-        conn.close()
+    return jsonify({'message': 'Order created successfully'}), 200
+
 
 # 查詢一筆訂單
 @app.route("/api/<string:merchant_lineid>/order/<int:order_number>", methods=["GET"])
