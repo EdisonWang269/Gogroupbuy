@@ -1,10 +1,12 @@
 <template>
     <div class="navBar">
         <div class="container">
-            <div class="menu">
-                <i class="bi bi-list"></i>
-                <span class="text">歷史訂單</span>
-            </div>
+            <router-link to="/history" class="link">
+                <div class="menu">
+                    <i class="bi bi-list"></i>
+                    <span class="text">歷史訂單</span>
+                </div>
+            </router-link>
             <router-link to="/home" class="link">
                 <div class="menu">
                     <i class="bi bi-house"></i>

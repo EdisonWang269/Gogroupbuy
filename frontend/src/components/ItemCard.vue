@@ -40,7 +40,7 @@ export default {
     /* height: 240px; */
     border-radius: 20px;
     border: none;
-    box-shadow: 3px 2px 8px 0px rgba(180, 180, 180, 0.5)
+    box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5)
 }
 
 .card-img-top{

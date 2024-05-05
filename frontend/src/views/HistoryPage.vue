@@ -1,0 +1,123 @@
+<template>
+  <h1><i class="bi bi-list"></i>歷史訂單</h1>
+  <select class="form-select" v-model="selected" @change="change"> 
+    <option selected >所有訂單</option>
+    <option value="history">歷史訂單</option>
+    <option value="waiting">待領訂單</option>
+  </select>
+  <div class="content">
+    <div class="wait" v-show="showWaiting">
+        <p class="title">待領清單</p>
+        <div class="cards">
+            <item-card-v v-for="item in 2" :key="item"/>
+        </div>
+    </div>
+
+    <div class="history" v-show="showHistory">
+        <p class="title">歷史清單</p>
+        <div class="cards" id="history">
+            <item-card-v v-for="item in 2" :key="item"/>
+        </div>
+    </div>
+</div>
+  
+
+</template>
+
+<script>
+import { ref } from 'vue';
+import ItemCardV from '../components/ItemCardV.vue';
+export default {
+    components:{
+        ItemCardV,
+    },
+    setup(){
+        const selected = ref("所有訂單");
+        const change = () => {
+            console.log(selected.value);
+            if(selected.value == "所有訂單"){
+                showHistory.value = true;
+                showWaiting.value = true;
+            }
+            else if(selected.value == "history"){
+                showHistory.value = true;
+                showWaiting.value = false;
+            }
+            else{
+                showHistory.value = false;
+                showWaiting.value = true;
+            }
+        };
+        const showHistory = ref(true);
+        const showWaiting = ref(true);
+        const waitingList = [];
+        const historyList = [];
+        const item = {
+            img: "",
+            name: "",
+            orderDate: "",
+            dueDate: "",
+            status: "",
+        }
+        return{
+            item,
+            waitingList,
+            historyList,
+            selected,
+            change,
+            showHistory,
+            showWaiting,
+        };
+    }
+    
+    
+}
+</script>
+
+<style scoped>
+h1{
+    margin-top: 48px;
+    margin-left: 5%;
+}
+i {
+    /* font-size: 28px; */
+    color: #EF2A39;
+    font-weight: 700;
+}
+.form-select{
+    width: 120px;
+    margin-left: 5%;
+    margin-top: 48px;
+    margin-bottom: 24px;
+}
+.option{
+    border-radius: 1px;
+    font-size: 16px;
+
+}
+
+.cards{
+    display: grid;
+    row-gap: 20px;
+}
+
+.content{
+    height: 68%;
+    overflow: scroll;
+    padding: 10px 0;
+}
+.content::-webkit-scrollbar{
+    
+    width: 0;
+    height: 0;
+}
+.title{
+    font-size: 20px;
+    text-decoration: underline;
+    margin-left:5%;
+}
+.wait{
+    margin-bottom: 30px;
+}
+
+</style>

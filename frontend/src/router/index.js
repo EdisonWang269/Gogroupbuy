@@ -32,7 +32,12 @@ const router = createRouter({
             path: '/home/item/confirm',
             name: 'confirmPage',
             component: () => import('../views/ConfirmPage.vue'),
-        }
+        },
+        {
+            path: '/history',
+            name: 'historyPage',
+            component: () => import('../views/HistoryPage.vue'),
+        },
     ]
 });
 
