@@ -21,27 +21,27 @@ DB_CONFIG = {
 def get_database_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
-def execute_query(query, params=None, fetchall=False, commit=False):
+def execute_query(query, params=None, fetchall=False):
     try:
         conn = get_database_connection()
         cursor = conn.cursor()
-        print(1)
         cursor.execute(query, params)
-        print(2)
-        if commit:
-            conn.commit()
-        else:
-            if fetchall:
-                print(3)
-                return cursor.fetchall()
 
+        if query.strip().upper().startswith('SELECT'):
+            if fetchall:
+                return cursor.fetchall()
             else:
-                print(4)
                 return cursor.fetchone()
+            
+        else:
+            conn.commit()
+            return True
+
     except Exception as e:
         print(str(e))
-        print(5)
         conn.rollback()
+        return None
+    
     finally:
         cursor.close()
         conn.close()
@@ -50,7 +50,6 @@ def execute_query(query, params=None, fetchall=False, commit=False):
 def home():
     return 'server ok'
     
-
 # 建立用戶資料
 @app.route("/api/<string:company_id>/user", methods=["POST"])
 def create_user(company_id):
@@ -244,7 +243,6 @@ def get_product(merchant_lineid, group_buying_number):
 
     return jsonify({"message": "Product not found"}), 404
     
-    
 # 提交一筆訂單
 @app.route("/api/<string:merchant_lineid>/order", methods=["POST"])
 def create_order(merchant_lineid):
@@ -255,112 +253,78 @@ def create_order(merchant_lineid):
     quantity = data.get('quantity')
     receive_status = data.get('receive_status')
 
-
     query = "INSERT INTO `Order` VALUES (%s, %s, %s, %s, %s)"
-    result = execute_query(query, (order_number, customer_lineid, group_buy_num, quantity, receive_status), commit=True)
+    result = execute_query(query, (order_number, customer_lineid, group_buy_num, quantity, receive_status))
 
-    return jsonify({'message': 'Order created successfully'}), 200
-
+    if result:
+        return jsonify({'message': 'Order created successfully'}), 200
+    else:
+        return jsonify({'error': 'Failed to create order'}), 500
 
 # 查詢一筆訂單
 @app.route("/api/<string:merchant_lineid>/order/<int:order_number>", methods=["GET"])
 def get_order(merchant_lineid, order_number):
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-        query = "SELECT * FROM `Order` WHERE order_number = %s"
-        cursor.execute(query, (order_number,))
-        order = cursor.fetchone()
-        conn.close()
+    query = "SELECT * FROM `Order` WHERE order_number = %s"
+    order = execute_query(query, (order_number,))
 
-        if order:
-            order_dict = {
-                "order_number": order[0],
-                "customer_lineid": order[1],
-                "group_buy_num": order[2],
-                "quantity": order[3],
-                "receive_status" : order[4]
-            }
-            return jsonify(order_dict), 200
-        
-        return jsonify({'message':'Order not found'}), 404
+    if order:
+        order_dict = {
+            "order_number": order[0],
+            "customer_lineid": order[1],
+            "group_buy_num": order[2],
+            "quantity": order[3],
+            "receive_status" : order[4]
+        }
+        return jsonify(order_dict), 200
     
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'error': str(e)}), 500
+    return jsonify({'message':'Order not found'}), 404
     
-    finally:
-        conn.close()
-
 # 查詢一名客戶所有清單
 @app.route("/api/<string:merchant_lineid>/order/<string:customer_lineid>", methods=["GET"])
 def get_all_orders(merchant_lineid, customer_lineid):
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-        query = "SELECT * FROM `Order` WHERE customer_lineid = %s"
-        cursor.execute(query, (customer_lineid,))
-        orders = cursor.fetchall()
-        conn.close()
 
-        data = []
-        if orders:
-            for order in orders:
-                data.append(
-                    {
-                        "order_number": order[0],
-                        "customer_lineid": order[1],
-                        "group_buy_num": order[2],
-                        "quantity": order[3],
-                        "receive_status" : order[4]
-                    }
-                )
-            return jsonify(data), 200
-
-        return jsonify({'message' : 'Order not found'}), 404
-
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'error': str(e)}), 500
+    query = "SELECT * FROM `Order` WHERE customer_lineid = %s"
+    orders = execute_query(query, (customer_lineid,), True)
     
-    finally:
-        conn.close()
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                    "order_number": order[0],
+                    "customer_lineid": order[1],
+                    "group_buy_num": order[2],
+                    "quantity": order[3],
+                    "receive_status" : order[4]
+                }
+            )
+        return jsonify(data), 200
+
+    return jsonify({'message' : 'Order not found'}), 404
 
 # 查詢一名客戶歷史或代領清單
 @app.route("/api/<string:merchant_lineid>/order/<string:customer_lineid>/<int:status>", methods=["GET"])
 def get_orders(merchant_lineid, customer_lineid, status):
     status = True if status == 1 else False
 
-    try:
-        conn = mysql.connector.connect(**config)
-        cursor = conn.cursor()
-        query = "SELECT * FROM `Order` WHERE customer_lineid = %s AND receive_status = %s"
-        cursor.execute(query, (customer_lineid, status))
-        orders = cursor.fetchall()
-        conn.close()
+    query = "SELECT * FROM `Order` WHERE customer_lineid = %s AND receive_status = %s"
+    orders = execute_query(query, (customer_lineid, status), True)
 
-        data = []
-        if orders:
-            for order in orders:
-                data.append(
-                    {
-                        "order_number": order[0],
-                        "customer_lineid": order[1],
-                        "group_buy_num": order[2],
-                        "quantity": order[3],
-                        "receive_status" : order[4]
-                    }
-                )
-            return jsonify(data), 200
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                    "order_number": order[0],
+                    "customer_lineid": order[1],
+                    "group_buy_num": order[2],
+                    "quantity": order[3],
+                    "receive_status" : order[4]
+                }
+            )
+        return jsonify(data), 200
 
-        return jsonify({'message' : 'Order not found'}), 404
-    
-    except Exception as e:
-        conn.rollback()
-        return jsonify({'error': str(e)}), 500
-    
-    finally:
-        conn.close()
+    return jsonify({'message' : 'Order not found'}), 404
 
 if __name__ == "__main__":
     app.run(debug=True)
