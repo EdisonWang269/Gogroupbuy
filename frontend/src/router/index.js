@@ -1,20 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(process.env.BASE_URL),
     routes:[
-        {
-            path: '/hello',
-            name: 'hello',
-            component: () => import('../views/HelloWorld.vue'),
-        },
+        // {
+        //     path: '/',
+        //     name: 'hello',
+        //     component: () => import('../views/HelloWorld.vue'),
+        // },
         {
             path: '/nav',
             name: 'navbar',
             component: () => import('../components/NavBar.vue'),
         },
         {
-            path: '/home',
+            path: '/',
             name: 'homePage',
             component: () => import('../views/HomePage.vue'),
         },
