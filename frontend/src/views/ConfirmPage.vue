@@ -5,7 +5,7 @@
     </div>
     <h2>訂單完成<i class="bi bi-check-lg"></i></h2>
     <div class="info">
-        你已成功訂購
+        你已成功訂購  <!-- 這裡應該要用到 vuex 了因為他跟其他網頁沒有母子關係 -->
         <br>商品：「{{ name }}」
         <br>數量：「{{ num }}」
         <br><span id="sml">*領取時間與資訊請待團購主通知</span>

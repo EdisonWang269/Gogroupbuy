@@ -9,14 +9,14 @@
     <div class="wait" v-show="showWaiting">
         <p class="title">待領清單</p>
         <div class="cards">
-            <item-card-v v-for="item in 2" :key="item"/>
+            <item-card-v v-for="item in waitingList" :key="item" :img="item.img" :name="item.name" :orderDate="item.orderDate" :dueDate="item.dueDate" :status="item.status"/>
         </div>
     </div>
 
     <div class="history" v-show="showHistory">
         <p class="title">歷史清單</p>
         <div class="cards" id="history">
-            <item-card-v v-for="item in 2" :key="item"/>
+            <item-card-v v-for="item in historyList" :key="item" :img="item.img" :name="item.name" :orderDate="item.orderDate" :dueDate="item.dueDate" :status="item.status"/>
         </div>
     </div>
 </div>
@@ -50,8 +50,8 @@ export default {
         };
         const showHistory = ref(true);
         const showWaiting = ref(true);
-        const waitingList = [];
-        const historyList = [];
+        const waitingList = ref([]);
+        const historyList = ref([]);
         const item = {
             img: "",
             name: "",

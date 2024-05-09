@@ -40,7 +40,7 @@ export default {
     setup(){
         const buttonAct = "立即下單";
         const orderNum = ref(1);
-        const item = {
+        const item = { //這裡要插值
             name: "香帥芋頭蛋糕",
             img: "../assets/cakeItem.png",
             price: 240,

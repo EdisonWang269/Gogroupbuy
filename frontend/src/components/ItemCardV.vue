@@ -8,25 +8,25 @@
         <br>訂單狀態：{{ status }}
     </p>
   </div>
-  <img src="../assets/cakeItem.png" class="card-img-top" alt="...">
+  <img :src=img class="card-img-top" alt="...">
 </div>
 </template>
 
 <script>
-import { ref } from 'vue';
 export default {
-    setup(){
-        const name = ref("香帥芋頭蛋糕");
-        const orderDate = ref("2024/ 5 / 10");
-        const dueDate = ref("2024/ 5 / 30");
-        const status = ref("已到貨待領取")
-        return{
-            name,
-            orderDate,
-            dueDate,
-            status,
-        };
-    }
+    props:['name', 'orderDate', 'dueDate', 'status', 'img'], 
+    // setup(){
+    //     const name = ref("香帥芋頭蛋糕");
+    //     const orderDate = ref("2024/ 5 / 10");
+    //     const dueDate = ref("2024/ 5 / 30");
+    //     const status = ref("已到貨待領取")
+    //     return{
+    //         name,
+    //         orderDate,
+    //         dueDate,
+    //         status,
+    //     };
+    // }
 }
 </script>
 
