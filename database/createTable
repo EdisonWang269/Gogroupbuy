@@ -1,6 +1,7 @@
 CREATE DATABASE Groupbuy;
 USE Groupbuy;
 
+SELECT * FROM Group_buying_merchant;
 CREATE TABLE Group_buying_merchant(
 	merchant_userid VARCHAR(255) NOT NULL,
 	store_name VARCHAR(255),
@@ -11,6 +12,7 @@ CREATE TABLE Group_buying_merchant(
 	UNIQUE(store_id)
 );
 
+SELECT * FROM Customer;
 CREATE TABLE Customer(
 	userid VARCHAR(255) NOT NULL,
  	store_id VARCHAR(255) NOT NULL,
@@ -20,6 +22,7 @@ CREATE TABLE Customer(
 	CONSTRAINT Customer_PK PRIMARY KEY(userid, store_id)
 );
 
+SELECT * FROM Product;
 CREATE TABLE Product(
 	product_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	price BIGINT,
@@ -29,6 +32,7 @@ CREATE TABLE Product(
 	product_picture BLOB 
 );
 
+SELECT * FROM Group_buying_product;
 CREATE TABLE Group_buying_product(
 	group_buying_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	store_id VARCHAR(255) NOT NULL,
@@ -45,6 +49,7 @@ CREATE TABLE Group_buying_product(
 	CONSTRAINT Group_buying_product_FK2 FOREIGN KEY(product_id) REFERENCES Product(product_id)
 );
 
+SELECT * FROM `Order`;
 CREATE TABLE `Order`(
 	order_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	userid VARCHAR(255) NOT NULL,
