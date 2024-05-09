@@ -49,7 +49,7 @@ CREATE TABLE `Order`(
 	userid VARCHAR(255) NOT NULL,
 	group_buying_id BIGINT UNSIGNED NOT NULL ,
 	quantity INT,
-	receive_status Boolean,
+	receive_status Boolean DEFAULT FALSE,
 	CONSTRAINT Order_FK1 FOREIGN KEY(userid) REFERENCES Customer(userid),
 	CONSTRAINT Order_FK2 FOREIGN KEY(group_buying_id) REFERENCES Group_buying_product(group_buying_id)
 );
