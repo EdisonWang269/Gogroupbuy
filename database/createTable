@@ -13,7 +13,6 @@ CREATE TABLE Customer(
 	userid VARCHAR(255) NOT NULL,
 	phone VARCHAR(10),
 	blacklist TINYINT(1) ,
-	member_level VARCHAR(255),
 	CONSTRAINT Customer_PK PRIMARY KEY(userid)
 );
 CREATE TABLE Product(
