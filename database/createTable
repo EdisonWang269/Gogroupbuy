@@ -25,17 +25,18 @@ CREATE TABLE Customer(
 SELECT * FROM Product;
 CREATE TABLE Product(
 	product_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	store_id VARCHAR(255) NOT NULL,
 	price BIGINT,
 	product_describe TEXT,
 	supplier_name VARCHAR(255),
 	product_name VARCHAR(255),
-	product_picture BLOB 
+	product_picture BLOB,
+	CONSTRAINT Product_FK FOREIGN KEY(store_id) REFERENCES Group_buying_merchant(store_id)
 );
 
 SELECT * FROM Group_buying_product;
 CREATE TABLE Group_buying_product(
 	group_buying_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	store_id VARCHAR(255) NOT NULL,
 	purchase_quantity INT,
 	launch_date DATETIME,
 	statement_date DATETIME,
@@ -45,8 +46,7 @@ CREATE TABLE Group_buying_product(
 	income DOUBLE,
 	cost DOUBLE,
 	product_id BIGINT UNSIGNED,
-	CONSTRAINT Group_buying_product_FK1 FOREIGN KEY(store_id) REFERENCES Group_buying_merchant(store_id),
-	CONSTRAINT Group_buying_product_FK2 FOREIGN KEY(product_id) REFERENCES Product(product_id)
+	CONSTRAINT Group_buying_product_FK FOREIGN KEY(product_id) REFERENCES Product(product_id)
 );
 
 SELECT * FROM `Order`;
