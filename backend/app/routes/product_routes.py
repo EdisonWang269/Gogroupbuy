@@ -59,7 +59,7 @@ def get_all_products_by_storename(en_store_name):
             )
         return jsonify(data), 200
 
-    return jsonify({"message": "Products not found"}), 404
+    return jsonify({"message": "Fail to get all products by storename"}), 404
 
 # 獲取一筆團購訂單
 @product_bp.route("/api/<string:en_store_name>/product/<int:group_buying_id>", methods=["GET"])
@@ -115,4 +115,4 @@ def get_product_by_group_buying_id(en_store_name, group_buying_id):
                         }
         return jsonify(product_dict), 200
 
-    return jsonify({"message": "Product not found"}), 404
+    return jsonify({"message": "Fail to get product by group buying id"}), 404
