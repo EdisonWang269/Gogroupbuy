@@ -25,7 +25,7 @@ CREATE TABLE Product(
 );
 
 CREATE TABLE Group_buying_product(
-	group_buying_number BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	group_buying_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	merchant_userid VARCHAR(255) NOT NULL,
 	purchase_quantity INT,
 	launch_date DATETIME,
@@ -41,11 +41,11 @@ CREATE TABLE Group_buying_product(
 );
 
 CREATE TABLE `Order`(
-	order_number BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	order_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	userid VARCHAR(255) NOT NULL,
-	group_buying_number BIGINT UNSIGNED NOT NULL ,
+	group_buying_id BIGINT UNSIGNED NOT NULL ,
 	quantity INT,
 	receive_status Boolean,
 	CONSTRAINT Order_FK1 FOREIGN KEY(userid) REFERENCES Customer(userid),
-	CONSTRAINT Order_FK2 FOREIGN KEY(group_buying_number) REFERENCES Group_buying_product(group_buying_number)
+	CONSTRAINT Order_FK2 FOREIGN KEY(group_buying_id) REFERENCES Group_buying_product(group_buying_id)
 );
