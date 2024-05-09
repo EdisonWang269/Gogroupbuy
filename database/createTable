@@ -11,6 +11,7 @@ CREATE TABLE Group_buying_merchant(
 );
 CREATE TABLE Customer(
 	userid VARCHAR(255) NOT NULL,
+	name VARCHAR(10),
 	phone VARCHAR(10),
 	blacklist TINYINT(1) ,
 	CONSTRAINT Customer_PK PRIMARY KEY(userid)
