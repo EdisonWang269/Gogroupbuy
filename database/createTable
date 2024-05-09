@@ -1,5 +1,6 @@
 CREATE DATABASE Groupbuy;
 USE Groupbuy;
+
 CREATE TABLE Group_buying_merchant(
 	merchant_userid VARCHAR(255) NOT NULL,
 	ch_store_name VARCHAR(255),
@@ -9,13 +10,15 @@ CREATE TABLE Group_buying_merchant(
 	CONSTRAINT Group_buying_merchant_PK  PRIMARY KEY(merchant_userid),
 	UNIQUE(en_store_name)
 );
+
 CREATE TABLE Customer(
 	userid VARCHAR(255) NOT NULL,
 	name VARCHAR(10),
 	phone VARCHAR(10),
-	blacklist TINYINT(1) ,
+	blacklist TINYINT,
 	CONSTRAINT Customer_PK PRIMARY KEY(userid)
 );
+
 CREATE TABLE Product(
 	product_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	price BIGINT,
@@ -32,10 +35,10 @@ CREATE TABLE Group_buying_product(
 	launch_date DATETIME,
 	statement_date DATETIME,
 	arrival_date DATETIME,
-	due_days SMALLINT,
+	due_days TINYINT,
 	inventory INT,
-	income DOUBLE(8, 2),
-	cost DOUBLE(8, 2),
+	income DOUBLE,
+	cost DOUBLE,
 	product_id BIGINT UNSIGNED,
 	CONSTRAINT Group_buying_product_FK1 FOREIGN KEY(merchant_userid) REFERENCES Group_buying_merchant(merchant_userid),
 	CONSTRAINT Group_buying_product_FK2 FOREIGN KEY(product_id) REFERENCES Product(product_id)
