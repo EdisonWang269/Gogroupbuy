@@ -30,7 +30,7 @@ CREATE TABLE Product(
 
 CREATE TABLE Group_buying_product(
 	group_buying_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	merchant_userid VARCHAR(255) NOT NULL,
+	en_store_name VARCHAR(255) NOT NULL,
 	purchase_quantity INT,
 	launch_date DATETIME,
 	statement_date DATETIME,
@@ -40,7 +40,7 @@ CREATE TABLE Group_buying_product(
 	income DOUBLE,
 	cost DOUBLE,
 	product_id BIGINT UNSIGNED,
-	CONSTRAINT Group_buying_product_FK1 FOREIGN KEY(merchant_userid) REFERENCES Group_buying_merchant(merchant_userid),
+	CONSTRAINT Group_buying_product_FK1 FOREIGN KEY(en_store_name) REFERENCES Group_buying_merchant(en_store_name),
 	CONSTRAINT Group_buying_product_FK2 FOREIGN KEY(product_id) REFERENCES Product(product_id)
 );
 
