@@ -1,15 +1,13 @@
 <template>
-  <div class="all">
+    <div class="all">
     <div class="card">
-      <h1>訂單確認</h1>
+      <h1>請輸入手機號碼</h1>
       <div class="content">
-        <span>您將訂購</span>
-        <br><span>「{{ name }}」</span>
-        <br><span>數量：「{{ orderNum }}」</span>
+        <input type="text" v-model="phoneNum">
       </div>
       <div class="buttonArea">
         <button id="cancel" @click="cancel">取消</button>
-        <button id="confirm" @click="confirm">確認</button>
+        <button id="confirm" @click="submit">確認</button>
       </div>
     </div>
   </div>
@@ -17,26 +15,24 @@
 </template>
 
 <script>
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 export default {
-  props:[ 'name', 'orderNum' ],
-  setup( props, { emit }){
-    // const router = useRouter();
-    const cancel = () => {
-      emit('isCancelled', true);
-    };
-
-    const confirm = () =>{
-      emit('confirmed', true);
-      // router.push('/home/item/confirm');
+    setup(props, {emit}){
+        const router = useRouter();
+        const phoneNum = null;
+        const submit = ()=>{
+            // 把手機號碼送去後端
+            console.log(phoneNum);
+            router.push('/home/item/confirm');
+        }
+        const cancel = () => {
+            emit('isCancelled', true);
+        };
+        return{
+            submit,
+            cancel,
+        }
     }
-
-    return{
-      cancel,
-      confirm,
-    };
-  }
-
 }
 </script>
 
@@ -71,7 +67,14 @@ h1{
   font-size: 16px;
   /* display: flexbox; */
   text-align: center;
-  color: #6A6A6A;
+}
+input{
+  width:85%;
+  border: solid 1px black;
+  border-radius: 10px;
+  height: 65px;
+  font-size: 28px;
+  text-align: center;
 }
 .buttonArea{
   text-align: center;
@@ -86,8 +89,6 @@ button{
   height: 48px;
 }
 
-
-
 #cancel{
   background-color: #3C2F2F;
 }
@@ -96,5 +97,4 @@ button{
   background-color: #EF2A39;
   margin-left: 14px;
 }
-
 </style>

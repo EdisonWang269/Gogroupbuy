@@ -15,12 +15,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SearchBar from '../components/SearchBar.vue';
-// import ItemCard from '../components/ItemCard.vue';
-import ItemCardTest from '../components/ItemCardTest.vue';
+import ItemCard from '../components/ItemCard.vue';
 export default {
     components:{
-        // ItemCard,
-        ItemCardTest,
+        ItemCard,
         SearchBar,
     },
     setup(){

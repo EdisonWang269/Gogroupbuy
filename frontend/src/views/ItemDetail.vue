@@ -25,17 +25,20 @@
         <span>商品說明：</span>
         <span id="content">{{ item.content }}</span>
     </div>
-    <confirm-pop v-if="ordercheck" class="pop" :name="item.name" :orderNum="orderNum" @isCancelled="cancel"></confirm-pop>
+    <confirm-pop v-if="ordercheck" class="pop" :name="item.name" :orderNum="orderNum" @isCancelled="cancel" @confirmed="checkAndNoPhone"></confirm-pop>
+    <phone-pop v-if="noPhoneNum" class="pop" @isCancelled="cancel"/>
 </template>
 
 <script>
 import { ref } from 'vue';
 import BigButton from '../components/BigButton.vue';
 import ConfirmPop from '@/components/ConfirmPop.vue';
+import PhonePop from '../components/PhonePop.vue';
 export default {
     components:{
         BigButton,
         ConfirmPop,
+        PhonePop,
     },  
     setup(){
         const buttonAct = "立即下單";
@@ -64,7 +67,14 @@ export default {
                 ordercheck.value = true;
             }
         };
-
+        const noPhoneNum = ref(false);
+        const checkAndNoPhone = (value) =>{
+            if(value == true){
+                console.log(value);
+                noPhoneNum.value = true;
+                ordercheck.value = false;
+            }
+        }
         const cancel = (value) => {
             if(value == true){
                 ordercheck.value = false;
@@ -80,6 +90,8 @@ export default {
             ordercheck,
             order,
             cancel,
+            noPhoneNum,
+            checkAndNoPhone,
         };
     }
 

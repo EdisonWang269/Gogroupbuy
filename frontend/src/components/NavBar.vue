@@ -7,7 +7,7 @@
                     <span class="text">歷史訂單</span>
                 </div>
             </router-link>
-            <router-link to="/home" class="link">
+            <router-link to="/" class="link">
                 <div class="menu">
                     <i class="bi bi-house"></i>
                     <span class="text">團購商品列表</span>
