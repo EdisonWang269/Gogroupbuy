@@ -2,7 +2,8 @@ CREATE DATABASE Groupbuy;
 USE Groupbuy;
 CREATE TABLE Group_buying_merchant(
 	merchant_userid VARCHAR(255) NOT NULL,
-	store_name VARCHAR(255),
+	ch_store_name VARCHAR(255),
+	en_store_name VARCHAR(255),
 	address VARCHAR(255),
 	business_hours VARCHAR(255),
 	CONSTRAINT Group_buying_merchant_PK  PRIMARY KEY(merchant_userid)    
