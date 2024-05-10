@@ -3,49 +3,110 @@ from ..database import execute_query
 
 user_bp = Blueprint('user', __name__)
 
-@user_bp.route("/api/<string:company_id>/user", methods=["POST"])
-def create_user(company_id):
-    data = request.json
-    line_id = data.get('customer_lineid')
-    phone = int(data.get('phone'))
-
-    try:
-        query = "INSERT INTO Customer (customer_lineid, phone) VALUES (%s, %s)"
-        execute_query(query, (line_id, phone))
-        return jsonify({'message': 'New user created successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@user_bp.route("/api/<string:company_id>/user/<string:customer_id>", methods=["GET"])
-def get_user(company_id, customer_id):
-    try:
-        query = "SELECT * FROM customer WHERE customer_lineid = %s"
-        user_data = execute_query(query, (customer_id,))
-        if user_data:
-            user_dict = {
-                "customer_id": user_data[0],
-                "customer_name": user_data[1],
+def check_role(store_id, userid):
+    query = "SELECT * FROM Group_buying_merchant WHERE store_id = %s AND merchant_userid = %s;"
+    merchant_info = execute_query(query, (store_id, userid))
+    # 已註冊商家
+    if merchant_info:
+        data = {
+                "role" : "merchant",
+                "info" : merchant_info
             }
-            return jsonify(user_dict)
-        return "User not found", 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return data
 
-@user_bp.route("/api/<string:company_id>/user", methods=["GET"])
-def get_users(company_id):
-    try:
-        query = "SELECT * FROM customer"
-        user_datas = execute_query(query, fetchall=True)
-        data = []
-        if user_datas:
-            for user_data in user_datas:
-                data.append(
-                    {
-                        "customer_id": user_data[0],
-                        "customer_name": user_data[1],
-                    }
-                )
-            return jsonify(data), 200
-        return "User not found", 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    query = "SELECT * FROM Customer WHERE store_id = %s AND userid = %s;"
+    customer_info = execute_query(query, (store_id, userid))
+    # 已註冊消費者
+    if customer_info:
+        data = {
+                "role" : "customer",
+                "info" : customer_info
+            }
+        return data
+
+    # 未註冊
+    return {}
+
+# 登入時呼叫授予身份，並更新user_name
+@user_bp.route("/api/<string:store_id>/user", methods=["POST"])
+def login_check(store_id):
+    data = request.json
+    userid = data.get('userid')
+    user_name = data.get('user_name')
+
+    role_info = check_role(store_id, userid)
+    if role_info:
+        if role_info["role"] == "merchant":
+            return jsonify({"message": "You are merchant of {}".format(store_id)}), 200
+ 
+        elif role_info["role"] == "customer":
+
+            # 更新user_name
+            if role_info["info"][2] != user_name:
+                query = "UPDATE Customer SET user_name = %s WHERE userid = %s AND store_id = %s"
+                result = execute_query(query, (user_name, userid, store_id))
+                if result:
+                    print("secc")
+                else:
+                    print("fail")
+
+            return jsonify({"message": "You are customer of {}".format(store_id)}), 200
+
+    else:
+        query = "INSERT INTO Customer (userid, store_id, user_name) VALUES(%s, %s, %s);"
+        result = execute_query(query, (userid, store_id, user_name))
+        if result:
+            return jsonify({"message": "Successfully enrolled"}), 200
+        
+        return jsonify({"message": "Enroll failed"}), 404
+
+# 更改用戶電話
+@user_bp.route("/api/<string:store_id>/user", methods=["PUT"])
+def update_user_info(store_id):
+    data = request.json
+    userid = data.get('userid')
+    phone = data.get('phone')
+
+    role_info = check_role(store_id, userid)
+    if not role_info:
+        return jsonify({"message": "User not found"}), 404
+    
+    if role_info["role"] == "merchant":
+        return jsonify({"message": "Merchant don't have phone"}), 404
+
+    query = "UPDATE Customer SET phone = %s WHERE userid = %s AND store_id = %s"
+    result = execute_query(query, (phone, userid, store_id))
+    if result:
+        return jsonify({"message": "Update user info successfully"}), 200
+    
+    return jsonify({"message": "Fail to update user info"}), 200
+
+# 修改用戶blacklist
+@user_bp.route("/api/<string:store_id>/user/<string:operation>", methods=["PUT"])
+def update_user_blacklist(store_id, operation):
+    data = request.json
+    userid = data.get('userid')
+
+    role_info = check_role(store_id, userid)
+    if not role_info:
+        return jsonify({"message": "User not found"}), 404
+    
+    if role_info["role"] == "merchant":
+        return jsonify({"message": "Merchant don't have blacklist"}), 404
+    
+    blacklist = role_info["info"][4]
+    if operation == "0":
+        blacklist = 0
+    elif operation == "1":
+        blacklist += 1
+    elif operation == "-1":
+        blacklist -= 1
+    else:
+        return jsonify({"message": "Invalid operation"}), 404
+
+    query = "UPDATE Customer SET blacklist = %s WHERE userid = %s AND store_id = %s"
+    result = execute_query(query, (blacklist, userid, store_id))
+    if result:
+        return jsonify({"message": "Update user blacklist successfully"}), 200
+    
+    return jsonify({"message": "Fail to update user blacklist"}), 200
