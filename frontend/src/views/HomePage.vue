@@ -7,9 +7,7 @@
     <search-bar @search-query="getValue($event)" v-model="searchQuery"/>
     <div class="items">
         <!-- 已寫好資料和模板綁定，到時將資料庫資料傳到 item 加入 items array 即可顯示 -->
-        <!-- <item-card v-for="item in items" :key="item.ID" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/> -->
-        <!-- 下面是顯示布局用，有資料後就可刪掉 -->
-        <item-card-test v-for="item in 8" :key="item" @click="checkDetail(1)" class="card"/>
+        <item-card v-for="item in items" :key="item.ID" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/>
     </div>
 </template>
 
@@ -17,12 +15,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SearchBar from '../components/SearchBar.vue';
-// import ItemCard from '../components/ItemCard.vue';
-import ItemCardTest from '../components/ItemCardTest.vue';
+import ItemCard from '../components/ItemCard.vue';
 export default {
     components:{
-        // ItemCard,
-        ItemCardTest,
+        ItemCard,
         SearchBar,
     },
     setup(){
