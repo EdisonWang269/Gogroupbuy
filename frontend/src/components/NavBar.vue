@@ -13,10 +13,12 @@
                     <span class="text">團購商品列表</span>
                 </div>
             </router-link>
-            <div class="menu">
-                <i class="bi bi-person"></i>
-                <span class="text">個人資訊</span>
-            </div>
+            <router-link to="/userInfo" class="link">
+                <div class="menu">
+                    <i class="bi bi-person"></i>
+                    <span class="text">個人資訊</span>
+                </div>
+            </router-link>
         </div>
         
 

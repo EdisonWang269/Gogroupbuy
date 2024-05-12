@@ -38,6 +38,11 @@ const router = createRouter({
             name: 'historyPage',
             component: () => import('../views/HistoryPage.vue'),
         },
+        {
+            path: '/userInfo',
+            name: 'userInfo',
+            component: () => import('../views/UserInfoPage.vue'),
+        }
     ]
 });
 
