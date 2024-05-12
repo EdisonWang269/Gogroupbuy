@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-  <img src="../assets/cakeItem.png" class="card-img-top" alt="...">
+  <img :src="img" class="card-img-top" alt="...">
   <div class="card-body">
     <p class="card-title">{{ name }}</p>
     <p class="card-text">$ {{ price }} / {{ measure }}
@@ -13,7 +13,7 @@
 <script>
 // import { ref } from 'vue';
 export default {
-    props: ['name','price', 'measure', 'endDate'],
+    props: ['img','name','price', 'measure', 'endDate'],
     // setup(){
         
     //     // const price = ref(240);

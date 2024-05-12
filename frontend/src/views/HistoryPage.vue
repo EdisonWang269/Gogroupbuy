@@ -53,12 +53,12 @@ export default {
         const waitingList = ref([]);
         const historyList = ref([]);
         const item = {
-            img: "",
+            img: require("../assets/cakeItem.png"),
             name: "",
             orderDate: "",
             dueDate: "",
             status: "",
-        }
+        };
         return{
             item,
             waitingList,

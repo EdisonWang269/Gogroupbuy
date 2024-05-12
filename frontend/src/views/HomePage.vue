@@ -7,7 +7,7 @@
     <search-bar @search-query="getValue($event)" v-model="searchQuery"/>
     <div class="items">
         <!-- 已寫好資料和模板綁定，到時將資料庫資料傳到 item 加入 items array 即可顯示 -->
-        <item-card v-for="item in items" :key="item.ID" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/>
+        <item-card v-for="item in items" :key="item.ID" :img="item.img" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/>
     </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
         
         // 一個商品的物件
         const item = {
-            img: "",
+            img: require("../assets/cakeItem.png"),
             ID: currentID.value++,
             name: "",
             price: 240,
