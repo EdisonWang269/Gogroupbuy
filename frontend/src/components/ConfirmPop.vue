@@ -45,10 +45,11 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
-  border-radius: 35px;
+  /* border-radius: 35px; */
 }
 
 .card{
+  
   display: flex;
   flex-direction: column;
   /* gap: 24px; */
@@ -61,6 +62,7 @@ export default {
   height: 32%;
 }
 h1{
+  position: inherit;
   margin: 0 auto;
   margin-top: 10%;
   color: #3C2F2F;
@@ -69,6 +71,7 @@ h1{
 }
 .content{
   font-size: 16px;
+  
   /* display: flexbox; */
   text-align: center;
   color: #6A6A6A;

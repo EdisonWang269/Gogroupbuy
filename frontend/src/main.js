@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap"
 import liff from '@line/liff';
@@ -14,5 +16,6 @@ liff.init({ liffId: '2004368945-ZXAjYNkb' })
   });
 
 const app = createApp(App);
+app.use(ElementPlus);
 app.use(router);
 app.mount('#app')

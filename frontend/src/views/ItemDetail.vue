@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <router-link to="/home"><i class="bi bi-arrow-left-short"></i></router-link>
+        <router-link to="/"><i class="bi bi-arrow-left-short"></i></router-link>
         <h1>恩恩的團購</h1>
     </div>
     <img src="../assets/cakeItem.png"> 
@@ -27,6 +27,7 @@
     </div>
     <confirm-pop v-if="ordercheck" class="pop" :name="item.name" :orderNum="orderNum" @isCancelled="cancel" @confirmed="checkAndNoPhone"></confirm-pop>
     <phone-pop v-if="noPhoneNum" class="pop" @isCancelled="cancel"/>
+    <nav-bar />
 </template>
 
 <script>
@@ -34,11 +35,13 @@ import { ref } from 'vue';
 import BigButton from '../components/BigButton.vue';
 import ConfirmPop from '@/components/ConfirmPop.vue';
 import PhonePop from '../components/PhonePop.vue';
+import NavBar from '@/components/NavBar.vue';
 export default {
     components:{
         BigButton,
         ConfirmPop,
         PhonePop,
+        NavBar,
     },  
     setup(){
         const buttonAct = "立即下單";
@@ -120,21 +123,22 @@ h1{
 }
 
 img{
-    width:88%;
-    height: auto;
+    width: auto;
+    height: 40vh;
     /* border: 1px solid gray; */
     display: block;
     margin: 0 auto;
+    margin-bottom: 5px;
     border-radius: 10px;
 }
 
 .main{
     display: flex;
     color: #3C2F2F;
-    gap:5%;
-    padding: 5px 5% 0 5%;
-    margin: 0 auto;
-
+    /* gap:5%; */
+    /* padding: 0 5px; */
+    /* margin: 0 auto; */
+    justify-content: space-evenly
 }
 
 .namePart{
@@ -203,6 +207,7 @@ i{
     font-size:24px;
     padding: 5px 5%;
     color: #3C2F2F;
+    text-align: left;
 }
 
 #content{

@@ -42,7 +42,27 @@ const router = createRouter({
             path: '/userInfo',
             name: 'userInfo',
             component: () => import('../views/UserInfoPage.vue'),
-        }
+        },
+        {
+            path: '/storeLogIn',
+            name: 'storeLogIn',
+            component: () => import('../views/StoreLogIn.vue'),
+        },
+        {
+            path: '/manager',
+            name: 'storeManage',
+            redirect: '/manager/itemManager',
+            component: () => import('../views/StoreManage.vue'),
+            children:[
+                {
+                    path: 'itemManager',
+                    name: 'itemManager',
+                    component: () => import('../views/StoreCont.vue'),
+                }
+            ]
+                
+            
+        },
     ]
 });
 

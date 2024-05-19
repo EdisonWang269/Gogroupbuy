@@ -14,6 +14,7 @@
     <div class="otherItem">
         <item-card v-for="item in items" :key="item.ID" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/>
     </div>
+    <nav-bar />
 </template>
 
 <script>
@@ -21,10 +22,12 @@ import ItemCard from '@/components/ItemCard.vue';
 import { useRouter } from 'vue-router';
 import BigButton from '@/components/BigButton.vue';
 import { ref } from 'vue';
+import NavBar from '../components/NavBar.vue';
 export default {
     components:{
         ItemCard,
         BigButton,
+        NavBar
     },
     props:[ 'name', 'num' ],
     setup(){
@@ -92,6 +95,7 @@ h2{
     margin-left: 8%;
     line-height:1.7;
     margin-top: 10px;
+    text-align: left;
 }
 #sml{
     font-size: 20px;

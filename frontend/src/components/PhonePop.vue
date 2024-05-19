@@ -41,7 +41,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
-  border-radius: 35px;
+  /* border-radius: 35px; */
 }
 
 .card{

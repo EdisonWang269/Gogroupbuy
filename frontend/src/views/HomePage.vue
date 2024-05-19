@@ -9,6 +9,7 @@
         <!-- 已寫好資料和模板綁定，到時將資料庫資料傳到 item 加入 items array 即可顯示 -->
         <item-card v-for="item in items" :key="item.ID" :img="item.img" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/>
     </div>
+    <nav-bar />
 </template>
 
 <script>
@@ -16,10 +17,12 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SearchBar from '../components/SearchBar.vue';
 import ItemCard from '../components/ItemCard.vue';
+import NavBar from '@/components/NavBar.vue';
 export default {
     components:{
         ItemCard,
         SearchBar,
+        NavBar,
     },
     setup(){
         const router = useRouter();
@@ -66,7 +69,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .all{
     position: relative;
 }
@@ -74,7 +77,8 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin: 48px 0 0 20px;
+    margin: 5vh 0 0 20px;
+    text-align: left;
 }
 
 h1{

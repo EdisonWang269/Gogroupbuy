@@ -18,11 +18,16 @@
         <p>{{ user.status }}</p>
     </div>
   </div>
+  <nav-bar />
 </template>
 
 <script>
 import { ref } from 'vue';
+import NavBar from '@/components/NavBar.vue';
 export default {
+    components:{
+        NavBar,
+    },
     setup(){
         const user = ref({
             userImg: require("../assets/user.jpg"),
@@ -47,6 +52,7 @@ h1{
     /* position: relative; */
     margin-left: 5%;
     margin-top: 48px;
+    text-align: left;
 }
 img{
     /* position: relative; */
@@ -65,6 +71,7 @@ img{
 .infoBar span{
     font-size: 15px;
     color:#A9A9A9;
+    text-align: left;
 }
 
 .infoBar p{
@@ -72,6 +79,7 @@ img{
     border-radius: 10px;
     padding: 22px 16px;
     font-size: 16px;
+    text-align: left;
 }
 .wrap{
     display: flex;

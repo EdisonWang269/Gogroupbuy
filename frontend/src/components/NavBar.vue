@@ -36,8 +36,8 @@ export default {
 
 <style scoped>
 .navBar{
-    width: 430px;
-    border-radius: 20px 20px 35px 35px;
+    width: 100VW;
+    border-radius: 20px 20px 0 0;
     background-color: #EF2A39;
     /* padding: 9px, 46px; */
     position: absolute;
@@ -47,8 +47,8 @@ export default {
 
 .container{
     display: flex;
-    gap: 13%;
-    justify-content: center;
+    /* gap: 13%; */
+    justify-content: space-between;
 }
 
 .menu{

@@ -20,16 +20,18 @@
         </div>
     </div>
 </div>
-  
+  <nav-bar />
 
 </template>
 
 <script>
 import { ref } from 'vue';
 import ItemCardV from '../components/ItemCardV.vue';
+import NavBar from '@/components/NavBar.vue';
 export default {
     components:{
         ItemCardV,
+        NavBar,
     },
     setup(){
         const selected = ref("所有訂單");
@@ -78,6 +80,7 @@ export default {
 h1{
     margin-top: 48px;
     margin-left: 5%;
+    text-align: left;
 }
 i {
     /* font-size: 28px; */
@@ -114,6 +117,7 @@ i {
 .title{
     font-size: 20px;
     text-decoration: underline;
+    text-align: left;
     margin-left:5%;
 }
 .wait{
