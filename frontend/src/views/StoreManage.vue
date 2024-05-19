@@ -19,6 +19,7 @@
 import {ref} from 'vue';
 import SideBar from "../components/SideBar.vue";
 import StoreNav from "../components/StoreNav.vue";
+
 export default {
     components: {
         SideBar,

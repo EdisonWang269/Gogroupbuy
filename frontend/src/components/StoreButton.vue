@@ -1,5 +1,5 @@
 <template>
-  <button>{{ action }}<span v-html="icon"></span></button>
+  <button class="button">{{ action }}<span v-html="icon"></span></button>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
 </script>
 
 <style scoped>
-button{
+.button{
     background-color: #4763E4;
     text-align: center;
     border-radius: 12px;

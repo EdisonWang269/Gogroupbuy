@@ -1,9 +1,10 @@
 <template>
+    <manager-pop :usage="topic" :original="endDate" :type="type" @isCanceled="cancel" @check="setEndDate" @isChecked="check" v-show="popShow"/>
     <div class="all">
         <div class="header">
             <h1>{{ itemName }}</h1> <!-- 從 vuex 抓商品資訊 -->
             <span>上架日期：{{ uploadDate }}</span>
-            <span>結單日期：{{ endDate }}   <i class="bi bi-pencil"></i></span>
+            <span>結單日期：{{ endDate }}   <i class="bi bi-pencil" @click="editDate"></i></span>
         </div>
         <div class="searchBar">
             <el-input
@@ -55,11 +56,13 @@ import { ref } from 'vue';
 // import { computed } from 'vue';
 import StoreButton from '../components/StoreButton.vue';
 import ManageTable from '@/components/ManageTable.vue';
+import ManagerPop from '../components/ManagerPop.vue';
 
 export default {
     components:{
         StoreButton,
         ManageTable,
+        ManagerPop,
         // DateFilter,
     },
 
@@ -67,11 +70,39 @@ export default {
         const itemName = ref("香帥芋泥蛋糕");
         const uploadDate = ref("2024/05/09");
         const endDate = ref("2024/05/15");
+        const topic = ref("");
+        const popShow = ref(false);
+        const type = ref("");
+        const editDate = () =>{
+            topic.value = "更改結單日期"
+            popShow.value = true;
+            type.value = "editDate";
+        }
+        const cancel = (value) =>{
+            popShow.value = value;
+        }
+        const check = (value) =>{
+            popShow.value = value;
+        }
+        const setEndDate = (date) =>{
+            console.log(date);
+            if(date != ""){
+                endDate.value = date;
+            }
+            
+        }
         
         return{
             itemName,
             uploadDate,
-            endDate
+            endDate,
+            editDate,
+            topic,
+            popShow,
+            check,
+            type,
+            cancel,
+            setEndDate,
         };
     }
 }
@@ -91,6 +122,7 @@ export default {
 }
 .bi.bi-pencil{
     color: #5C73DB;
+    cursor: pointer;
 }
 h1{
     font-weight: 700;
