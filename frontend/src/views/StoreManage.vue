@@ -55,9 +55,10 @@ export default {
     height: 100%;
 }
 .sideBar{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
+
 }
 .con{
     position: relative;

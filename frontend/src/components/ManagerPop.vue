@@ -5,14 +5,43 @@
         <div class="editDate" v-if="type==='editDate'">
             <div>
                 <span>原來結單日期</span>
-                <el-input :value="original" style="width: 500px" disabled/>
+                <el-input :value="original" style="width: 95%" disabled/>
             </div>
             <div>
                 <span>更新結單日期</span>
-                <el-input v-model="updated" style="width: 500px" placeholder="Please input" />
+                <el-input v-model="updated" style="width: 95%" placeholder="Please input" />
                 <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
             </div>
             
+        </div>
+        <div class="notify" v-else-if="type === 'notify'"> 
+            <div>
+                <span>顧客名單</span>
+                <el-input :value="customerName" style="width: 95%" placeholder="Please input" />
+            </div>
+            <div>
+                <span>訊息內容</span>
+                <textarea v-model="notifyMessage" placeholder="請輸入通知訊息內容"></textarea>
+            </div>
+            
+        </div>
+        <div class="addCus" v-else-if="type === 'addCus'">
+            <div>
+                <span>顧客姓名</span>
+                <el-input v-model="addName" style="width: 95%" placeholder="Please input" />
+            </div>
+            <div>
+                <span>手機號碼</span>
+                <el-input v-model="addPhone" style="width: 95%" placeholder="Please input" />
+            </div>
+            <div>
+                <span>訂購日期</span>
+                <el-input v-model="addOrderDate" style="width: 95%" placeholder="Please input" />
+            </div>
+            <div>
+                <span>訂購數量</span>
+                <el-input v-model="addOrderNum" style="width: 95%" placeholder="Please input" />
+            </div>
         </div>
         <div class="buttons">
             <store-button :action="'確認'" class="button" @click="check"/>
@@ -26,13 +55,18 @@
 import {ref} from 'vue';
 import StoreButton from './StoreButton.vue';
 export default {
-    props:['usage','original','type'],
+    props:['usage','original','type','customerName'],
     components:{
         StoreButton,
     },
     setup(props,{emit}){
         const updated = ref("");
         const alertShow = ref(false);
+        const notifyMessage = ref("");
+        const addName = ref("");
+        const addPhone = ref("");
+        const addOrderDate = ref("");
+        const addOrderNum = ref();
         const alert = () =>{
             if(updated.value == ""){
                 alertShow.value = true;
@@ -63,6 +97,11 @@ export default {
             cancel,
             check,
             alertShow,
+            notifyMessage,
+            addName,
+            addPhone,
+            addOrderNum,
+            addOrderDate,
         }
     }
 }
@@ -135,5 +174,30 @@ h4{
     height: 50px;
     padding: 13px;
 } */
+textarea{
+    resize: none;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    width: 95%;
+    height: 200px;
+    padding: 16px;
+}
+.notify{
+    display: flex;
+    flex-direction: column;
+    gap:16px;
+}
+.notify div{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+}
+.addCus{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(2,1fr);
+    grid-row-gap: 16px;
+}
 
 </style>

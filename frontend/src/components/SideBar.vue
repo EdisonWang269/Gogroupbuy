@@ -17,13 +17,13 @@
                 </template>
                 <el-menu-item class="item" v-for="(item, index) in 4" :key="index" :index="`1-${index + 1}`" @click="toItem">{{ itemName }}</el-menu-item>
                 </el-sub-menu>
-                <el-sub-menu index="2">
+                <el-menu-item index="2" @click="toOrder">
                     <template #title>
                         <i class="bi bi-file-earmark-text"></i>
                         <span>訂單管理</span>
                     </template>
-                </el-sub-menu>
-                <el-menu-item index="3">
+                </el-menu-item>
+                <el-menu-item index="3" @click="toUpload">
                     <template #title>
                         <i class="bi bi-laptop"></i>
                         <span>上架商品</span>
@@ -55,10 +55,18 @@ export default {
             emit('tellName', itemName.value);
             router.push("/manager/itemManager");
         }
+        const toOrder = () =>{
+            router.push("/manager/orderManager");
+        }
+        const toUpload = () =>{
+            router.push("/manager/upLoadItem");
+        }
         return{
             itemName,
             itemList,
             toItem,
+            toOrder,
+            toUpload
         }
     }
 

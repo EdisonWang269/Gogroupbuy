@@ -2,32 +2,21 @@
     <manager-pop :usage="topic" :original="endDate" :type="type" :customerName="customerName" @isCanceled="cancel" @check="setEndDate" @isChecked="check" v-show="popShow"/>
     <div class="all">
         <div class="header">
-            <h1>{{ itemName }}</h1> <!-- 從 vuex 抓商品資訊 -->
-            <span>上架日期：{{ uploadDate }}</span>
-            <span>結單日期：{{ endDate }}   <i class="bi bi-pencil" @click="editDate"></i></span>
+            <h1>顧客訂單管理與查詢</h1> 
         </div>
         <div class="searchBar">
             <el-input
                 v-model="searchInput"
                 id="search"
-                placeholder="搜尋用戶"
+                placeholder="搜尋用戶、訂購商品"
             >
                 <template #prefix>
                     <i class="bi bi-search"></i>
                 </template>
             </el-input>
         </div>
-        <div class="buttonList">
-            <div class="function">
-                <store-button :action="'增加現場購買顧客  '" :icon="'<i class=\'bi bi-plus-lg\'></i>'" @click="addCustomer"/>
-                <!-- <date-filter :opstions = "orderDates"/> -->
-            </div>
-            <div class="notify" @click="notify($event)" >
-                <i class="bi bi-bell"></i>
-                <button class="noti">一鍵通知</button>
-            </div>
-        </div>
-        <manage-table @singleNotify="notify($event)"/>
+
+        <manage-table @singleNotify="notify()"/>
         <div class="pages">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -51,87 +40,41 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-// import { TableColumnCtx, TableInstance } from 'element-plus';
-// import { computed } from 'vue';
-import StoreButton from '../components/StoreButton.vue';
+import {ref} from 'vue';
 import ManageTable from '@/components/ManageTable.vue';
 import ManagerPop from '../components/ManagerPop.vue';
-
 export default {
     components:{
-        StoreButton,
         ManageTable,
         ManagerPop,
-        // DateFilter,
-    },
 
+    },
     setup(){
-        const itemName = ref("香帥芋泥蛋糕");
-        const uploadDate = ref("2024/05/09");
-        const endDate = ref("2024/05/15");
-        const searchInput = ref("");
         const topic = ref("");
         const popShow = ref(false);
         const type = ref("");
-        const customerName = ref("Tom,Alex,Sammy"); //要通知的顧客名字
-        const editDate = () =>{
-            topic.value = "更改結單日期"
-            popShow.value = true;
-            type.value = "editDate";
-        }
+        const searchInput = ref("");
+        const customerName = ref("");
         const notify = (value) =>{
-            if(typeof value === "string"){
-                topic.value = "通知";
-                popShow.value = true;
-                type.value = "notify";
-                customerName.value = value;
-                
-            }
-            else{
-                topic.value = "通知所有未領取顧客";
-                popShow.value = true;
-                type.value = "notify";
-                
-            }
+            topic.value = "通知";
+            popShow.value = true;
+            type.value = "notify";
+            customerName.value = value; 
         }
-        // const notifyCustomerName = () =>{
-
-        // }
         const cancel = (value) =>{
             popShow.value = value;
         }
-        const check = (value) =>{
-            popShow.value = value;
-        }
-        const setEndDate = (date) =>{
-            console.log(date);
-            if(date != ""){
-                endDate.value = date;
-            }
-        }
-        const addCustomer = () =>{
-            topic.value = "增加現場購買顧客";
-            type.value = "addCus";
-            popShow.value = true;
-        }
-        
         return{
-            itemName,
-            uploadDate,
-            endDate,
-            editDate,
+            searchInput,
+            notify,
             topic,
             popShow,
-            check,
             type,
             cancel,
-            setEndDate,
-            notify,
             customerName,
-            searchInput,
-            addCustomer,
-        };
+
+        }
+
     }
 }
 </script>
@@ -216,4 +159,5 @@ i{
     position: absolute;
     bottom: 0;
 }
+
 </style>

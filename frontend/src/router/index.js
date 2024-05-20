@@ -58,6 +58,16 @@ const router = createRouter({
                     path: 'itemManager',
                     name: 'itemManager',
                     component: () => import('../views/StoreCont.vue'),
+                },
+                {
+                    path: 'orderManager',
+                    name: 'orderManager',
+                    component: () => import('../views/StoreOrderManager.vue'),
+                },
+                {
+                    path: 'uploadItem',
+                    name: 'uploadItem',
+                    component: () => import('../views/UploadItem.vue'),
                 }
             ]
                 

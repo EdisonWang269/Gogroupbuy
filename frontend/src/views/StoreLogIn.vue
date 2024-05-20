@@ -8,10 +8,10 @@
         
             <div class="info">
                 <span>Email</span>
-                <input type="text" :class="status" placeholder="請輸入電子信箱" aria-label="Username" aria-describedby="basic-addon1" v-model="email">
+                <input type="email" :class="status" :placeholder="placeholder" aria-label="Username" aria-describedby="basic-addon1" v-model="email">
                 <span>Password</span>
                 <div class="input-group mb-3">
-                    <input :type="type" class="form-control" id="password" placeholder="請輸入密碼" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input :type="type" :class="status" id="password" placeholder="請輸入密碼" aria-label="Recipient's username" aria-describedby="basic-addon2" v-model="password">
                     <span class="input-group-text" id="basic-addon2"><i :class="icon" id="suffix" @click="isShowed"></i></span>
                 </div>
                 
@@ -39,8 +39,11 @@ export default {
         const show = ref(false);
         const type = ref("password");
         const validEmail = ref(true);
+        const placeholder = ref("請輸入電子郵件")
         const status = ref("form-control");
         const email = ref("");
+        const emailInput = ref(null);
+        const password = ref("");
         const isShowed = () =>{
             show.value = !show.value;
             if(show.value){
@@ -53,15 +56,20 @@ export default {
             }
         }
         const logIn = () =>{
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            validEmail.value = emailPattern.test(email.value);
+            validEmail.value = emailInput.value && emailInput.value.checkValidity() && password.value;
+            
             if(validEmail.value){
                 router.push("/manage");
+                console.log("Logged In");
             }
             else{
+                console.log("fail");
                 status.value = "warning";
+                placeholder.value = "請輸入正確的電子郵件或密碼";
+
+
                 // 轉去警告的 css
-                router.push("/manager");
+                // router.push("/manager");
             }
         }
         return{
@@ -74,20 +82,33 @@ export default {
             type,
             logIn,
             status,
+            placeholder,
+            email,
+            password,
         }
     }
 }
 </script>
 
 <style scoped>
+.warning.#password{
+    /* height:50px; */
+    width: 90%;
+    border-radius: 0.375rem;
+    padding: .375rem .75rem;
+    color: #F87171;
+    border: #F87171 1px solid;
+}
 .warning{
-    height:50px;
-    border-radius: 12px;
+    /* height:50px; */
+    width: 100%;
+    border-radius: 0.375rem;
+    padding: .375rem .75rem;
+    color: #F87171;
     border: #F87171 1px solid;
 }
 
 .normal{
-    
     height:50px;
     border-radius: 12px;
     width: 100%;

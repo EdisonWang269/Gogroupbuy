@@ -20,7 +20,7 @@
                     <template #default="scope">
                         <div class="checkBox">
                             <el-checkbox v-model="scope.row.checked" size="large" @change="handleChange(scope.row)"/>
-                            <el-button type="danger" round size="small" v-if="!scope.row.checked">通知</el-button>
+                            <el-button type="danger" round size="small" v-if="!scope.row.checked" @click="singleNotify(scope.row.name)">通知</el-button>
                         </div>
                     </template>
                 </el-table-column>
@@ -38,9 +38,11 @@ export default {
     components:{
     },
 
-    setup(){
+    setup(props, {emit}){
         const filterDates = ref([]);
-
+        const singleNotify = (name) =>{
+            emit('singleNotify',name);
+        }
         const tableData = ref([
             {
                 name: 'Tom',
@@ -102,6 +104,9 @@ export default {
                 value: date
             }));
         });
+        const addItem = () =>{
+            
+        }
         
         return{
             // Search
@@ -113,6 +118,8 @@ export default {
             dates,
             filterDates,
             dateFilters,
+            singleNotify,
+            addItem,
         };
     }
 }
