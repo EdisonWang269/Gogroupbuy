@@ -1,8 +1,8 @@
 <template>
   <div class="table">
             <el-table :data="tableData" height="250" style="width: 100%">
-                <el-table-column prop="name" label="顧客姓名" width="120" />
-                <el-table-column prop="orderNum" label="數量" width="100" />
+                <el-table-column prop="name" label="顧客姓名" />
+                <el-table-column prop="orderNum" label="數量" />
                 <el-table-column prop="orderDate" label="訂購日期" :filter-method="filterHandler" :filters="dateFilters"/>
                 <el-table-column prop="phoneNum" label="手機號碼" />
                 <el-table-column prop="status" label="訂單狀況">
@@ -16,7 +16,7 @@
                         </el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column prop="checked" label="完成度">
+                <el-table-column prop="checked" label="完成度" >
                     <template #default="scope">
                         <div class="checkBox">
                             <el-checkbox v-model="scope.row.checked" size="large" @change="handleChange(scope.row)"/>
@@ -129,7 +129,7 @@ export default {
 .table{
     width: 90%;
     margin: 0 auto;
-    margin-top: 48px;
+    margin-top: 3%;
 }
 .checkBox{
     display: flex;

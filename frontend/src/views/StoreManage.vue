@@ -69,7 +69,9 @@ export default {
     position: relative;
     top: 0;
     right: 0;
-    height: 40px;
+    height: 80px;
     width: 100%;
+    display: flex;
+    align-items: center;
 }
 </style>

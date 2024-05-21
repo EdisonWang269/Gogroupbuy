@@ -27,7 +27,8 @@
                 <button class="noti">一鍵通知</button>
             </div>
         </div>
-        <manage-table @singleNotify="notify($event)"/>
+        <item-table @singleNotify="notify($event)"/>
+        <div class="num"><span>已領取： {{checkedNum}}</span> <span>未領取： {{ uncheckedNum }}</span></div>
         <div class="pages">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -55,13 +56,13 @@ import { ref } from 'vue';
 // import { TableColumnCtx, TableInstance } from 'element-plus';
 // import { computed } from 'vue';
 import StoreButton from '../components/StoreButton.vue';
-import ManageTable from '@/components/ManageTable.vue';
+import ItemTable from '@/components/ItemTable.vue';
 import ManagerPop from '../components/ManagerPop.vue';
 
 export default {
     components:{
         StoreButton,
-        ManageTable,
+        ItemTable,
         ManagerPop,
         // DateFilter,
     },
@@ -75,6 +76,8 @@ export default {
         const popShow = ref(false);
         const type = ref("");
         const customerName = ref("Tom,Alex,Sammy"); //要通知的顧客名字
+        const checkedNum = ref(0);
+        const uncheckedNum = ref(0);
         const editDate = () =>{
             topic.value = "更改結單日期"
             popShow.value = true;
@@ -131,6 +134,8 @@ export default {
             customerName,
             searchInput,
             addCustomer,
+            checkedNum,
+            uncheckedNum,
         };
     }
 }
@@ -215,5 +220,13 @@ i{
     /* margin: 0 auto; */
     position: absolute;
     bottom: 0;
+}
+.num{
+    color: #A1A1AA;
+    margin-top: 20px;
+    display: flex;
+    gap: 50px;
+    width: 100%;
+    justify-content: center;
 }
 </style>

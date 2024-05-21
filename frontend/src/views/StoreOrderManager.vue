@@ -16,7 +16,7 @@
             </el-input>
         </div>
 
-        <manage-table @singleNotify="notify()"/>
+        <order-table @singleNotify="notify()"/>
         <div class="pages">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -41,11 +41,11 @@
 
 <script>
 import {ref} from 'vue';
-import ManageTable from '@/components/ManageTable.vue';
+import OrderTable from '@/components/OrderTable.vue';
 import ManagerPop from '../components/ManagerPop.vue';
 export default {
     components:{
-        ManageTable,
+        OrderTable,
         ManagerPop,
 
     },

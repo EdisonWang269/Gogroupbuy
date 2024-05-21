@@ -2,7 +2,7 @@
     <div class="all">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><router-link to="/manager">{{ action }}</router-link></li>  <!-- 從 vuex 抓sidebar value -->
+                <li class="breadcrumb-item">{{ action }}</li>  <!-- 從 vuex 抓sidebar value -->
                 <li class="breadcrumb-item active" aria-current="page">{{ item }}</li>  <!-- 從 vuex 抓商品名稱 -->
             </ol>
         </nav>
@@ -19,12 +19,23 @@ export default {
 <style scoped>
 .all{
     width: 100%;
+    display: flex;
     vertical-align: center;
     align-items: center;
     justify-items: center;
     /* height: 80px; */
     padding-left: 40px;
     background-color: #fff;
+}
+.all nav{
+    height: 100%;
+    padding-top: 25px;
+    margin: auto 0;
+    display: block;
+    text-align: center;
+}
+.breadcrumb-item.active{
+    color: #4658AC;
 }
 
 </style>
