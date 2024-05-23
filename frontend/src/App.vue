@@ -3,11 +3,12 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "App",
   methods: {
+    ...mapState(["items"]),
     ...mapActions(["fetchItems"])
   },
   mounted() {

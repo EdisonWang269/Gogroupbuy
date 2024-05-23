@@ -1,125 +1,88 @@
 <template class="all">
-    <router-view />   
-    <div class="header">
-        <h1><i class="bi bi-house" id="homeIcon"></i>恩恩的團購商品</h1>
-        <p>歡迎大家加入我的團購</p>
-    </div>
-    <search-bar @search-query="getValue($event)" v-model="searchQuery"/>
-    <div class="items">
-        <!-- 已寫好資料和模板綁定，到時將資料庫資料傳到 item 加入 items array 即可顯示 -->
-        <item-card v-for="item in items" :key="item.ID" :img="item.img" :name="item.name" :price="item.price" :measure="item.measure" :endDate="item.endDate" class="card"/>
-    </div>
-    <nav-bar />
+  <router-view />
+  <div class="header">
+    <h1><i class="bi bi-house" id="homeIcon"></i>恩恩的團購商品</h1>
+    <p>歡迎大家加入我的團購</p>
+  </div>
+  <search-bar />
+  <div class="items">
+    <item-card
+      class="card"
+      @click="checkDetail(item.group_buying_id)"
+      v-for="item in items"
+      :key="item.group_buying_id"
+      :img="item.product_picture"
+      :name="item.product_name"
+      :price="item.price"
+      :measure="item.measure"
+      :endDate="item.statement_date"
+    />
+  </div>
+  <nav-bar />
 </template>
 
-<script>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import SearchBar from '../components/SearchBar.vue';
-import ItemCard from '../components/ItemCard.vue';
-import NavBar from '@/components/NavBar.vue';
-export default {
-    components:{
-        ItemCard,
-        SearchBar,
-        NavBar,
-    },
-    setup(){
-        const router = useRouter();
-        const currentID = ref(0);
-        
-        // 一個商品的物件
-        const item = {
-            img: require("../assets/cakeItem.png"),
-            ID: currentID.value++,
-            name: "",
-            price: 240,
-            measure: "",
-            endDate: "",
-        };
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import SearchBar from "../components/SearchBar.vue";
+import ItemCard from "../components/ItemCard.vue";
+import NavBar from "@/components/NavBar.vue";
 
-        // 儲存所有商品的 array 
-        const items = ref([]);
+const store = useStore();
+const router = useRouter();
+const items = computed(() => store.getters.filteredItems);
 
-        // 使用者輸入的搜尋字串
-        const searchQuery = ref("");
-
-        const getValue = (value) => {
-            searchQuery.value = value;
-        };
-        // 測試 v-model 綁定正確
-        const check = () => {
-            console.log(searchQuery.value);
-        };
-
-        const checkDetail = (itemID) => {
-            router.push(`/home/item/${itemID}`);
-        };
-
-        return{
-            item,
-            items,
-            searchQuery,
-            check,
-            getValue,
-            checkDetail,
-
-        };
-    }
-}
+const checkDetail = (itemID) => {
+  router.push(`/home/item/${itemID}`);
+};
 </script>
 
 <style scoped>
-.all{
-    position: relative;
+.all {
+  position: relative;
 }
-.header{
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin: 5vh 0 0 20px;
-    text-align: left;
-}
-
-h1{
-    font-weight: 800;
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 5vh 0 0 20px;
+  text-align: left;
 }
 
-#homeIcon{
- margin-right: 12px;   
- color:#EF2A39;
+h1 {
+  font-weight: 800;
 }
 
-p{
-    margin-top: 10px;
-    font-size: 18px;
-    color: #6A6A6A;
+#homeIcon {
+  margin-right: 12px;
+  color: #ef2a39;
 }
 
-.items{
-    position: relative;
-    left: 6px;
-    margin: 10% 10px;
-    padding: 0 0 5% 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-row-gap: 16px;
-    max-height: 63%;
-    overflow: scroll;
-
+p {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #6a6a6a;
 }
 
-.items::-webkit-scrollbar{
-    
-    width: 0;
-    height: 0;
+.items {
+  position: relative;
+  left: 6px;
+  margin: 10% 10px;
+  padding: 0 0 5% 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-row-gap: 16px;
+  max-height: 63%;
+  overflow: scroll;
 }
 
-.card{
-    cursor: pointer;
+.items::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
-
-
-
+.card {
+  cursor: pointer;
+}
 </style>
