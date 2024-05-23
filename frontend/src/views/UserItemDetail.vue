@@ -3,7 +3,7 @@
     <router-link to="/"><i class="bi bi-arrow-left-short"></i></router-link>
     <h1>恩恩的團購</h1>
   </div>
-  <img src="../assets/cakeItem.png" />
+  <img :src="item.product_picture" />
   <div class="main">
     <div class="namePart">
       <p class="name">
