@@ -11,11 +11,7 @@
       @click="checkDetail(item.group_buying_id)"
       v-for="item in items"
       :key="item.group_buying_id"
-      :img="item.product_picture"
-      :name="item.product_name"
-      :price="item.price"
-      :measure="item.measure"
-      :endDate="item.statement_date"
+      v-bind="item"
     />
   </div>
   <nav-bar />
@@ -25,6 +21,7 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+
 import SearchBar from "../components/SearchBar.vue";
 import ItemCard from "../components/ItemCard.vue";
 import NavBar from "@/components/NavBar.vue";
@@ -34,6 +31,7 @@ const router = useRouter();
 const items = computed(() => store.getters.filteredItems);
 
 const checkDetail = (itemID) => {
+  store.commit("setCurrItemID", itemID);
   router.push(`/home/item/${itemID}`);
 };
 </script>

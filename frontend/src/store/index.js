@@ -4,6 +4,7 @@ export default createStore({
   state: {
     items: [],
     currStoreID: "store1",
+    currItemID: "",
     keyword: ""
   },
 
@@ -21,12 +22,22 @@ export default createStore({
           .toLowerCase()
           .includes(state.keyword.toLowerCase());
       });
+    },
+
+    currItem(state) {
+      return state.items.find((item) => item.product_id == state.currItemID);
     }
   },
 
   mutations: {
     setItems(state, items) {
       state.items = items;
+    },
+    setCurrStoreID(state, storeID) {
+      state.currStoreID = storeID;
+    },
+    setCurrItemID(state, itemID) {
+      state.currItemID = itemID;
     },
     setKeyword(state, keyword) {
       state.keyword = keyword;
