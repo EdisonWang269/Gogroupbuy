@@ -16,12 +16,12 @@ const router = createRouter({
         {
             path: '/',
             name: 'homePage',
-            component: () => import('../views/HomePage.vue'),
+            component: () => import('../views/UserHomePage.vue'),
         },
         {
             path: '/home/item/:itemID',
             name: 'itemDetail',
-            component: () => import('../views/ItemDetail.vue'),   
+            component: () => import('../views/UserItemDetail.vue'),   
         },
         {
             path: '/pop',
@@ -31,12 +31,12 @@ const router = createRouter({
         {
             path: '/home/item/confirm',
             name: 'confirmPage',
-            component: () => import('../views/ConfirmPage.vue'),
+            component: () => import('../views/UserConfirmPage.vue'),
         },
         {
             path: '/history',
             name: 'historyPage',
-            component: () => import('../views/HistoryPage.vue'),
+            component: () => import('../views/UserHistoryPage.vue'),
         },
         {
             path: '/userInfo',
@@ -67,7 +67,7 @@ const router = createRouter({
                 {
                     path: 'uploadItem',
                     name: 'uploadItem',
-                    component: () => import('../views/UploadItem.vue'),
+                    component: () => import('../views/StoreUploadItem.vue'),
                 }
             ]
                 
