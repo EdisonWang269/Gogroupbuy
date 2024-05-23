@@ -42,11 +42,11 @@
 
 <script>
 import { ref } from "vue";
-import ItemCardV from "../components/ItemCardV.vue";
+// import ItemCardH from "../components/ItemCardH.vue";
 import NavBar from "@/components/NavBar.vue";
 export default {
   components: {
-    ItemCardV,
+    // ItemCardH,
     NavBar
   },
   setup() {

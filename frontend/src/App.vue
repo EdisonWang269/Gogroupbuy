@@ -1,18 +1,19 @@
 <template>
-  <router-view/>
-  <!-- <nav-bar /> -->
+  <router-view />
 </template>
 
 <script>
-// import HelloWorld from './views/HelloWorld.vue'
-// import NavBar from './components/NavBar.vue';
+import { mapActions } from "vuex";
 
 export default {
-  // name: 'App',
-  // components: {
-  //   NavBar,
-  // }
-}
+  name: "App",
+  methods: {
+    ...mapActions(["fetchItems"])
+  },
+  mounted() {
+    this.fetchItems();
+  }
+};
 </script>
 
 <style>

@@ -1,4 +1,12 @@
-const { defineConfig } = require('@vue/cli-service')
-module.exports = defineConfig({
-  publicPath: '/Gogroupbuy/'
-})
+module.exports = {
+  devServer: {
+    proxy: {
+      "/api": {
+        target: "https://wangpython.pythonanywhere.com/",
+        changeOrigin: true
+      }
+    }
+  },
+
+  publicPath: "/Gogroupbuy/"
+};
