@@ -4,7 +4,7 @@
     <div class="card-body">
       <p class="card-title">{{ product_name }}</p>
       <p class="card-text">
-        $ {{ price }} <br />結單日期：{{ statement_date }}
+        $ {{ price }} / {{ measure }} <br />結單日期：{{ statement_date }}
       </p>
     </div>
   </div>
@@ -12,7 +12,13 @@
 
 <script>
 export default {
-  props: ["product_name", "price", "product_picture", "statement_date"]
+  props: [
+    "product_name",
+    "price",
+    "product_picture",
+    "statement_date",
+    "measure"
+  ]
 };
 </script>
 

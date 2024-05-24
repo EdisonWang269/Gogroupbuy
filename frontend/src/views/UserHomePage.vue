@@ -65,13 +65,14 @@ p {
 
 .items {
   position: relative;
-  left: 6px;
+  left: 5%;
   margin: 10% 10px;
   padding: 0 0 5% 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-row-gap: 16px;
   max-height: 63%;
+  width: 90%;
   overflow: scroll;
 }
 
@@ -82,5 +83,6 @@ p {
 
 .card {
   cursor: pointer;
+  width: 90%;
 }
 </style>
