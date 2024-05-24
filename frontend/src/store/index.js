@@ -6,6 +6,7 @@ export default createStore({
     currStoreID: "store1",
     currItemID: "",
     currItemNum: 0,
+    userPhone: "",
     keyword: ""
   },
 
@@ -38,6 +39,9 @@ export default createStore({
   },
 
   mutations: {
+    setUserPhone(state, userPhone) {
+      state.userPhone = userPhone;
+    },
     setItems(state, items) {
       state.items = items;
     },

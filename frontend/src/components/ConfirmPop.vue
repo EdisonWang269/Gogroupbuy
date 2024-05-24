@@ -4,8 +4,8 @@
       <h1>訂單確認</h1>
       <div class="content">
         <span>您將訂購</span><br />
-        <span>「{{ name }}」</span><br />
-        <span>數量：「{{ orderNum }}」</span>
+        <span>「{{ store.getters.currItem.product_name }}」</span><br />
+        <span>數量：「{{ store.state.currItemNum }}」</span>
       </div>
       <div class="buttonArea">
         <button id="cancel" @click="cancel">取消</button>
@@ -16,13 +16,10 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps } from "vue";
+import { defineEmits } from "vue";
+import { useStore } from "vuex";
 
-defineProps({
-  name: String,
-  orderNum: Number
-});
-
+const store = useStore();
 const emit = defineEmits(["isCancelled", "confirmed"]);
 
 const cancel = () => {

@@ -3,38 +3,31 @@
     <div class="card">
       <h1>請輸入手機號碼</h1>
       <div class="content">
-        <input type="text" v-model="phoneNum" />
+        <input type="text" v-model="userPhone" />
       </div>
       <div class="buttonArea">
-        <button id="cancel" @click="cancel">取消</button>
         <button id="confirm" @click="submit">確認</button>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-export default {
-  setup(props, { emit }) {
-    const router = useRouter();
-    const phoneNum = null;
+const store = useStore();
+const router = useRouter();
+const userPhone = ref("");
 
-    const submit = () => {
-      // 把手機號碼送去後端
-      console.log(phoneNum);
-      router.push("/home/item/confirm");
-    };
-
-    const cancel = () => {
-      emit("isCancelled", true);
-    };
-
-    return {
-      submit,
-      cancel
-    };
+//TODO: 與資料庫的互動?
+const submit = () => {
+  if (userPhone.value == "") {
+    alert("請輸入手機號碼");
+  } else {
+    store.commit("setUserPhone", userPhone.value);
+    router.push("/home/item/confirm");
   }
 };
 </script>

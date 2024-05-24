@@ -75,7 +75,6 @@ const order = () => {
 const noPhoneNum = ref(false);
 const checkAndNoPhone = (value) => {
   if (value == true) {
-    console.log(value);
     noPhoneNum.value = true;
     ordercheck.value = false;
   }
