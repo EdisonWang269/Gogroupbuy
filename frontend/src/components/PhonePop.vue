@@ -15,18 +15,22 @@
 
 <script>
 import { useRouter } from "vue-router";
+
 export default {
   setup(props, { emit }) {
     const router = useRouter();
     const phoneNum = null;
+
     const submit = () => {
       // 把手機號碼送去後端
       console.log(phoneNum);
       router.push("/home/item/confirm");
     };
+
     const cancel = () => {
       emit("isCancelled", true);
     };
+
     return {
       submit,
       cancel

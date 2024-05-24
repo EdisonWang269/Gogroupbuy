@@ -5,6 +5,7 @@ export default createStore({
     items: [],
     currStoreID: "store1",
     currItemID: "",
+    currItemNum: 0,
     keyword: ""
   },
 
@@ -45,6 +46,9 @@ export default createStore({
     },
     setCurrItemID(state, itemID) {
       state.currItemID = itemID;
+    },
+    setCurrItemNum(state, itemNum) {
+      state.currItemNum = itemNum;
     },
     setKeyword(state, keyword) {
       state.keyword = keyword;

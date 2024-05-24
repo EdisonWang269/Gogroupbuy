@@ -7,9 +7,8 @@
   <div class="main">
     <div class="namePart">
       <p class="name">
-        {{ item.product_name }} <br /><span class="price"
-          >價格：$ {{ item.price }} / {{ item.measure }}</span
-        >
+        {{ item.product_name }} <br />
+        <span class="price">價格：$ {{ item.price }} / {{ item.measure }}</span>
       </p>
     </div>
     <div class="num">
@@ -68,6 +67,7 @@ const minOrder = () => {
 const ordercheck = ref(false);
 const order = () => {
   if (orderNum.value > 0) {
+    store.commit("setCurrItemNum", orderNum.value);
     ordercheck.value = true;
   }
 };
