@@ -1,7 +1,7 @@
 <template>
   <h1><i class="bi bi-list"></i>歷史訂單</h1>
   <select class="form-select" v-model="selected" @change="change">
-    <option selected>所有訂單</option>
+    <option selected value="all">所有訂單</option>
     <option value="history">歷史訂單</option>
     <option value="waiting">待領訂單</option>
   </select>
@@ -9,7 +9,7 @@
     <div class="wait" v-show="showWaiting">
       <p class="title">待領清單</p>
       <div class="cards">
-        <item-card-v
+        <item-card-h
           v-for="item in waitingList"
           :key="item"
           :img="item.img"
@@ -19,13 +19,12 @@
           :status="item.status"
         />
       </div>
-      ｛
     </div>
 
     <div class="history" v-show="showHistory">
       <p class="title">歷史清單</p>
       <div class="cards" id="history">
-        <item-card-v
+        <item-card-h
           v-for="item in historyList"
           :key="item"
           :img="item.img"
@@ -40,50 +39,27 @@
   <nav-bar />
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
-// import ItemCardH from "../components/ItemCardH.vue";
+import ItemCardH from "../components/ItemCardH.vue";
 import NavBar from "@/components/NavBar.vue";
-export default {
-  components: {
-    // ItemCardH,
-    NavBar
-  },
-  setup() {
-    const selected = ref("所有訂單");
-    const change = () => {
-      console.log(selected.value);
-      if (selected.value == "所有訂單") {
-        showHistory.value = true;
-        showWaiting.value = true;
-      } else if (selected.value == "history") {
-        showHistory.value = true;
-        showWaiting.value = false;
-      } else {
-        showHistory.value = false;
-        showWaiting.value = true;
-      }
-    };
-    const showHistory = ref(true);
-    const showWaiting = ref(true);
-    const waitingList = ref([]);
-    const historyList = ref([]);
-    const item = {
-      img: require("../assets/cakeItem.png"),
-      name: "",
-      orderDate: "",
-      dueDate: "",
-      status: ""
-    };
-    return {
-      item,
-      waitingList,
-      historyList,
-      selected,
-      change,
-      showHistory,
-      showWaiting
-    };
+
+const selected = ref("all");
+const showHistory = ref(true);
+const showWaiting = ref(true);
+const waitingList = ref([]);
+const historyList = ref([]);
+
+const change = () => {
+  if (selected.value == "all") {
+    showHistory.value = true;
+    showWaiting.value = true;
+  } else if (selected.value == "history") {
+    showHistory.value = true;
+    showWaiting.value = false;
+  } else {
+    showHistory.value = false;
+    showWaiting.value = true;
   }
 };
 </script>

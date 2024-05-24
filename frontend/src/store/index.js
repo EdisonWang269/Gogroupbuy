@@ -3,7 +3,9 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     items: [],
-    currStoreID: "store1",
+    orders: [],
+    storeID: "store1", // for testing TODO: how to get these two?
+    userID: "customer1", // for testing
     currItemID: "",
     currItemNum: 0,
     userPhone: "",
@@ -39,13 +41,16 @@ export default createStore({
   },
 
   mutations: {
+    setOrders(state, orders) {
+      state.orders = orders;
+    },
     setUserPhone(state, userPhone) {
       state.userPhone = userPhone;
     },
     setItems(state, items) {
       state.items = items;
     },
-    setCurrStoreID(state, storeID) {
+    setStoreID(state, storeID) {
       state.currStoreID = storeID;
     },
     setCurrItemID(state, itemID) {
@@ -61,9 +66,17 @@ export default createStore({
 
   actions: {
     async fetchItems({ commit }) {
-      const response = await fetch(`/api/${this.state.currStoreID}/product`);
+      const response = await fetch(`/api/${this.state.storeID}/product`);
       const data = await response.json();
       commit("setItems", data);
+    },
+
+    async fetchOrders({ commit }) {
+      const response = await fetch(
+        `/api/${this.state.storeID}/order/${this.state.userID}`
+      );
+      const data = await response.json();
+      commit("setOrders", data);
     }
   },
   modules: {}
