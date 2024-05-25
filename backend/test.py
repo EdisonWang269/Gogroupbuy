@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 
 import mysql.connector
+import base64
 
 app = Flask(__name__)
 
@@ -43,10 +44,25 @@ def execute_query(query, params=None, fetchall=False):
 def home():
     query = '''INSERT INTO Test
             VALUES (%s);'''
-    result = execute_query(query, ('1',))
+    result = execute_query(query, ('2',))
     
     return 'server ok'
 
+#測試加入照片
+@app.route("/api/product", methods=["POST"])
+def add_pic():
+    if 'photo' not in request.files:
+        return jsonify({'error': 'No photo uploaded'}), 400
+    
+    product_picture_file = request.files['photo']
+    product_picture_binary = base64.b64encode(product_picture_file.read())
+    
+    query = "INSERT INTO `PRODUCT`(product_picture) VALUES(%s)"
+    result = execute_query(query,(product_picture_binary,))
+    if result:
+        return jsonify({'message': 'Pruduct created successfully'}), 200
+    return jsonify({'error': 'Failed to create product'}), 500
+    
 #新增一項商品
 @app.route("/api/<string:store_id>/product", methods=["POST"])
 def create_product(store_id):
@@ -56,12 +72,14 @@ def create_product(store_id):
     product_describe = data.get('product_describe')
     supplier_name = data.get('supplier_name')
     product_name = data.get('product_name')
-    product_picture = data.get('product_picture')
+    product_picture_file = request.files['photo']
     
+    #轉成二進位
+    product_picture_binary = base64.b64encode(product_picture_file.read())
     
     query = """INSERT INTO `PRODUCT` (store_id, price, product_describe, supplier_name, product_name, product_picture)
                 VALUES (%s, %s, %s, %s, %s, %s, %s);"""
-    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture))
+    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture_binary))
     
     if result:
         return jsonify({'message': 'Pruduct created successfully'}), 200
@@ -105,8 +123,9 @@ def get_userid_by_group_buying_id(store_id, group_buying_id):
     return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404  
 
 #取得user的歷史訂單
-@app.route(/api/<string:store_id>/,methods = ["GET"] )
-
+@app.route("/api/<string:store_id>/Order/<string:userid>/",methods = ["GET"] )
+def get_user_all_order_by_userid(store_id, userid):
+    query = ""
 
 
 #結單時管理者下單（更新團購商品：到貨日期/領取截止日/inventory...）
