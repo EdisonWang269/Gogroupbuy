@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask
 from flask_cors import CORS
 from .routes.user_routes import user_bp
@@ -14,6 +16,7 @@ def create_app():
     
     JWT_SECRET_KEY = 'DXCs7OJoRpgNwitDBlj2pTqjhGj2xvaQtWGkBo6CBpjTvbHsaVSCXIaspQGtGBG60lUqw8YFqapZUdQam4w9jQ'
     app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=24)
     jwt = JWTManager(app)
     CORS(app)
     
