@@ -1,10 +1,13 @@
 from flask import Blueprint, request, jsonify
 from ..database import execute_query
 
+from flask_jwt_extended import jwt_required
+
 order_bp = Blueprint('order', __name__)
 
 # 提交一筆訂單
 @order_bp.route("/api/<string:store_id>/order", methods=["POST"])
+@jwt_required()
 def create_order(store_id):
     data = request.json
     userid = data.get('userid')
@@ -21,6 +24,7 @@ def create_order(store_id):
 
 # 查詢一筆訂單
 @order_bp.route("/api/<string:store_id>/order/<int:order_id>", methods=["GET"])
+@jwt_required()
 def get_order_by_order_id(store_id, order_id):
     query = """
                 SELECT `Order`.*
@@ -45,6 +49,7 @@ def get_order_by_order_id(store_id, order_id):
 
 # 查詢一名客戶所有清單
 @order_bp.route("/api/<string:store_id>/order/<string:userid>", methods=["GET"])
+@jwt_required()
 def get_all_orders_by_userid(store_id, userid):
     query = """
                 SELECT `Order`.*
@@ -73,6 +78,7 @@ def get_all_orders_by_userid(store_id, userid):
     return jsonify({'message' : 'Fail to get all orders by userid'}), 404
 
 @order_bp.route("/api/<string:store_id>/order/<string:userid>/<int:status>", methods=["GET"])
+@jwt_required()
 def get_all_orders_by_userid_and_status(store_id, userid, status):
     if status == 0:
         status = False
