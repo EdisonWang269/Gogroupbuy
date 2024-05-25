@@ -48,10 +48,9 @@ def home():
     return 'server ok'
 
 #新增一項商品
-@app.route("/api/product", methods=["POST"])
-def create_product():
+@app.route("/api/<string:store_id>/product", methods=["POST"])
+def create_product(store_id):
     data = request.json
-    store_id = data.get('store_id')
     price = data.get('price')
     product_describe = data.get('product_describe')
     supplier_name = data.get('supplier_name')
@@ -59,7 +58,7 @@ def create_product():
     product_picture = data.get('product_picture')
     
     query = """INSERT INTO `PRODUCT` (store_id, price, product_describe, supplier_name, product_name, product_picture)
-                VALUES (%s, %s, %s, %s, %s, %s)"""
+                VALUES (%s, %s, %s, %s, %s, %s);"""
     result = execute_query(query,(store_id, price, product_describe, supplier_name, product_name, product_picture))
     
     if result:
@@ -67,32 +66,43 @@ def create_product():
     return jsonify({'error': 'Failed to create product'}), 500
     
 #新增一項團購商品
-@app.route("/api/<string:store_id>/product", methods = ["POST"])
-def create_group_buying_product():
+@app.route("/api/<string:store_id>/product/ontheshelves", methods = ["POST"])
+def create_group_buying_product(store_id):
     data = request.json
-    purchase_quantity = data.get('purchase_quantity')
     launch_date = data.get('launch_date')
     statement_date = data.get('statement_date')
-    arrival_date = data.get('arrival_date')
-    due_days= data.get('due_days')
-    inventory = data.get('inventory')
-    arrival_date = data.get('arrival_date')
-    income = data.get('income')
-    cost = data.get('cost')
     product_id = data.get('product_id')
     
-    query = '''INSERT INTO `Group_buying_product`(purchase_quantity, launch_date, statement_date, arrival_date,
-                 due_days, inventory, arrival_date, income, cost, product_id) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s))'''
-    result = execute_query(query, (purchase_quantity, launch_date, statement_date, arrival_date,
-                 due_days, inventory, arrival_date, income, cost, product_id))   
+    query = 'INSERT INTO `Group_buying_product`(launch_date, statement_date, product_id) VALUES(%s, %s, %s);'
+    result = execute_query(query, (launch_date, statement_date, product_id,))   
     
     if result:
          return jsonify({'message': 'group_buying_product created successfully'}), 200
     return jsonify({'error': 'Failed to create group_buying_product'}), 500      
 
 #獲取一項團購商品的所有訂購者
+@app.route("/api/<string:store_id>/Order/<int:group_buying_id>", methods = ["GET"])
+def get_userid_by_group_buying_id(store_id, group_buying_id):
+    query = '''SELECT `userid`
+                FROM `Order` AS O,`Group_buying_product` AS G,`Product` AS P
+                WHERE O.group_buying_id = G.group_buying_id
+                AND G.product_id = P.product_id
+                AND P.store_id = %s
+                AND O.group_buying_id = %s;             
+    '''
+    userids = execute_query(query, (store_id, group_buying_id), True)
+    data = []
+    if userids:
+        data.append(
+            {
+                "userids":userids,
+            }
+        )
+        return jsonify(data), 200
 
-
+    return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404  
+#取得歷史訂單
+#結單時管理者下單（更新團購商品：到貨日期/領取截止日/inventory...）
 #到貨時更新到貨日期
 #到貨時開始計算停止領取日期
 
