@@ -1,10 +1,13 @@
 from flask import Blueprint, jsonify
 from ..database import execute_query
 
+from flask_jwt_extended import jwt_required
+
 product_bp = Blueprint('product', __name__)
 
 # 獲取商家的所有商品列表
 @product_bp.route("/api/<string:store_id>/product", methods=["GET"])
+@jwt_required()
 def get_all_products_by_storename(store_id):
     query = """
                 SELECT 
@@ -63,6 +66,7 @@ def get_all_products_by_storename(store_id):
 
 # 獲取一筆團購訂單
 @product_bp.route("/api/<string:store_id>/product/<int:group_buying_id>", methods=["GET"])
+@jwt_required()
 def get_product_by_group_buying_id(store_id, group_buying_id):
     query = """
                 SELECT 
