@@ -52,14 +52,16 @@ def home():
 def create_product(store_id):
     data = request.json
     price = data.get('price')
+    unit = data.get('unit')
     product_describe = data.get('product_describe')
     supplier_name = data.get('supplier_name')
     product_name = data.get('product_name')
     product_picture = data.get('product_picture')
     
+    
     query = """INSERT INTO `PRODUCT` (store_id, price, product_describe, supplier_name, product_name, product_picture)
-                VALUES (%s, %s, %s, %s, %s, %s);"""
-    result = execute_query(query,(store_id, price, product_describe, supplier_name, product_name, product_picture))
+                VALUES (%s, %s, %s, %s, %s, %s, %s);"""
+    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture))
     
     if result:
         return jsonify({'message': 'Pruduct created successfully'}), 200
@@ -101,7 +103,12 @@ def get_userid_by_group_buying_id(store_id, group_buying_id):
         return jsonify(data), 200
 
     return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404  
-#取得歷史訂單
+
+#取得user的歷史訂單
+@app.route(/api/<string:store_id>/,methods = ["GET"] )
+
+
+
 #結單時管理者下單（更新團購商品：到貨日期/領取截止日/inventory...）
 #到貨時更新到貨日期
 #到貨時開始計算停止領取日期
