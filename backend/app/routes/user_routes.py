@@ -77,6 +77,7 @@ def login_check(store_id):
 
 # 更改用戶電話
 @user_bp.route("/api/<string:store_id>/user", methods=["PUT"])
+@jwt_required()
 def update_user_info(store_id):
     data = request.json
     userid = data.get('userid')
