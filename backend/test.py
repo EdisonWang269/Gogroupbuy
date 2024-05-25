@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 
 import mysql.connector
 import base64
+import datetime
+
 
 app = Flask(__name__)
 
@@ -120,7 +122,7 @@ def get_userid_by_group_buying_id(store_id, group_buying_id):
 
     return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404  
 
-#取得user的歷史訂單 回傳productid,productname,取貨期限,訂單狀態,圖片
+#取得user的歷史訂單 回傳productid,productname,到貨時間,可領取天數,訂單狀態,圖片
 @app.route("/api/<string:store_id>/Order/<string:userid>/",methods = ["GET"] )
 def get_user_all_order_by_userid(store_id, userid):
     query = '''SELECT P.product_id, product_name, arrival_date, due_days, receive_status, product_picture
@@ -137,8 +139,9 @@ def get_user_all_order_by_userid(store_id, userid):
                 {
                     "product_id": order[0],
                     "product_name": order[1],
-                    "arrival_date": order[2],
-                    "due_days": order[3],
+                    "領取期限":order[2] + datetime.timedelta(days=order[3]),
+                    #"arrival_date": order[2],
+                    #"due_days": order[3],
                     "receive_status" : order[4],
                     "product_picture" : order[5]
                 }
