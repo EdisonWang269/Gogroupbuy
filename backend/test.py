@@ -72,14 +72,12 @@ def create_product(store_id):
     product_describe = data.get('product_describe')
     supplier_name = data.get('supplier_name')
     product_name = data.get('product_name')
-    product_picture_file = request.files['photo']
+    product_picture = data.get('product_picture')
+
     
-    #轉成二進位
-    product_picture_binary = base64.b64encode(product_picture_file.read())
-    
-    query = """INSERT INTO `PRODUCT` (store_id, price, product_describe, supplier_name, product_name, product_picture)
+    query = """INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
                 VALUES (%s, %s, %s, %s, %s, %s, %s);"""
-    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture_binary))
+    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture))
     
     if result:
         return jsonify({'message': 'Pruduct created successfully'}), 200
@@ -122,10 +120,33 @@ def get_userid_by_group_buying_id(store_id, group_buying_id):
 
     return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404  
 
-#取得user的歷史訂單
+#取得user的歷史訂單 回傳productid,productname,取貨期限,訂單狀態,圖片
 @app.route("/api/<string:store_id>/Order/<string:userid>/",methods = ["GET"] )
 def get_user_all_order_by_userid(store_id, userid):
-    query = ""
+    query = '''SELECT P.product_id, product_name, arrival_date, due_days, receive_status, product_picture
+                FROM `Order` AS O, Group_buying_product AS G, Product AS P
+                WHERE O.group_buying_id = G.group_buying_id
+                AND G.product_id = P.product_id
+                AND P.store_id = %s
+                AND O.userid = %s'''
+    orders = execute_query(query,(store_id, userid), True)
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                    "product_id": order[0],
+                    "product_name": order[1],
+                    "arrival_date": order[2],
+                    "due_days": order[3],
+                    "receive_status" : order[4],
+                    "product_picture" : order[5]
+                }
+            )
+        return jsonify(data), 200
+
+    return jsonify({'message' : 'Fail to get user all order by userid'}), 404 
+    
 
 
 #結單時管理者下單（更新團購商品：到貨日期/領取截止日/inventory...）
