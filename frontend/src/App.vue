@@ -9,10 +9,11 @@ export default {
   name: "App",
   methods: {
     ...mapState(["items"]),
-    ...mapActions(["fetchItems"])
+    ...mapActions(["fetchItems", "fetchOrders"])
   },
   mounted() {
     this.fetchItems();
+    this.fetchOrders();
   }
 };
 </script>

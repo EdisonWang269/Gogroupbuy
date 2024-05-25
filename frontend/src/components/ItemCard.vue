@@ -1,17 +1,24 @@
 <template>
   <div class="card">
-    <!-- 需要動態新增圖片 -->
-    <img src="@/assets/cakeItem.png" class="card-img-top" />
+    <img :src="product_picture" alt="image" class="card-img-top" />
     <div class="card-body">
-      <p class="card-title">{{ name }}</p>
-      <p class="card-text">$ {{ price }} <br />結單日期：{{ endDate }}</p>
+      <p class="card-title">{{ product_name }}</p>
+      <p class="card-text">
+        $ {{ price }} / {{ measure }} <br />結單日期：{{ statement_date }}
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["img", "name", "price", "measure", "endDate"]
+  props: [
+    "product_name",
+    "price",
+    "product_picture",
+    "statement_date",
+    "measure"
+  ]
 };
 </script>
 

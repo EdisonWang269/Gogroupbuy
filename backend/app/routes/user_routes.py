@@ -1,6 +1,11 @@
 from flask import Blueprint, request, jsonify
 from ..database import execute_query
 
+from flask_jwt_extended import create_access_token, get_jwt
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
 user_bp = Blueprint('user', __name__)
 
 def check_role(store_id, userid):
@@ -37,7 +42,11 @@ def login_check(store_id):
     role_info = check_role(store_id, userid)
     if role_info:
         if role_info["role"] == "merchant":
-            return jsonify({"message": "You are merchant of {}".format(store_id)}), 200
+            identity = {"store_id": store_id, "userid": userid}
+            additional_claims = {"role": "merchant"}
+            access_token = create_access_token(identity=identity, additional_claims=additional_claims)
+            return jsonify(access_token=access_token)
+
  
         elif role_info["role"] == "customer":
 
@@ -46,22 +55,29 @@ def login_check(store_id):
                 query = "UPDATE Customer SET user_name = %s WHERE userid = %s AND store_id = %s"
                 result = execute_query(query, (user_name, userid, store_id))
                 if result:
-                    print("secc")
+                    print("secc update user_name")
                 else:
-                    print("fail")
+                    print("fail to update user_name")
 
-            return jsonify({"message": "You are customer of {}".format(store_id)}), 200
+            identity = {"store_id": store_id, "userid": userid}
+            additional_claims = {"role": "customer"}
+            access_token = create_access_token(identity=identity, additional_claims=additional_claims)
+            return jsonify(access_token=access_token)
 
     else:
         query = "INSERT INTO Customer (userid, store_id, user_name) VALUES(%s, %s, %s);"
         result = execute_query(query, (userid, store_id, user_name))
         if result:
-            return jsonify({"message": "Successfully enrolled"}), 200
+            identity = {"store_id": store_id, "userid": userid}
+            additional_claims = {"role": "customer"}
+            access_token = create_access_token(identity=identity, additional_claims=additional_claims)
+            return jsonify(access_token=access_token, message="Successfully enrolled")
         
         return jsonify({"message": "Enroll failed"}), 404
 
 # 更改用戶電話
 @user_bp.route("/api/<string:store_id>/user", methods=["PUT"])
+@jwt_required()
 def update_user_info(store_id):
     data = request.json
     userid = data.get('userid')
@@ -83,9 +99,16 @@ def update_user_info(store_id):
 
 # 修改用戶blacklist
 @user_bp.route("/api/<string:store_id>/user/<string:operation>", methods=["PUT"])
+@jwt_required()
 def update_user_blacklist(store_id, operation):
     data = request.json
     userid = data.get('userid')
+
+    claims = get_jwt()
+    role = claims['role']
+    if role != 'merchant':
+        return jsonify({"message":"權限不足"}), 400
+
 
     role_info = check_role(store_id, userid)
     if not role_info:

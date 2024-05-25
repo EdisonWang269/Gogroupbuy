@@ -3,11 +3,6 @@ import { createRouter, createWebHistory } from "vue-router";
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
-    // {
-    //     path: '/',
-    //     name: 'hello',
-    //     component: () => import('../views/HelloWorld.vue'),
-    // },
     {
       path: "/nav",
       name: "navbar",
@@ -20,7 +15,7 @@ const router = createRouter({
     },
     {
       path: "/home/item/:itemID",
-      name: "itemDetail",
+      name: "userItemDetail",
       component: () => import("../views/UserItemDetail.vue")
     },
     {
