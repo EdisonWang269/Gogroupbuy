@@ -27,7 +27,7 @@ def create_order(store_id):
 @jwt_required()
 def get_order_by_order_id(store_id, order_id):
     query = """
-                SELECT `Order`.*
+                SELECT `Order`.*, Product.*, Group_buying_product.*
                 FROM `Order`
                 INNER JOIN Group_buying_product ON `Order`.group_buying_id = Group_buying_product.group_buying_id
                 INNER JOIN Product ON Group_buying_product.product_id = Product.product_id
@@ -37,12 +37,29 @@ def get_order_by_order_id(store_id, order_id):
 
     if order:
         order_dict = {
-            "order_id": order[0],
-            "userid": order[1],
-            "group_buying_id": order[2],
-            "quantity": order[3],
-            "receive_status" : order[4]
-        }
+                    "order_id": order[0],
+                    "userid": order[1],
+                    "group_buying_id": order[2],
+                    "quantity": order[3],
+                    "receive_status": order[4],
+                    "group_buying_id": order[5],
+                    "purchase_quantity": order[6],
+                    "launch_date": order[7],
+                    "statement_date": order[8],
+                    "arrival_date": order[9],
+                    "due_days": order[10],
+                    "inventory": order[11],
+                    "income": order[12],
+                    "cost": order[13],
+                    "product_id": order[14],
+                    "store_id": order[15],
+                    "price": order[16],
+                    "unit": order[17],
+                    "product_describe": order[18],
+                    "supplier_name": order[19],
+                    "product_name": order[20],
+                    "product_picture": order[21]
+                }
         return jsonify(order_dict), 200
     
     return jsonify({'message':'Fail to get order by orderid'}), 404
@@ -52,7 +69,7 @@ def get_order_by_order_id(store_id, order_id):
 @jwt_required()
 def get_all_orders_by_userid(store_id, userid):
     query = """
-                SELECT `Order`.*
+                SELECT `Order`.*, Product.*, Group_buying_product.*
                 FROM `Order`
                 INNER JOIN Group_buying_product ON `Order`.group_buying_id = Group_buying_product.group_buying_id
                 INNER JOIN Product ON Group_buying_product.product_id = Product.product_id
@@ -70,7 +87,24 @@ def get_all_orders_by_userid(store_id, userid):
                     "userid": order[1],
                     "group_buying_id": order[2],
                     "quantity": order[3],
-                    "receive_status" : order[4]
+                    "receive_status": order[4],
+                    "group_buying_id": order[5],
+                    "purchase_quantity": order[6],
+                    "launch_date": order[7],
+                    "statement_date": order[8],
+                    "arrival_date": order[9],
+                    "due_days": order[10],
+                    "inventory": order[11],
+                    "income": order[12],
+                    "cost": order[13],
+                    "product_id": order[14],
+                    "store_id": order[15],
+                    "price": order[16],
+                    "unit": order[17],
+                    "product_describe": order[18],
+                    "supplier_name": order[19],
+                    "product_name": order[20],
+                    "product_picture": order[21]
                 }
             )
         return jsonify(data), 200
@@ -88,7 +122,7 @@ def get_all_orders_by_userid_and_status(store_id, userid, status):
         return jsonify({'message' : 'Invalid status'}), 404
     
     query = """
-                SELECT `Order`.*
+                SELECT `Order`.*, Product.*, Group_buying_product.*
                 FROM `Order`
                 INNER JOIN Group_buying_product ON `Order`.group_buying_id = Group_buying_product.group_buying_id
                 INNER JOIN Product ON Group_buying_product.product_id = Product.product_id
@@ -107,7 +141,24 @@ def get_all_orders_by_userid_and_status(store_id, userid, status):
                     "userid": order[1],
                     "group_buying_id": order[2],
                     "quantity": order[3],
-                    "receive_status" : order[4]
+                    "receive_status": order[4],
+                    "group_buying_id": order[5],
+                    "purchase_quantity": order[6],
+                    "launch_date": order[7],
+                    "statement_date": order[8],
+                    "arrival_date": order[9],
+                    "due_days": order[10],
+                    "inventory": order[11],
+                    "income": order[12],
+                    "cost": order[13],
+                    "product_id": order[14],
+                    "store_id": order[15],
+                    "price": order[16],
+                    "unit": order[17],
+                    "product_describe": order[18],
+                    "supplier_name": order[19],
+                    "product_name": order[20],
+                    "product_picture": order[21]
                 }
             )
         return jsonify(data), 200
