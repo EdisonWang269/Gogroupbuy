@@ -33,7 +33,7 @@ def check_role(store_id, userid):
     return {}
 
 # 登入時呼叫授予身份，並更新user_name
-@user_bp.route("/api/<string:store_id>/user", methods=["POST"])
+@user_bp.route("/api/user/<string:store_id>", methods=["POST"])
 def login_check(store_id):
     data = request.json
     userid = data.get('userid')
@@ -46,7 +46,6 @@ def login_check(store_id):
             additional_claims = {"role": "merchant"}
             access_token = create_access_token(identity=identity, additional_claims=additional_claims)
             return jsonify(access_token=access_token)
-
  
         elif role_info["role"] == "customer":
 
@@ -76,18 +75,20 @@ def login_check(store_id):
         return jsonify({"message": "Enroll failed"}), 404
 
 # 更改用戶電話
-@user_bp.route("/api/<string:store_id>/user", methods=["PUT"])
+@user_bp.route("/api/user", methods=["PUT"])
 @jwt_required()
-def update_user_info(store_id):
+def update_user_info():
     data = request.json
-    userid = data.get('userid')
     phone = data.get('phone')
 
-    role_info = check_role(store_id, userid)
-    if not role_info:
-        return jsonify({"message": "User not found"}), 404
+    identity = get_jwt_identity()
+    store_id = identity.get('store_id')
+    userid = identity.get('userid')
+
+    claims = get_jwt()
+    role = claims['role']
     
-    if role_info["role"] == "merchant":
+    if role == "merchant":
         return jsonify({"message": "Merchant don't have phone"}), 404
 
     query = "UPDATE Customer SET phone = %s WHERE userid = %s AND store_id = %s"
@@ -98,11 +99,14 @@ def update_user_info(store_id):
     return jsonify({"message": "Fail to update user info"}), 200
 
 # 修改用戶blacklist
-@user_bp.route("/api/<string:store_id>/user/<string:operation>", methods=["PUT"])
+@user_bp.route("/api/user/<string:operation>", methods=["PUT"])
 @jwt_required()
-def update_user_blacklist(store_id, operation):
+def update_user_blacklist(operation):
     data = request.json
     userid = data.get('userid')
+    
+    identity = get_jwt_identity()
+    store_id = identity.get('store_id')
 
     claims = get_jwt()
     role = claims['role']
