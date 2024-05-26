@@ -1,7 +1,9 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from ..database import execute_query
 
 from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
+
+import base64
 
 product_bp = Blueprint('product', __name__)
 
@@ -126,3 +128,36 @@ def get_product_by_group_buying_id(group_buying_id):
         return jsonify(product_dict), 200
 
     return jsonify({"message": "Fail to get product by groupbuying id"}), 404
+    
+#新增一項商品
+@product_bp.route("/api/product", methods=["POST"])
+@jwt_required()
+def create_product():
+    data = request.json     
+    price = data.get('price')
+    unit = data.get('unit')
+    product_describe = data.get('product_describe')
+    supplier_name = data.get('supplier_name')
+    product_name = data.get('product_name')
+    product_picture = data.get('product_picture')
+
+    identity = get_jwt_identity()
+    store_id = identity.get('store_id')
+
+    claims = get_jwt()
+    role = claims['role']
+
+    if role != 'merchant':
+        return jsonify({"message":"權限不足"}), 400
+
+    query = """
+                INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
+                VALUES (%s, %s, %s, %s, %s, %s, %s);
+            """
+    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture))
+    
+    if result:
+        return jsonify({'message': 'Pruduct created successfully'}), 200
+    
+    return jsonify({'error': 'Failed to create product'}), 500
+
