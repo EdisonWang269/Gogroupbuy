@@ -23,7 +23,7 @@ CREATE TABLE Customer(
 CREATE TABLE Product(
 	product_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	store_id VARCHAR(255) NOT NULL,
-	price BIGINT,
+	price INT,
 	unit VARCHAR(255),
 	product_describe TEXT,
 	supplier_name VARCHAR(255),
