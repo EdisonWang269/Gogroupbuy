@@ -1,14 +1,9 @@
+from flaskext.mysql import MySQL
+
 import mysql.connector
 
-DB_CONFIG = {
-  'user': 'root',
-  'password': 'root',
-  'host': '127.0.0.1',
-  'database': 'Groupbuy',
-}
-
 def get_database_connection():
-    return mysql.connector.connect(**DB_CONFIG)
+    return mysql.connect()
 
 def execute_query(query, params=None, fetchall=False):
     try:
