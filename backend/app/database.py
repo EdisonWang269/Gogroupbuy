@@ -2,8 +2,9 @@ from flaskext.mysql import MySQL
 
 import mysql.connector
 
+mysql = MySQL()
 def get_database_connection():
-    mysql = MySQL()
+    
     return mysql.connect()
 
 def execute_query(query, params=None, fetchall=False):

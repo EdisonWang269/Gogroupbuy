@@ -12,6 +12,7 @@ from flaskext.mysql import MySQL
 
 import configparser
 
+mysql = MySQL()
 def create_app():
     app = Flask(__name__)
 
@@ -28,8 +29,8 @@ def create_app():
     app.config['MYSQL_DATABASE_DB'] = config['db']['database']
 
     jwt = JWTManager(app)
+    mysql.init_app(app)
     CORS(app)
-    MySQL(app)
     
     # Register Blueprints
     app.register_blueprint(user_bp)
