@@ -1,11 +1,21 @@
 from flaskext.mysql import MySQL
-
 import mysql.connector
 
-mysql = MySQL()
+import configparser
+
+config_path = '/home/wangpython/Gogroupbuy/backend/config.ini'
+config = configparser.ConfigParser()
+config.read(config_path)
+
+DB_CONFIG = {
+  'user': config['db']['username'],
+  'password': config['db']['password'],
+  'host': config['db']['host'],
+  'database': config['db']['database'],
+}
+
 def get_database_connection():
-    
-    return mysql.connect()
+    return mysql.connector.connect(**DB_CONFIG)
 
 def execute_query(query, params=None, fetchall=False):
     try:

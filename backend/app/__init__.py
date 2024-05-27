@@ -1,5 +1,3 @@
-import datetime
-
 from flask import Flask
 from flask_cors import CORS
 from .routes.user_routes import user_bp
@@ -11,8 +9,8 @@ from flask_jwt_extended import JWTManager
 from flaskext.mysql import MySQL
 
 import configparser
+import datetime
 
-mysql = MySQL()
 def create_app():
     app = Flask(__name__)
 
@@ -29,10 +27,8 @@ def create_app():
     app.config['MYSQL_DATABASE_DB'] = config['db']['database']
 
     jwt = JWTManager(app)
-    mysql.init_app(app)
     CORS(app)
     
-    # Register Blueprints
     app.register_blueprint(user_bp)
     app.register_blueprint(product_bp)
     app.register_blueprint(order_bp)
