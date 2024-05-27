@@ -27,7 +27,6 @@ def create_app():
     app.config['MYSQL_DATABASE_PASSWORD'] = config['db']['password']
     app.config['MYSQL_DATABASE_DB'] = config['db']['database']
 
-    mysql = MySQL(app)
     jwt = JWTManager(app)
     CORS(app)
     
@@ -35,7 +34,5 @@ def create_app():
     app.register_blueprint(user_bp)
     app.register_blueprint(product_bp)
     app.register_blueprint(order_bp)
-
-
-
+    
     return app

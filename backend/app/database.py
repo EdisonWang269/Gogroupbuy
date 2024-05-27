@@ -1,7 +1,8 @@
 from flaskext.mysql import MySQL
-from app import mysql
+
 import mysql.connector
 
+mysql = MySQL()
 def get_database_connection():
     return mysql.connect()
 
