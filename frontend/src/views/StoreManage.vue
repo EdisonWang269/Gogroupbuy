@@ -25,8 +25,8 @@ export default {
         SideBar,
         StoreNav,
     },
-    setup(){
-        const firstStep = ref("商品管理");
+    setup(){ // 要透過 Vuex 綁定他現在是在哪個步驟
+        const firstStep = ref("商品管理"); 
         const secondStep = ref("香帥芋泥蛋糕");
         
         return{

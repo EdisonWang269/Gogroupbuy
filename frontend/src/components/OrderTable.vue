@@ -44,7 +44,7 @@
           const singleNotify = (name) =>{
               emit('singleNotify',name);
           }
-          const tableData = ref([
+          const tableData = ref([ // 可以在這裡綁定
               {
                   name: 'Tom',
                   item: '香帥芋泥蛋糕',

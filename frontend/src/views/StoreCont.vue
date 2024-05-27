@@ -62,7 +62,7 @@ import ManagerPop from '../components/ManagerPop.vue';
 export default {
     components:{
         StoreButton,
-        ItemTable,
+        ItemTable,  // 可以也可以在這裡綁資料庫的訂單資料
         ManagerPop,
         // DateFilter,
     },

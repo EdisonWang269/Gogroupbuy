@@ -42,8 +42,8 @@ export default {
         const placeholder = ref("請輸入電子郵件")
         const status = ref("form-control");
         const email = ref("");
-        const emailInput = ref(null);
-        const password = ref("");
+        const emailInput = ref(null); //要連資料庫判斷是否有帳號
+        const password = ref(""); // 這也是連資料庫判斷
         const isShowed = () =>{
             show.value = !show.value;
             if(show.value){
@@ -66,10 +66,6 @@ export default {
                 console.log("fail");
                 status.value = "warning";
                 placeholder.value = "請輸入正確的電子郵件或密碼";
-
-
-                // 轉去警告的 css
-                // router.push("/manager");
             }
         }
         return{

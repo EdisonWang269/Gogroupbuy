@@ -45,7 +45,7 @@ import OrderTable from '@/components/OrderTable.vue';
 import ManagerPop from '../components/ManagerPop.vue';
 export default {
     components:{
-        OrderTable,
+        OrderTable,  // 可以在這裡綁定訂單資料，回傳到 components 裡面
         ManagerPop,
 
     },
@@ -53,7 +53,7 @@ export default {
         const topic = ref("");
         const popShow = ref(false);
         const type = ref("");
-        const searchInput = ref("");
+        const searchInput = ref("");  
         const customerName = ref("");
         const notify = (value) =>{
             topic.value = "通知";
