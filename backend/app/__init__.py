@@ -21,10 +21,10 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = config['jwt']['JWT_SECRET_KEY']
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=24)
 
-    app.config['MYSQL_DATABASE_HOST'] = config['db']['host']
-    app.config['MYSQL_DATABASE_USER'] = config['db']['username']
-    app.config['MYSQL_DATABASE_PASSWORD'] = config['db']['password']
-    app.config['MYSQL_DATABASE_DB'] = config['db']['database']
+    # app.config['MYSQL_DATABASE_HOST'] = config['db']['host']
+    # app.config['MYSQL_DATABASE_USER'] = config['db']['username']
+    # app.config['MYSQL_DATABASE_PASSWORD'] = config['db']['password']
+    # app.config['MYSQL_DATABASE_DB'] = config['db']['database']
 
     jwt = JWTManager(app)
     CORS(app)

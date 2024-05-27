@@ -3,8 +3,6 @@ from ..database import execute_query
 
 from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
 
-import base64
-
 product_bp = Blueprint('product', __name__)
 
 # 獲取商家的所有商品列表
