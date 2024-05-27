@@ -29,10 +29,11 @@ def create_app():
 
     jwt = JWTManager(app)
     CORS(app)
+    MySQL(app)
     
     # Register Blueprints
     app.register_blueprint(user_bp)
     app.register_blueprint(product_bp)
     app.register_blueprint(order_bp)
-    
+
     return app
