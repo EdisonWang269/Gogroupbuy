@@ -3,7 +3,7 @@ from flaskext.mysql import MySQL
 import mysql.connector
 
 def get_database_connection():
-    return mysql.connect()
+    return mysql.connector.connect()
 
 def execute_query(query, params=None, fetchall=False):
     try:
