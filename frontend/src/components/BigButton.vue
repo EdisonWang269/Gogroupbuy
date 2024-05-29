@@ -3,25 +3,22 @@
 </template>
 
 <script>
-// import { ref } from 'vue';
-export default {
-    props:[
-        'action',
-    ],
-    setup(){
-        // const action = ref("");
+  // import { ref } from 'vue';
+  export default {
+    props: ["action"],
+    setup() {
+      // const action = ref("");
 
-        return{
-            // action,
-        };
-    }
-
-}
+      return {
+        // action,
+      };
+    },
+  };
 </script>
 
 <style scoped>
-button{
-    background-color:#3C2F2F;
+  button {
+    background-color: #3c2f2f;
     border: none;
     border-radius: 20px;
     box-shadow: 3px 3px 8px 3px rgba(0, 0, 0, 0.2);
@@ -32,6 +29,5 @@ button{
     color: white;
     margin: 0 auto;
     padding: 10px 0;
-}
-
+  }
 </style>

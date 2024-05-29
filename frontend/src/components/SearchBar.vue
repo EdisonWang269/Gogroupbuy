@@ -14,39 +14,39 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useStore } from "vuex";
-const store = useStore();
+  import { computed } from "vue";
+  import { useStore } from "vuex";
+  const store = useStore();
 
-const keyword = computed({
-  get() {
-    return store.state.keyword;
-  },
-  set(value) {
-    store.commit("setKeyword", value);
-  }
-});
+  const keyword = computed({
+    get() {
+      return store.state.keyword;
+    },
+    set(value) {
+      store.commit("setKeyword", value);
+    },
+  });
 </script>
 
 <style scoped>
-#search {
-  font-size: 20px;
-}
+  #search {
+    font-size: 20px;
+  }
 
-#searchBar {
-  box-shadow: 5px 7px 8px 0px rgba(180, 180, 180, 0.5);
-  border-radius: 20px;
-  border: 1px solid rgba(180, 180, 180, 0.5);
-  top: 20px;
-  border: none;
-  width: 90%;
-  margin: 0 auto;
-  height: 60px;
-}
+  #searchBar {
+    box-shadow: 5px 7px 8px 0px rgba(180, 180, 180, 0.5);
+    border-radius: 20px;
+    border: 1px solid rgba(180, 180, 180, 0.5);
+    top: 20px;
+    border: none;
+    width: 90%;
+    margin: 0 auto;
+    height: 60px;
+  }
 
-.input-group-text,
-.form-control {
-  border: none;
-  /* border-radius: 20px 0 0 20px; */
-}
+  .input-group-text,
+  .form-control {
+    border: none;
+    /* border-radius: 20px 0 0 20px; */
+  }
 </style>

@@ -40,73 +40,73 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import ItemCardH from "../components/ItemCardH.vue";
-import NavBar from "@/components/NavBar.vue";
+  import { ref } from "vue";
+  import ItemCardH from "../components/ItemCardH.vue";
+  import NavBar from "@/components/NavBar.vue";
 
-const selected = ref("all");
-const showHistory = ref(true);
-const showWaiting = ref(true);
-const waitingList = ref([]);
-const historyList = ref([]);
+  const selected = ref("all");
+  const showHistory = ref(true);
+  const showWaiting = ref(true);
+  const waitingList = ref([]);
+  const historyList = ref([]);
 
-const change = () => {
-  if (selected.value == "all") {
-    showHistory.value = true;
-    showWaiting.value = true;
-  } else if (selected.value == "history") {
-    showHistory.value = true;
-    showWaiting.value = false;
-  } else {
-    showHistory.value = false;
-    showWaiting.value = true;
-  }
-};
+  const change = () => {
+    if (selected.value == "all") {
+      showHistory.value = true;
+      showWaiting.value = true;
+    } else if (selected.value == "history") {
+      showHistory.value = true;
+      showWaiting.value = false;
+    } else {
+      showHistory.value = false;
+      showWaiting.value = true;
+    }
+  };
 </script>
 
 <style scoped>
-h1 {
-  margin-top: 48px;
-  margin-left: 5%;
-  text-align: left;
-}
-i {
-  /* font-size: 28px; */
-  color: #ef2a39;
-  font-weight: 700;
-}
-.form-select {
-  width: 120px;
-  margin-left: 5%;
-  margin-top: 48px;
-  margin-bottom: 24px;
-}
-.option {
-  border-radius: 1px;
-  font-size: 16px;
-}
+  h1 {
+    margin-top: 48px;
+    margin-left: 5%;
+    text-align: left;
+  }
+  i {
+    /* font-size: 28px; */
+    color: #ef2a39;
+    font-weight: 700;
+  }
+  .form-select {
+    width: 120px;
+    margin-left: 5%;
+    margin-top: 48px;
+    margin-bottom: 24px;
+  }
+  .option {
+    border-radius: 1px;
+    font-size: 16px;
+  }
 
-.cards {
-  display: grid;
-  row-gap: 20px;
-}
+  .cards {
+    display: grid;
+    row-gap: 20px;
+  }
 
-.content {
-  height: 68%;
-  overflow: scroll;
-  padding: 10px 0;
-}
-.content::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-.title {
-  font-size: 20px;
-  text-decoration: underline;
-  text-align: left;
-  margin-left: 5%;
-}
-.wait {
-  margin-bottom: 30px;
-}
+  .content {
+    height: 68%;
+    overflow: scroll;
+    padding: 10px 0;
+  }
+  .content::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  .title {
+    font-size: 20px;
+    text-decoration: underline;
+    text-align: left;
+    margin-left: 5%;
+  }
+  .wait {
+    margin-bottom: 30px;
+  }
 </style>

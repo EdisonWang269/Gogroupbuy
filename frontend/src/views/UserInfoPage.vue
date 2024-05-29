@@ -3,58 +3,57 @@
     <i class="bi bi-person"></i>
     個人資訊
   </h1>
-  <img :src="user.userImg">
+  <img :src="user.userImg" />
   <div class="wrap">
     <div class="infoBar">
-        <span>姓名</span>
-        <p>{{ user.name }}</p>
+      <span>姓名</span>
+      <p>{{ user.name }}</p>
     </div>
     <div class="infoBar">
-        <span>手機</span>
-        <p>{{ user.phoneNum }}</p>
+      <span>手機</span>
+      <p>{{ user.phoneNum }}</p>
     </div>
     <div class="infoBar">
-        <span>會員等級</span>
-        <p>{{ user.status }}</p>
+      <span>會員等級</span>
+      <p>{{ user.status }}</p>
     </div>
   </div>
   <nav-bar />
 </template>
 
 <script>
-import { ref } from 'vue';
-import NavBar from '@/components/NavBar.vue';
-export default {
-    components:{
-        NavBar,
+  import { ref } from "vue";
+  import NavBar from "@/components/NavBar.vue";
+  export default {
+    components: {
+      NavBar,
     },
-    setup(){
-        const user = ref({
-            userImg: require("../assets/user.jpg"),
-            name: "陳以恩",
-            phoneNum: "0922-111-333",
-            status: "一般會員",
-        });
-        
-        return{
-            user,
-        };
-    }
+    setup() {
+      const user = ref({
+        userImg: require("../assets/user.jpg"),
+        name: "陳以恩",
+        phoneNum: "0922-111-333",
+        status: "一般會員",
+      });
 
-}
+      return {
+        user,
+      };
+    },
+  };
 </script>
 
 <style scoped>
-i{
-    color: #EF2A39;
-}
-h1{
+  i {
+    color: #ef2a39;
+  }
+  h1 {
     /* position: relative; */
     margin-left: 5%;
     margin-top: 48px;
     text-align: left;
-}
-img{
+  }
+  img {
     /* position: relative; */
     display: block;
     height: 115px;
@@ -62,31 +61,30 @@ img{
     border-radius: 35px;
     margin: 60px auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-.infoBar{
+  }
+  .infoBar {
     display: flex;
     flex-direction: column;
     gap: 6px;
-}
-.infoBar span{
+  }
+  .infoBar span {
     font-size: 15px;
-    color:#A9A9A9;
+    color: #a9a9a9;
     text-align: left;
-}
+  }
 
-.infoBar p{
-    border: 1px solid #EEEEEE;
+  .infoBar p {
+    border: 1px solid #eeeeee;
     border-radius: 10px;
     padding: 22px 16px;
     font-size: 16px;
     text-align: left;
-}
-.wrap{
+  }
+  .wrap {
     display: flex;
     flex-direction: column;
     gap: 30px;
     width: 80%;
     margin: 0 auto;
-}
-
+  }
 </style>

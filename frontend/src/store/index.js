@@ -9,7 +9,7 @@ export default createStore({
     currItemID: "",
     currItemNum: 0,
     userPhone: "",
-    keyword: ""
+    keyword: "",
   },
 
   getters: {
@@ -37,7 +37,7 @@ export default createStore({
 
     currItem(state) {
       return state.items.find((item) => item.product_id == state.currItemID);
-    }
+    },
   },
 
   mutations: {
@@ -61,7 +61,7 @@ export default createStore({
     },
     setKeyword(state, keyword) {
       state.keyword = keyword;
-    }
+    },
   },
 
   actions: {
@@ -77,7 +77,7 @@ export default createStore({
       );
       const data = await response.json();
       commit("setOrders", data);
-    }
+    },
   },
-  modules: {}
+  modules: {},
 });

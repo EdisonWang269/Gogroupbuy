@@ -18,71 +18,71 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+  import { computed } from "vue";
+  import { useStore } from "vuex";
+  import { useRouter } from "vue-router";
 
-import SearchBar from "../components/SearchBar.vue";
-import ItemCard from "../components/ItemCard.vue";
-import NavBar from "@/components/NavBar.vue";
+  import SearchBar from "../components/SearchBar.vue";
+  import ItemCard from "../components/ItemCard.vue";
+  import NavBar from "@/components/NavBar.vue";
 
-const store = useStore();
-const router = useRouter();
-const items = computed(() => store.getters.filteredItems);
+  const store = useStore();
+  const router = useRouter();
+  const items = computed(() => store.getters.filteredItems);
 
-const checkDetail = (itemID) => {
-  store.commit("setCurrItemID", itemID);
-  router.push(`/home/item/${itemID}`);
-};
+  const checkDetail = (itemID) => {
+    store.commit("setCurrItemID", itemID);
+    router.push(`/home/item/${itemID}`);
+  };
 </script>
 
 <style scoped>
-.all {
-  position: relative;
-}
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 5vh 0 0 20px;
-  text-align: left;
-}
+  .all {
+    position: relative;
+  }
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 5vh 0 0 20px;
+    text-align: left;
+  }
 
-h1 {
-  font-weight: 800;
-}
+  h1 {
+    font-weight: 800;
+  }
 
-#homeIcon {
-  margin-right: 12px;
-  color: #ef2a39;
-}
+  #homeIcon {
+    margin-right: 12px;
+    color: #ef2a39;
+  }
 
-p {
-  margin-top: 10px;
-  font-size: 18px;
-  color: #6a6a6a;
-}
+  p {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #6a6a6a;
+  }
 
-.items {
-  position: relative;
-  left: 5%;
-  margin: 10% 10px;
-  padding: 0 0 5% 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-row-gap: 16px;
-  max-height: 63%;
-  width: 90%;
-  overflow: scroll;
-}
+  .items {
+    position: relative;
+    left: 5%;
+    margin: 10% 10px;
+    padding: 0 0 5% 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-row-gap: 16px;
+    max-height: 63%;
+    width: 90%;
+    overflow: scroll;
+  }
 
-.items::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
+  .items::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 
-.card {
-  cursor: pointer;
-  width: 90%;
-}
+  .card {
+    cursor: pointer;
+    width: 90%;
+  }
 </style>
