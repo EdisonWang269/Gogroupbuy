@@ -262,6 +262,7 @@ def get_userid_by_group_buying_id(group_buying_id):
     message = '您訂購的商品已送達，請盡快取貨。'
 
     for userid in userids:
-        send_message(userid, message)
+        resp = send_message(userid, message)
     
-    return jsonify({'message' : 'Send message successfully'}), 200
+    # return jsonify({'message' : 'Send message successfully'}), 200
+    return resp
