@@ -255,14 +255,15 @@ def get_userid_by_group_buying_id(group_buying_id):
                 AND receive_status = FALSE;
             """
     userids = execute_query(query, (group_buying_id,), True)
-
+    
     if not userids:
         return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
 
     message = '您訂購的商品已送達，請盡快取貨。'
 
     for userid in userids:
+        useridtype = type(userid)
         resp = send_message(userid, message)
     
     # return jsonify({'message' : 'Send message successfully'}), 200
-    return resp
+    return jsonify(userids=type(userids), useridtype=useridtype)
