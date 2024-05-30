@@ -249,20 +249,26 @@ def get_userid_by_group_buying_id(group_buying_id):
         return jsonify({"message":"權限不足"}), 400
     
     query = """
-                SELECT userid
-                FROM `Order`
-                WHERE group_buying_id = %s 
-                AND receive_status = FALSE;
-            """
-    userids = execute_query(query, (group_buying_id,), True)
+                SELECT O.userid, P.product_name
+                FROM `Order` O
+                JOIN Group_buying_product GBP ON O.group_buying_id = GBP.group_buying_id
+                JOIN Product P ON GBP.product_id = P.product_id
+                WHERE O.group_buying_id = %s 
+                AND O.receive_status = FALSE;
 
-    if not userids:
+            """
+    results = execute_query(query, (group_buying_id,), True)
+
+    if not results:
         return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
 
-    message = '您訂購的商品已送達，請盡快取貨。'
+    
 
-    for user in userids:
-        userid = user[0]
+    for result in results:
+        userid = result[0]
+        product_name = result[1]
+        message = f'您訂購的{product_name}已送達，請盡快取貨。'
+        
         send_message(userid, message)
     
     return jsonify({'message' : 'Send message successfully'}), 200
