@@ -1,3 +1,4 @@
+import datetime
 from flask import Blueprint, request, jsonify
 from ..database import execute_query
 from ..sendmess import send_message
@@ -249,7 +250,7 @@ def get_userid_by_group_buying_id(group_buying_id):
         return jsonify({"message":"權限不足"}), 400
     
     query = """
-                SELECT O.userid, P.product_name
+                SELECT O.userid, P.product_name, P.price, O.quantity, GBP.arrival_date, GBP.due_days
                 FROM `Order` O
                 JOIN Group_buying_product GBP ON O.group_buying_id = GBP.group_buying_id
                 JOIN Product P ON GBP.product_id = P.product_id
@@ -262,13 +263,16 @@ def get_userid_by_group_buying_id(group_buying_id):
     if not results:
         return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
 
-    
-
     for result in results:
         userid = result[0]
         product_name = result[1]
-        message = f'您訂購的{product_name}已送達，請盡快取貨。'
-        
+        price = result[2]
+        quantity = result[3]
+        arrival_date = result[4]
+        due_days = result[5]
+        due_date = arrival_date + datetime.timedelta(days=due_days)
+        message = f'您訂購的{product_name}已送達，請備妥${price*quantity}，於{due_date}前來店內取貨，謝謝。'
+
         send_message(userid, message)
     
     return jsonify({'message' : 'Send message successfully'}), 200
