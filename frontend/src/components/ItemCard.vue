@@ -4,7 +4,7 @@
     <div class="card-body">
       <p class="card-title">{{ product_name }}</p>
       <p class="card-text">
-        $ {{ price }} / {{ measure }} <br />結單日期：{{ statement_date }}
+        $ {{ price }} / {{ unit }} <br />結單日期：{{ statement_date }}
       </p>
     </div>
   </div>
@@ -17,7 +17,7 @@
       "price",
       "product_picture",
       "statement_date",
-      "measure",
+      "unit",
     ],
   };
 </script>

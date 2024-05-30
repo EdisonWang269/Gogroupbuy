@@ -3,44 +3,34 @@
     <i class="bi bi-person"></i>
     個人資訊
   </h1>
-  <img :src="user.userImg" />
+  <!-- <img :src="userImg" /> -->
+  <img src="../assets/user.jpg" />
   <div class="wrap">
     <div class="infoBar">
       <span>姓名</span>
-      <p>{{ user.name }}</p>
+      <input type="text" v-model="name" />
     </div>
     <div class="infoBar">
       <span>手機</span>
-      <p>{{ user.phoneNum }}</p>
+      <input type="text" v-model="phoneNum" placeholder="請輸入手機號碼" />
     </div>
     <div class="infoBar">
       <span>會員等級</span>
-      <p>{{ user.status }}</p>
+      <p>{{ status }}</p>
     </div>
   </div>
   <nav-bar />
 </template>
 
-<script>
+<script setup>
   import { ref } from "vue";
+  import { useStore } from "vuex";
   import NavBar from "@/components/NavBar.vue";
-  export default {
-    components: {
-      NavBar,
-    },
-    setup() {
-      const user = ref({
-        userImg: require("../assets/user.jpg"),
-        name: "陳以恩",
-        phoneNum: "0922-111-333",
-        status: "一般會員",
-      });
 
-      return {
-        user,
-      };
-    },
-  };
+  const store = useStore();
+  const name = ref("陳以恩");
+  const phoneNum = store.state.userPhone;
+  const status = ref("一般會員");
 </script>
 
 <style scoped>
@@ -80,6 +70,15 @@
     font-size: 16px;
     text-align: left;
   }
+
+  .infoBar input {
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+    padding: 22px 16px;
+    font-size: 16px;
+    text-align: left;
+  }
+
   .wrap {
     display: flex;
     flex-direction: column;

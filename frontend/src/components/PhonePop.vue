@@ -21,7 +21,6 @@
   const router = useRouter();
   const userPhone = ref("");
 
-  //TODO: 與資料庫的互動?
   const submit = () => {
     if (userPhone.value == "") {
       alert("請輸入手機號碼");
