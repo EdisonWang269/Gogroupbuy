@@ -1,5 +1,41 @@
 import { createStore } from "vuex";
 
+function changeDate(oldDate) {
+  const date = new Date(oldDate);
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+
+  return `${year}/${month}/${day}`;
+}
+
+function changeStatus(status) {
+  if (typeof status === "number" || Number.isInteger(status)) {
+    switch (status) {
+      case -1:
+        return "未到貨";
+      case 0:
+        return "待領取";
+      case 1:
+        return "已領取";
+      default:
+        return "未到貨";
+    }
+  } else {
+    return status;
+  }
+}
+
+function formatOrder(order) {
+  order.arrival_date = changeDate(order.arrival_date);
+  order.launch_date = changeDate(order.launch_date);
+  if (order.statement_date !== "未到貨") {
+    order.statement_date = changeDate(order.statement_date);
+  }
+  order.receive_status = changeStatus(order.receive_status);
+  return order;
+}
+
 export default createStore({
   state: {
     items: [],
@@ -14,35 +50,11 @@ export default createStore({
   },
 
   getters: {
-    // eslint-disable-next-line no-unused-vars
-    changeDate: (state) => (oldDate) => {
-      const date = new Date(oldDate);
-      const year = date.getFullYear();
-      const month = ("0" + (date.getMonth() + 1)).slice(-2);
-      const day = ("0" + date.getDate()).slice(-2);
-
-      return `${year}/${month}/${day}`;
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    changeStatus: (state) => (status) => {
-      switch (status) {
-        case null:
-          return "未到貨";
-        case 0:
-          return "待領取";
-        case 1:
-          return "已領取";
-        default:
-          return "已領取"; //FIXME: should be "未到貨"
-      }
-    },
-
-    filteredItems(state, getters) {
+    filteredItems(state) {
       return state.items.filter((item) => {
-        item.arrival_date = getters.changeDate(item.arrival_date);
-        item.launch_date = getters.changeDate(item.launch_date);
-        item.statement_date = getters.changeDate(item.statement_date);
+        item.arrival_date = changeDate(item.arrival_date);
+        item.launch_date = changeDate(item.launch_date);
+        item.statement_date = changeDate(item.statement_date);
 
         return item.product_name
           .toLowerCase()
@@ -50,37 +62,8 @@ export default createStore({
       });
     },
 
-    unshippedOrders(state, getters) {
-      return state.orders.filter((order) => {
-        order.statement_date = getters.changeDate(order.statement_date);
-        order.arrival_date = getters.changeDate(order.arrival_date);
-        order.launch_date = getters.changeDate(order.launch_date);
-        order.receive_status = getters.changeStatus(order.receive_status);
-
-        return order.receive_status === "未到貨";
-      });
-    },
-
-    waitingOrders(state, getters) {
-      return state.orders.filter((order) => {
-        order.statement_date = getters.changeDate(order.statement_date);
-        order.arrival_date = getters.changeDate(order.arrival_date);
-        order.launch_date = getters.changeDate(order.launch_date);
-        order.receive_status = getters.changeStatus(order.receive_status);
-
-        return order.receive_status === "待領取";
-      });
-    },
-
-    historyOrders(state, getters) {
-      return state.orders.filter((order) => {
-        order.statement_date = getters.changeDate(order.statement_date);
-        order.arrival_date = getters.changeDate(order.arrival_date);
-        order.launch_date = getters.changeDate(order.launch_date);
-        order.receive_status = getters.changeStatus(order.receive_status);
-
-        return order.receive_status === "已領取";
-      });
+    getOrders(state) {
+      return state.orders.map((order) => formatOrder(order));
     },
 
     currItem(state) {
@@ -89,6 +72,9 @@ export default createStore({
   },
 
   mutations: {
+    addWaitingOrder(state, order) {
+      state.orders.push(order);
+    },
     setUserID(state, userID) {
       state.userID = userID;
     },

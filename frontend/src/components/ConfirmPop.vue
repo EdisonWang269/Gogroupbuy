@@ -20,14 +20,23 @@
   import { useStore } from "vuex";
 
   const store = useStore();
-  const emit = defineEmits(["isCancelled", "confirmed"]);
+  const emit = defineEmits(["cancelled", "confirmed"]);
 
   const cancel = () => {
-    emit("isCancelled", true);
+    emit("cancelled");
   };
 
   const confirm = () => {
-    emit("confirmed", true);
+    emit("confirmed");
+
+    const newOrder = {
+      group_buying_id: store.getters.currItem.group_buying_id,
+      product_name: store.getters.currItem.product_name,
+      statement_date: "未到貨",
+      quantity: store.state.currItemNum,
+      receive_status: "未到貨",
+    };
+    store.commit("addWaitingOrder", newOrder);
   };
 </script>
 

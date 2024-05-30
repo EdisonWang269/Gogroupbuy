@@ -20,27 +20,28 @@
       </div>
     </div>
   </div>
-  <big-button :action="buttonAct" @click="order" />
+  <big-button :action="buttonAct" @click="checkOrder" />
   <div class="content">
     <span>結單日期：{{ item.statement_date }}</span>
     <span>商品說明：</span>
     <span id="content">{{ item.product_describe }}</span>
   </div>
   <confirm-pop
-    v-if="ordercheck"
+    v-if="orderCheck"
     class="pop"
     :name="item.product_name"
     :orderNum="orderNum"
-    @isCancelled="cancel"
+    @cancelled="cancel"
     @confirmed="checkAndNoPhone"
   ></confirm-pop>
-  <phone-pop v-if="noPhoneNum" class="pop" @isCancelled="cancel" />
+  <phone-pop v-if="noPhoneNum" class="pop" @cancelled="cancel" />
   <nav-bar />
 </template>
 
 <script setup>
   import { ref } from "vue";
   import { useStore } from "vuex";
+  import { useRouter } from "vue-router";
 
   import BigButton from "../components/BigButton.vue";
   import ConfirmPop from "@/components/ConfirmPop.vue";
@@ -48,6 +49,7 @@
   import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
+  const router = useRouter();
 
   const item = store.getters.currItem;
   const buttonAct = "立即下單";
@@ -64,26 +66,25 @@
     }
   };
 
-  const ordercheck = ref(false);
-  const order = () => {
+  const orderCheck = ref(false);
+  const checkOrder = () => {
     if (orderNum.value > 0) {
       store.commit("setCurrItemNum", orderNum.value);
-      ordercheck.value = true;
+      orderCheck.value = true;
     }
   };
 
   const noPhoneNum = ref(false);
-  const checkAndNoPhone = (value) => {
-    if (value == true) {
-      noPhoneNum.value = true;
-      ordercheck.value = false;
+  const checkAndNoPhone = () => {
+    noPhoneNum.value = store.state.userPhone === "";
+
+    if (orderCheck.value && !noPhoneNum.value) {
+      router.push("/home/item/confirm");
     }
   };
 
-  const cancel = (value) => {
-    if (value == true) {
-      ordercheck.value = false;
-    }
+  const cancel = () => {
+    orderCheck.value = false;
   };
 </script>
 

@@ -20,10 +20,11 @@
   const store = useStore();
   const router = useRouter();
   const userPhone = ref("");
+  const regex = /^09\d{8}$/;
 
   const submit = () => {
-    if (userPhone.value == "") {
-      alert("請輸入手機號碼");
+    if (!regex.test(userPhone.value)) {
+      alert("請輸入正確的手機號碼，例如：0912-345-678");
     } else {
       store.commit("setUserPhone", userPhone.value);
       router.push("/home/item/confirm");

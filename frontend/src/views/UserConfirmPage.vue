@@ -35,9 +35,6 @@
   const action = "回到賣場";
   const router = useRouter();
   const store = useStore();
-
-  //TODO: 新增一筆歷史訂單
-
   const items = computed(() => {
     return store.getters.filteredItems.filter((item) => {
       return item.product_name !== store.getters.currItem.product_name;

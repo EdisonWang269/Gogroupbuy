@@ -3,10 +3,14 @@
     <div class="card-body">
       <p class="card-title">{{ name }}</p>
       <p class="card-text">
-        取貨期限：{{ dueDate }} <br />訂單狀態：{{ status }}
+        取貨期限：
+        <br /><b>{{ dueDate }} </b> <br />訂單狀態：<br /><b>{{ status }}</b>
       </p>
     </div>
-    <img :src="img" class="card-img-top" alt="..." />
+
+    <!-- TODO: add real image -->
+    <!-- <img :src="img" class="card-img-top" alt="..." /> -->
+    <img src="../assets/user.jpg" class="card-img-top" alt="..." />
   </div>
 </template>
 
@@ -20,6 +24,7 @@
   .card {
     border-radius: 20px;
     width: 90%;
+
     margin: 0 auto;
     display: flex;
     flex-direction: row;

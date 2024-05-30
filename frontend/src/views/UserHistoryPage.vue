@@ -1,14 +1,30 @@
 <template>
   <h1><i class="bi bi-list"></i>歷史訂單</h1>
   <select class="form-select" v-model="selected" @change="change">
-    <option selected value="all">所有訂單</option>
-    <option value="history">歷史訂單</option>
+    <option value="all" selected>全部訂單</option>
+    <option value="unshipped">未到貨訂單</option>
     <option value="waiting">待領訂單</option>
+    <option value="history">歷史訂單</option>
   </select>
+
   <div class="content">
-    <div class="wait" v-show="showWaiting">
-      <p class="title">待領清單</p>
+    <div class="container" v-show="showUnshipped">
+      <p class="title">未到貨訂單</p>
       <div class="cards">
+        <item-card-h
+          v-for="item in unshippedList"
+          :key="item.order_id"
+          :img="item.product_picture"
+          :name="item.product_name"
+          :dueDate="item.statement_date"
+          :status="item.receive_status"
+        />
+      </div>
+    </div>
+
+    <div class="container" v-show="showWaiting">
+      <p class="title">待領訂單</p>
+      <div class="cards" id="wait">
         <item-card-h
           v-for="item in waitingList"
           :key="item.order_id"
@@ -20,8 +36,8 @@
       </div>
     </div>
 
-    <div class="history" v-show="showHistory">
-      <p class="title">歷史清單</p>
+    <div class="container" v-show="showHistory">
+      <p class="title">歷史訂單</p>
       <div class="cards" id="history">
         <item-card-h
           v-for="item in historyList"
@@ -34,34 +50,60 @@
       </div>
     </div>
   </div>
-  <nav-bar />
+  <nav-bar class="nav-bar" />
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
   import { useStore } from "vuex";
   import ItemCardH from "../components/ItemCardH.vue";
   import NavBar from "@/components/NavBar.vue";
 
-  const selected = ref("all");
-  const showHistory = ref(true);
-  const showWaiting = ref(true);
-
   const store = useStore();
-  const waitingList = store.getters.waitingOrders;
-  const historyList = store.getters.historyOrders;
+  const selected = ref("all");
+
+  const showUnshipped = ref(true);
+  const showWaiting = ref(true);
+  const showHistory = ref(true);
 
   const change = () => {
-    if (selected.value == "all") {
-      showHistory.value = true;
+    if (selected.value === "all") {
+      showUnshipped.value = true;
       showWaiting.value = true;
-    } else if (selected.value == "history") {
       showHistory.value = true;
+    } else if (selected.value === "unshipped") {
+      showUnshipped.value = true;
       showWaiting.value = false;
-    } else {
       showHistory.value = false;
+    } else if (selected.value === "waiting") {
+      showUnshipped.value = false;
       showWaiting.value = true;
+      showHistory.value = false;
+    } else if (selected.value === "history") {
+      showUnshipped.value = false;
+      showWaiting.value = false;
+      showHistory.value = true;
     }
+  };
+
+  const unshippedList = store.getters.getOrders.filter(
+    (item) => item.receive_status == "未到貨"
+  );
+  const waitingList = store.getters.getOrders.filter(
+    (item) => item.receive_status === "待領取"
+  );
+  const historyList = store.getters.getOrders.filter(
+    (item) => item.receive_status === "已領取"
+  );
+
+  onMounted(() => {
+    window.addEventListener("scroll", adjustContentPosition);
+  });
+
+  const adjustContentPosition = () => {
+    const navBarHeight = document.querySelector(".nav-bar").offsetHeight;
+    const content = document.querySelector(".content");
+    content.style.marginBottom = `${navBarHeight}px`;
   };
 </script>
 
@@ -71,43 +113,78 @@
     margin-left: 5%;
     text-align: left;
   }
+
   i {
-    /* font-size: 28px; */
     color: #ef2a39;
     font-weight: 700;
   }
+
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+  }
+
   .form-select {
-    width: 120px;
+    width: 150px;
     margin-left: 5%;
     margin-top: 48px;
     margin-bottom: 24px;
   }
+
   .option {
     border-radius: 1px;
     font-size: 16px;
   }
 
-  .cards {
-    display: grid;
-    row-gap: 20px;
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
-  .content {
-    height: 68%;
-    overflow: scroll;
-    padding: 10px 0;
-  }
-  .content::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-  }
   .title {
-    font-size: 20px;
+    font-size: 25px;
     text-decoration: underline;
     text-align: left;
     margin-left: 5%;
   }
-  .wait {
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 30px;
+    max-height: 325px;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 325wpx;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 3px solid hsl(0, 0%, 65%);
+    padding: 10px;
+  }
+
+  .cards::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .cards::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .cards::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  .cards::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 </style>

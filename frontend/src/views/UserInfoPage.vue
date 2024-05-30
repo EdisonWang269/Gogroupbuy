@@ -12,7 +12,12 @@
     </div>
     <div class="infoBar">
       <span>手機</span>
-      <input type="text" v-model="phoneNum" placeholder="請輸入手機號碼" />
+      <input
+        type="text"
+        v-model="phoneNum"
+        @input="store.commit('setUserPhone', $event.target.value)"
+        placeholder="請輸入手機號碼"
+      />
     </div>
     <div class="infoBar">
       <span>會員等級</span>
@@ -29,7 +34,7 @@
 
   const store = useStore();
   const name = ref("陳以恩");
-  const phoneNum = store.state.userPhone;
+  const phoneNum = ref(store.state.userPhone);
   const status = ref("一般會員");
 </script>
 

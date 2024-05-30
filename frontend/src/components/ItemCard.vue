@@ -1,10 +1,13 @@
 <template>
   <div class="card">
-    <img :src="product_picture" alt="image" class="card-img-top" />
+    <!-- <img :src="product_picture" alt="image" class="card-img-top" /> -->
+    <img src="../assets/user.jpg" alt="image" class="card-img-top" />
     <div class="card-body">
       <p class="card-title">{{ product_name }}</p>
       <p class="card-text">
-        $ {{ price }} / {{ unit }} <br />結單日期：{{ statement_date }}
+        價錢: <b>$ {{ price }} / {{ unit }}</b> <br />結單日期：<b>{{
+          statement_date
+        }}</b>
       </p>
     </div>
   </div>
@@ -26,7 +29,6 @@
   .card {
     margin: 3px;
     width: 185px;
-    /* height: 240px; */
     border-radius: 20px;
     border: none;
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);
@@ -48,6 +50,7 @@
     text-align: center;
     font-size: 20px;
     color: #ac503c;
+    margin-top: 12px;
   }
 
   .card-text {
