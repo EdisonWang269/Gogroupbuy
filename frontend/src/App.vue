@@ -3,17 +3,15 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from "vuex";
+  import { mapActions } from "vuex";
 
   export default {
     name: "App",
     methods: {
-      ...mapState(["items"]),
-      ...mapActions(["fetchItems", "fetchOrders"]),
+      ...mapActions(["fetchInit"]),
     },
     mounted() {
-      this.fetchItems();
-      this.fetchOrders();
+      this.fetchInit();
     },
   };
 </script>
