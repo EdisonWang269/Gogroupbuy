@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from ..database import execute_query
+from ..sendmess import send_message
 
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
 
 order_bp = Blueprint('order', __name__)
 
@@ -236,3 +237,31 @@ def get_all_orders_by_userid_and_status(userid, status):
         return jsonify(data), 200
 
     return jsonify({'message' : 'Fail to get all orders by userid and status'}), 404
+
+#到貨時通知顧客：獲取一項團購商品的所有訂購者
+@order_bp.route("/api/order/<int:group_buying_id>", methods = ["GET"])
+@jwt_required()
+def get_userid_by_group_buying_id(group_buying_id):
+    claims = get_jwt()
+    role = claims['role']
+
+    if role != 'merchant':
+        return jsonify({"message":"權限不足"}), 400
+    
+    query = """
+                SELECT userid
+                FROM `Order`
+                WHERE group_buying_id = %s 
+                AND receive_status = FALSE;
+            """
+    userids = execute_query(query, (group_buying_id,), True)
+
+    if not userids:
+        return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
+
+    message = '您訂購的商品已送達，請盡快取貨。'
+    
+    for userid in userids:
+        send_message(userid, message)
+    
+    return jsonify({'message' : 'Send message successfully'}), 200
