@@ -271,7 +271,7 @@ def get_userid_by_group_buying_id(group_buying_id):
         arrival_date = result[4]
         due_days = result[5]
         due_date = arrival_date + datetime.timedelta(days=due_days)
-        message = f'您訂購的{product_name}已送達，請備妥${price*quantity}，於{due_date}前來店內取貨，謝謝。'
+        message = f'您訂購的{product_name}已到貨，請備妥${price*quantity}，於{due_date}前來店內取貨，謝謝。'
 
         send_message(userid, message)
     
