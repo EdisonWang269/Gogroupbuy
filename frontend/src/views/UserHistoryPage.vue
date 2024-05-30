@@ -11,12 +11,11 @@
       <div class="cards">
         <item-card-h
           v-for="item in waitingList"
-          :key="item"
-          :img="item.img"
-          :name="item.name"
-          :orderDate="item.orderDate"
-          :dueDate="item.dueDate"
-          :status="item.status"
+          :key="item.order_id"
+          :img="item.product_picture"
+          :name="item.product_name"
+          :dueDate="item.statement_date"
+          :status="item.receive_status"
         />
       </div>
     </div>
@@ -26,12 +25,11 @@
       <div class="cards" id="history">
         <item-card-h
           v-for="item in historyList"
-          :key="item"
-          :img="item.img"
-          :name="item.name"
-          :orderDate="item.orderDate"
-          :dueDate="item.dueDate"
-          :status="item.status"
+          :key="item.order_id"
+          :img="item.product_picture"
+          :name="item.product_name"
+          :dueDate="item.statement_date"
+          :status="item.receive_status"
         />
       </div>
     </div>
@@ -41,14 +39,17 @@
 
 <script setup>
   import { ref } from "vue";
+  import { useStore } from "vuex";
   import ItemCardH from "../components/ItemCardH.vue";
   import NavBar from "@/components/NavBar.vue";
 
   const selected = ref("all");
   const showHistory = ref(true);
   const showWaiting = ref(true);
-  const waitingList = ref([]);
-  const historyList = ref([]);
+
+  const store = useStore();
+  const waitingList = store.getters.waitingOrders;
+  const historyList = store.getters.historyOrders;
 
   const change = () => {
     if (selected.value == "all") {

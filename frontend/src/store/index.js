@@ -24,6 +24,20 @@ export default createStore({
       return `${year}/${month}/${day}`;
     },
 
+    // eslint-disable-next-line no-unused-vars
+    changeStatus: (state) => (status) => {
+      switch (status) {
+        case null:
+          return "未到貨";
+        case 0:
+          return "待領取";
+        case 1:
+          return "已領取";
+        default:
+          return "已領取"; //FIXME: should be "未到貨"
+      }
+    },
+
     filteredItems(state, getters) {
       return state.items.filter((item) => {
         item.arrival_date = getters.changeDate(item.arrival_date);
@@ -33,6 +47,39 @@ export default createStore({
         return item.product_name
           .toLowerCase()
           .includes(state.keyword.toLowerCase());
+      });
+    },
+
+    unshippedOrders(state, getters) {
+      return state.orders.filter((order) => {
+        order.statement_date = getters.changeDate(order.statement_date);
+        order.arrival_date = getters.changeDate(order.arrival_date);
+        order.launch_date = getters.changeDate(order.launch_date);
+        order.receive_status = getters.changeStatus(order.receive_status);
+
+        return order.receive_status === "未到貨";
+      });
+    },
+
+    waitingOrders(state, getters) {
+      return state.orders.filter((order) => {
+        order.statement_date = getters.changeDate(order.statement_date);
+        order.arrival_date = getters.changeDate(order.arrival_date);
+        order.launch_date = getters.changeDate(order.launch_date);
+        order.receive_status = getters.changeStatus(order.receive_status);
+
+        return order.receive_status === "待領取";
+      });
+    },
+
+    historyOrders(state, getters) {
+      return state.orders.filter((order) => {
+        order.statement_date = getters.changeDate(order.statement_date);
+        order.arrival_date = getters.changeDate(order.arrival_date);
+        order.launch_date = getters.changeDate(order.launch_date);
+        order.receive_status = getters.changeStatus(order.receive_status);
+
+        return order.receive_status === "已領取";
       });
     },
 

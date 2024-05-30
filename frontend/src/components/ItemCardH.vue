@@ -3,8 +3,7 @@
     <div class="card-body">
       <p class="card-title">{{ name }}</p>
       <p class="card-text">
-        訂購日期：{{ orderDate }} //待刪除 <br />取貨期限：{{ dueDate }}
-        <br />訂單狀態：{{ status }}
+        取貨期限：{{ dueDate }} <br />訂單狀態：{{ status }}
       </p>
     </div>
     <img :src="img" class="card-img-top" alt="..." />
@@ -13,19 +12,7 @@
 
 <script>
   export default {
-    props: ["name", "orderDate", "dueDate", "status", "img"],
-    // setup(){
-    //     const name = ref("香帥芋頭蛋糕");
-    //     const orderDate = ref("2024/ 5 / 10");
-    //     const dueDate = ref("2024/ 5 / 30");
-    //     const status = ref("已到貨待領取")
-    //     return{
-    //         name,
-    //         orderDate,
-    //         dueDate,
-    //         status,
-    //     };
-    // }
+    props: ["name", "dueDate", "status", "img"],
   };
 </script>
 
