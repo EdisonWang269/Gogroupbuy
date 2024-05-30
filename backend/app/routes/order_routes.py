@@ -267,4 +267,4 @@ def get_userid_by_group_buying_id(group_buying_id):
         send_message(userid, message)
     
     # return jsonify({'message' : 'Send message successfully'}), 200
-    return jsonify({"id": useridtype}), 200
+    return jsonify({"ids": type(userids)}), 200
