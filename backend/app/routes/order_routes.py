@@ -239,7 +239,7 @@ def get_all_orders_by_userid_and_status(userid, status):
     return jsonify({'message' : 'Fail to get all orders by userid and status'}), 404
 
 #到貨時通知顧客：獲取一項團購商品的所有訂購者
-@order_bp.route("/api/order/<int:group_buying_id>", methods = ["GET"])
+@order_bp.route("/api/order/notify/<int:group_buying_id>", methods = ["GET"])
 @jwt_required()
 def get_userid_by_group_buying_id(group_buying_id):
     claims = get_jwt()
@@ -260,7 +260,7 @@ def get_userid_by_group_buying_id(group_buying_id):
         return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
 
     message = '您訂購的商品已送達，請盡快取貨。'
-    
+
     for userid in userids:
         send_message(userid, message)
     
