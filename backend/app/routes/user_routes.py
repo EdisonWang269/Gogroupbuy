@@ -54,7 +54,7 @@ def login_check():
             return jsonify(access_token=access_token)
 
     else:
-        query = "INSERT INTO Customer (userid, store_id) VALUES(%s, %s, %s);"
+        query = "INSERT INTO Customer (userid, store_id) VALUES(%s, %s);"
         result = execute_query(query, (userid, store_id))
         if result:
             identity = {"store_id": store_id, "userid": userid}
