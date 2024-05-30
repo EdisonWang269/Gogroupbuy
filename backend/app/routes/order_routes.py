@@ -250,7 +250,7 @@ def get_userid_by_group_buying_id(group_buying_id):
         return jsonify({"message":"權限不足"}), 400
     
     query = """
-                SELECT O.userid, P.product_name, P.price, O.quantity, GBP.arrival_date, GBP.due_days
+                SELECT O.userid, P.product_name, P.price, O.quantity, DATE_FORMAT(GBP.arrival_date, '%Y-%m-%d') AS arrival_date, GBP.due_days
                 FROM `Order` O
                 JOIN Group_buying_product GBP ON O.group_buying_id = GBP.group_buying_id
                 JOIN Product P ON GBP.product_id = P.product_id
