@@ -14,7 +14,7 @@ def send_message(userid, message):
     }
 
     data = {
-        "to": f"{userid}",
+        "to": userid,
         "messages": [
             {
                 "type": "text",
