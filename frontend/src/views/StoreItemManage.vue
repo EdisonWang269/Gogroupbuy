@@ -19,8 +19,8 @@
       </div>
       
       <div class="buttons">
-        <store-button :action="'結單管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'"/>
-        <store-button :action="'到貨管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'"/>
+        <store-button :action="'結單管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'" @click="endOrder"/>
+        <store-button :action="'到貨管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'" @click="arriveManage"/>
       </div>
       
     </div>
@@ -134,8 +134,24 @@
       const addCustomer = () => {
         topic.value = "增加現場購買顧客";
         type.value = "addCus";
-        popShow.value = true;
+        showPop();
       };
+
+      const endOrder = () =>{
+        topic.value = "結單管理";
+        type.value = "endOrder";
+        showPop();
+      }
+
+      const arriveManage = () =>{
+        topic.value = "到貨管理";
+        type.value = "arriveManage";
+        showPop();
+      }
+
+      const showPop = () =>{
+        popShow.value = true;
+      }
 
       return {
         itemName,
@@ -154,6 +170,8 @@
         addCustomer,
         checkedNum,
         uncheckedNum,
+        endOrder,
+        arriveManage,
       };
     },
   };

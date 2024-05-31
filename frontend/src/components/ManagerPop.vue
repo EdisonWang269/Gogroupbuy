@@ -68,6 +68,36 @@
           />
         </div>
       </div>
+      <div class="editDate" v-if="type === 'endOrder'">
+        <div>
+          <span>此次團購訂購商品數量</span>
+          <el-input v-model="totalNum" style="width: 95%" placeholder="Please input"/>
+        </div>
+        <div>
+          <span>此次訂購花費成本</span>
+          <el-input
+            v-model="cost"
+            style="width: 95%"
+            placeholder="Please input"
+          />
+          <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
+        </div>
+      </div>
+      <div class="editDate" v-if="type === 'arriveManage'">
+        <div>
+          <span>到貨日期</span>
+          <el-input :value="arriveDate" style="width: 95%" disabled/>
+        </div>
+        <div>
+          <span>截止領取天數</span>
+          <el-input
+            v-model="dueDays"
+            style="width: 95%"
+            placeholder="Please input"
+          />
+
+        </div>
+      </div>
       <div class="buttons">
         <store-button :action="'確認'" class="button" @click="check" />
         <button class="buttonCancel" @click="cancel">取消</button>
@@ -85,6 +115,10 @@
       StoreButton,
     },
     setup(props, { emit }) {
+      const arriveDate = ref("2024/05/20");
+      const dueDays = ref();
+      const cost = ref();
+      const totalNum = ref();
       const updated = ref("");
       const alertShow = ref(false);
       const notifyMessage = ref("");
@@ -125,6 +159,10 @@
         addPhone,
         addOrderNum,
         addOrderDate,
+        totalNum,
+        cost,
+        arriveDate,
+        dueDays,
       };
     },
   };
