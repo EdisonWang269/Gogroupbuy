@@ -1,10 +1,10 @@
 <template>
-  <h1>
+  <h1 class="title">
     <i class="bi bi-person"></i>
     個人資訊
   </h1>
-  <!-- <img :src="userImg" /> -->
-  <img src="../assets/user.jpg" />
+  <!-- <img :src="userImg" class="userImg" /> -->
+  <img src="../assets/user.jpg" class="userImg" />
   <div class="wrap">
     <div class="infoBar">
       <span>姓名</span>
@@ -36,26 +36,34 @@
   const name = ref("陳以恩");
   const phoneNum = ref(store.state.userPhone);
   const status = ref("一般會員");
+  const userImg = ref("../assets/user.jpg");
 </script>
 
 <style scoped>
   i {
     color: #ef2a39;
   }
-  h1 {
-    /* position: relative; */
+  h1.title {
     margin-left: 5%;
     margin-top: 48px;
     text-align: left;
+    transition: transform 0.3s;
   }
-  img {
-    /* position: relative; */
+  h1.title:hover {
+    transform: translateY(-10px) rotate(10deg);
+  }
+  img.userImg {
     display: block;
     height: 115px;
     width: auto;
     border-radius: 35px;
     margin: 60px auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+    transform: scale(1.3);
+  }
+  img.userImg:hover {
+    transform: scale(1.4);
   }
   .infoBar {
     display: flex;
@@ -74,6 +82,10 @@
     padding: 22px 16px;
     font-size: 16px;
     text-align: left;
+    transition: transform 0.3s;
+  }
+  .infoBar p:hover {
+    transform: translateY(-5px);
   }
 
   .infoBar input {
@@ -82,6 +94,10 @@
     padding: 22px 16px;
     font-size: 16px;
     text-align: left;
+    transition: border-color 0.3s;
+  }
+  .infoBar input:focus {
+    border-color: #ef2a39;
   }
 
   .wrap {
@@ -90,5 +106,9 @@
     gap: 30px;
     width: 80%;
     margin: 0 auto;
+    transition: transform 0.3s;
+  }
+  .wrap:hover {
+    transform: translateY(-10px);
   }
 </style>

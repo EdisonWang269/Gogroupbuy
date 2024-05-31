@@ -71,6 +71,11 @@
     height: 65px;
     font-size: 28px;
     text-align: center;
+    transition: all 0.3s;
+  }
+  input:hover {
+    border: 1px solid #ef2a39;
+    box-shadow: 0 0 5px #ef2a39;
   }
   .buttonArea {
     text-align: center;
@@ -83,6 +88,12 @@
     color: white;
     width: 38%;
     height: 48px;
+    transition: all 0.3s;
+  }
+  button:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
   }
 
   #cancel {

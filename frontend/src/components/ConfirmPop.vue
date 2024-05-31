@@ -86,6 +86,12 @@
     color: white;
     width: 38%;
     height: 48px;
+    transition: 0.3s;
+  }
+  button:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
   }
 
   #cancel {

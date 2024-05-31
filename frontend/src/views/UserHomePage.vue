@@ -14,7 +14,7 @@
       v-bind="item"
     />
   </div>
-  <nav-bar />
+  <nav-bar class="nav-bar" />
 </template>
 
 <script setup>
@@ -39,7 +39,11 @@
 <style scoped>
   .all {
     position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
+
   .header {
     display: flex;
     flex-direction: column;
@@ -64,16 +68,13 @@
   }
 
   .items {
-    position: relative;
-    left: 5%;
+    flex: 1;
     margin: 10% 10px;
-    padding: 0 0 5% 0;
+    padding-bottom: 60px; /* 確保不會被nav-bar擋住 */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-row-gap: 16px;
-    max-height: 63%;
-    width: 90%;
-    overflow: scroll;
+    overflow-y: auto;
   }
 
   .items::-webkit-scrollbar {
@@ -84,5 +85,48 @@
   .card {
     cursor: pointer;
     width: 90%;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .card:hover::after,
+  .card:hover::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: rotate(180deg);
+    transform-origin: bottom;
+    z-index: -1;
+  }
+
+  .card:hover .item-card-name {
+    color: #ef2a39;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+  }
+
+  .card:hover .item-card-price {
+    color: #ef2a39;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .card:hover .item-card-img {
+    filter: blur(10px);
+    opacity: 0.5;
+  }
+
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
   }
 </style>

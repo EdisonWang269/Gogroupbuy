@@ -20,7 +20,7 @@
       </div>
     </div>
   </div>
-  <big-button :action="buttonAct" @click="checkOrder" />
+  <big-button :action="buttonAct" class="hover-button" @click="checkOrder" />
   <div class="content">
     <span>結單日期：{{ item.statement_date }}</span>
     <span>商品說明：</span>
@@ -156,6 +156,10 @@
     color: #ef2a39;
     font-size: 45px;
     cursor: pointer;
+    transition: color 0.3s;
+  }
+  i:hover {
+    color: #d41e1e;
   }
 
   .num {
@@ -172,19 +176,14 @@
     margin-bottom: 0;
   }
 
-  /* button{
-    background-color:#3C2F2F;
-    border: none;
-    border-radius: 20px;
-    box-shadow: 3px 3px 8px 3px rgba(0, 0, 0, 0.2);
-    display: block;
-    width: 90%;
-    font-size: 32px;
-    font-weight: 700;
-    color: white;
-    margin: 0 auto;
-    padding: 10px 0;
-} */
+  .hover-button {
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  .hover-button:hover {
+    background-color: #3c2f2f;
+    transform: scale(1.1);
+  }
+
   .content {
     margin-top: 5px;
     display: flex;
@@ -205,5 +204,15 @@
     position: absolute;
     top: 0;
     left: 0;
+  }
+
+  .bi.bi-dash-square-fill,
+  .bi.bi-plus-square-fill {
+    transition: transform 0.3s, color 0.3s;
+  }
+  .bi.bi-dash-square-fill:hover,
+  .bi.bi-plus-square-fill:hover {
+    transform: scale(1.15);
+    color: hsl(0, 100%, 50%);
   }
 </style>

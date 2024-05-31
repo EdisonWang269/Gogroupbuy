@@ -44,7 +44,7 @@ export default createStore({
     userID: "customer1",
     currItemID: "",
     currItemNum: 0,
-    userPhone: "",
+    userPhone: "09123456789",
     keyword: "",
     token: "",
   },

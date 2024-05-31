@@ -8,9 +8,20 @@
   </select>
 
   <div class="content">
-    <div class="container" v-show="showUnshipped">
+    <div
+      class="container"
+      v-show="showUnshipped"
+      :class="{ flip: showUnshipped }"
+    >
       <p class="title">未到貨訂單</p>
-      <div class="cards">
+      <div
+        class="cards"
+        :style="{
+          marginBottom: selected !== 'all' ? '50px' : '0px',
+          maxHeight: selected !== 'all' ? '550px' : '325px',
+          overflowY: 'auto',
+        }"
+      >
         <item-card-h
           v-for="item in unshippedList"
           :key="item.order_id"
@@ -22,9 +33,17 @@
       </div>
     </div>
 
-    <div class="container" v-show="showWaiting">
+    <div class="container" v-show="showWaiting" :class="{ flip: showWaiting }">
       <p class="title">待領訂單</p>
-      <div class="cards" id="wait">
+      <div
+        class="cards"
+        id="wait"
+        :style="{
+          marginBottom: selected !== 'all' ? '50px' : '0px',
+          maxHeight: selected !== 'all' ? '550px' : '325px',
+          overflowY: 'auto',
+        }"
+      >
         <item-card-h
           v-for="item in waitingList"
           :key="item.order_id"
@@ -36,9 +55,17 @@
       </div>
     </div>
 
-    <div class="container" v-show="showHistory">
+    <div class="container" v-show="showHistory" :class="{ flip: showHistory }">
       <p class="title">歷史訂單</p>
-      <div class="cards" id="history">
+      <div
+        class="cards"
+        id="history"
+        :style="{
+          marginBottom: '50px',
+          maxHeight: selected !== 'all' ? '550px' : '325px',
+          overflowY: 'auto',
+        }"
+      >
         <item-card-h
           v-for="item in historyList"
           :key="item.order_id"
@@ -54,7 +81,7 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from "vue";
+  import { ref } from "vue";
   import { useStore } from "vuex";
   import ItemCardH from "../components/ItemCardH.vue";
   import NavBar from "@/components/NavBar.vue";
@@ -95,16 +122,6 @@
   const historyList = store.getters.getOrders.filter(
     (item) => item.receive_status === "已領取"
   );
-
-  onMounted(() => {
-    window.addEventListener("scroll", adjustContentPosition);
-  });
-
-  const adjustContentPosition = () => {
-    const navBarHeight = document.querySelector(".nav-bar").offsetHeight;
-    const content = document.querySelector(".content");
-    content.style.marginBottom = `${navBarHeight}px`;
-  };
 </script>
 
 <style scoped>
@@ -133,6 +150,18 @@
     margin-bottom: 24px;
   }
 
+  .form-select,
+  .form-select option {
+    background-color: #efefef8e;
+    color: #333;
+    border: none;
+    outline: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    appearance: none;
+    font-size: 16px;
+  }
+
   .option {
     border-radius: 1px;
     font-size: 16px;
@@ -142,6 +171,14 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    perspective: 1000px;
+    margin-bottom: 65px;
+  }
+
+  .container {
+    position: relative;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
   }
 
   .title {
@@ -151,27 +188,18 @@
     margin-left: 5%;
   }
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 30px;
-    max-height: 325px;
-  }
-
   .cards {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-height: 325wpx;
-    overflow-y: auto;
+    transition: max-height 0.6s;
     padding-right: 10px;
     border: 3px solid hsl(0, 0%, 65%);
     padding: 10px;
   }
 
   .cards::-webkit-scrollbar {
-    width: 3px;
+    width: 5px;
   }
 
   .cards::-webkit-scrollbar-track {
@@ -186,5 +214,19 @@
 
   .cards::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+
+  .cards:hover {
+    box-shadow: 0 0 10px #888;
+    transform: scale(1.05);
+  }
+
+  .cards:hover .item-card-h {
+    transform: scale(1.05);
+  }
+
+  .item-card-h:hover {
+    box-shadow: 0 0 10px #888;
+    transform: scale(1.1);
   }
 </style>

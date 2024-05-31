@@ -9,6 +9,7 @@
       placeholder="Search"
       aria-describedby="inputGroup-sizing-lg"
       v-model="keyword"
+      @keydown.enter="search"
     />
   </div>
 </template>
@@ -26,11 +27,16 @@
       store.commit("setKeyword", value);
     },
   });
+
+  const search = () => {
+    store.dispatch("searchProduct");
+  };
 </script>
 
 <style scoped>
   #search {
     font-size: 20px;
+    transition: all 0.3s;
   }
 
   #searchBar {
@@ -48,5 +54,13 @@
   .form-control {
     border: none;
     /* border-radius: 20px 0 0 20px; */
+  }
+
+  #searchBar:hover #search {
+    transform: translateX(5px);
+  }
+
+  #searchBar:hover {
+    box-shadow: 10px 10px 15px 0px rgba(180, 180, 180, 0.5);
   }
 </style>
