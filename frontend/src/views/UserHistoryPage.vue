@@ -77,14 +77,14 @@
       </div>
     </div>
   </div>
-  <nav-bar class="nav-bar" />
+  <!-- <nav-bar class="nav-bar" /> -->
 </template>
 
 <script setup>
   import { ref } from "vue";
   import { useStore } from "vuex";
   import ItemCardH from "../components/ItemCardH.vue";
-  import NavBar from "@/components/NavBar.vue";
+  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const selected = ref("all");
@@ -194,7 +194,7 @@
     gap: 10px;
     transition: max-height 0.6s;
     padding-right: 10px;
-    border: 3px solid hsl(0, 0%, 65%);
+    /* border: 3px solid hsl(0, 0%, 65%); */
     padding: 10px;
   }
 

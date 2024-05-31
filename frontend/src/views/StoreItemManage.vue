@@ -11,12 +11,18 @@
   />
   <div class="all">
     <div class="header">
-      <h1>{{ itemName }}</h1>
-      <!-- 從 vuex 抓商品資訊 -->
-      <span>上架日期：{{ uploadDate }}</span>
-      <span
-        >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
-      ></span>
+      <div class="info">
+        <h1>{{ itemName }}</h1>
+        <!-- 從 vuex 抓商品資訊 -->
+        <span>上架日期：{{ uploadDate }}</span>
+        <span>結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i></span>
+      </div>
+      
+      <div class="buttons">
+        <store-button :action="'結單管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'"/>
+        <store-button :action="'到貨管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'"/>
+      </div>
+      
     </div>
     <div class="searchBar">
       <el-input v-model="searchInput" id="search" placeholder="搜尋用戶">
@@ -160,9 +166,22 @@
     height: 100%;
   }
   .header {
+    margin: 0 5%;
     display: flex;
-    gap: 30px;
+    /* gap: 30px; */
     align-items: baseline;
+    justify-content: space-between;
+  }
+  .info{
+    display: flex;
+    width:60%;
+    align-items: baseline;
+    gap:30px;
+  }
+  .buttons{
+    display: flex;
+    padding-bottom: 10px;
+    gap: 10px;
   }
   .bi.bi-pencil {
     color: #5c73db;
@@ -171,7 +190,7 @@
   h1 {
     font-weight: 700;
     font-size: 32px;
-    margin-left: 5%;
+    /* margin-left: 5%; */
     padding-top: 20px;
   }
   .searchBar {

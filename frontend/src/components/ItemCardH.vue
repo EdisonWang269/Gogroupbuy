@@ -42,7 +42,7 @@
   }
 
   img {
-    width: 120px;
+    width: 55%;
     height: auto;
   }
 </style>

@@ -24,13 +24,13 @@
       <p>{{ status }}</p>
     </div>
   </div>
-  <nav-bar />
+  <!-- <nav-bar class="navBar"/> -->
 </template>
 
 <script setup>
   import { ref } from "vue";
   import { useStore } from "vuex";
-  import NavBar from "@/components/NavBar.vue";
+  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const name = ref("陳以恩");
@@ -40,6 +40,10 @@
 </script>
 
 <style scoped>
+.navBar{
+  position: fixed;
+  bottom: 0;
+}
   i {
     color: #ef2a39;
   }
@@ -107,6 +111,7 @@
     width: 80%;
     margin: 0 auto;
     transition: transform 0.3s;
+    margin-bottom: 20%;
   }
   .wrap:hover {
     transform: translateY(-10px);

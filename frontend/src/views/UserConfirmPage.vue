@@ -24,7 +24,7 @@
       <item-card v-bind="item" style="transform: scale(1.1)" />
     </div>
   </div>
-  <nav-bar />
+  <nav-bar class="navBar"/>
 </template>
 
 <script setup>
@@ -46,7 +46,7 @@
   });
 
   const backToHome = () => {
-    router.push({ name: "homePage" });
+    router.push({ name: "home" });
   };
 
   const checkDetail = (itemID) => {
@@ -58,6 +58,10 @@
 </script>
 
 <style scoped>
+.navBar{
+  position: fixed;
+  bottom: 0;
+}
   i {
     font-size: 28px;
     font-weight: 700;
@@ -116,6 +120,7 @@
     margin-top: 25px;
     transition: all 0.3s ease;
     overflow-x: hidden;
+    margin-bottom: 20%;
   }
 
   .card {

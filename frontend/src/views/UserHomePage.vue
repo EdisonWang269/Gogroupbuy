@@ -14,7 +14,7 @@
       v-bind="item"
     />
   </div>
-  <nav-bar class="nav-bar" />
+  <!-- <nav-bar class="nav-bar" /> -->
 </template>
 
 <script setup>
@@ -24,7 +24,7 @@
 
   import SearchBar from "../components/SearchBar.vue";
   import ItemCard from "../components/ItemCard.vue";
-  import NavBar from "@/components/NavBar.vue";
+  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const router = useRouter();
@@ -53,7 +53,7 @@
   }
 
   h1 {
-    font-weight: 800;
+    font-weight: 500;
   }
 
   #homeIcon {
