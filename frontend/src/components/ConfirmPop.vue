@@ -5,7 +5,10 @@
       <div class="content">
         <span>您將訂購</span><br />
         <span>「{{ store.getters.currItem.product_name }}」</span><br />
-        <span>數量：「{{ store.state.currItemNum }}」</span>
+        <span
+          >數量：「{{ store.state.currItemNum }}
+          {{ store.getters.currItem.unit }}」</span
+        >
       </div>
       <div class="buttonArea">
         <button id="cancel" @click="cancel">取消</button>
@@ -32,7 +35,7 @@
     const newOrder = {
       group_buying_id: store.getters.currItem.group_buying_id,
       product_name: store.getters.currItem.product_name,
-      statement_date: "未到貨",
+      due_date: "未到貨",
       quantity: store.state.currItemNum,
       receive_status: "未到貨",
     };

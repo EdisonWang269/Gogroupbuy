@@ -7,7 +7,8 @@
   <div class="info">
     你已成功訂購 <br />
     商品：「{{ store.getters.currItem.product_name }}」 <br />
-    數量：「{{ store.state.currItemNum }}」 <br />
+    數量：「{{ store.state.currItemNum }} {{ store.getters.currItem.unit }}」
+    <br />
     <span id="sml">*領取時間與資訊請待團購主通知</span>
   </div>
   <big-button :action="action" @click="backToHome" class="back" />
@@ -116,6 +117,8 @@
     margin-top: 25px;
     transition: all 0.3s ease;
     overflow-x: hidden;
+    place-items: center;
+    overflow: visible;
   }
 
   .card {
@@ -127,9 +130,36 @@
     justify-content: center;
     align-items: center;
     transition: all 0.3s ease;
+    width: 80%;
   }
 
   .card-hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    animation: shakeAndScale 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes shakeAndScale {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0) scale(1.075);
+    }
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0) scale(1.075);
+    }
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0) scale(1.075);
+    }
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0) scale(1.075);
+    }
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1.05);
+    }
   }
 </style>

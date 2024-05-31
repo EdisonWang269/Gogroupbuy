@@ -1,6 +1,12 @@
 <template>
   <h1><i class="bi bi-list"></i>歷史訂單</h1>
-  <select class="form-select" v-model="selected" @change="change">
+  <select
+    class="form-select"
+    v-model="selected"
+    @change="change"
+    @focus="addFocus"
+    @blur="removeFocus"
+  >
     <option value="all" selected>全部訂單</option>
     <option value="unshipped">未到貨訂單</option>
     <option value="waiting">待領訂單</option>
@@ -24,10 +30,11 @@
       >
         <item-card-h
           v-for="item in unshippedList"
+          class="item-card"
           :key="item.order_id"
           :img="item.product_picture"
           :name="item.product_name"
-          :dueDate="item.statement_date"
+          :dueDate="item.due_date"
           :status="item.receive_status"
         />
       </div>
@@ -49,7 +56,7 @@
           :key="item.order_id"
           :img="item.product_picture"
           :name="item.product_name"
-          :dueDate="item.statement_date"
+          :dueDate="item.due_date"
           :status="item.receive_status"
         />
       </div>
@@ -71,7 +78,7 @@
           :key="item.order_id"
           :img="item.product_picture"
           :name="item.product_name"
-          :dueDate="item.statement_date"
+          :dueDate="item.due_date"
           :status="item.receive_status"
         />
       </div>
@@ -122,6 +129,14 @@
   const historyList = store.getters.getOrders.filter(
     (item) => item.receive_status === "已領取"
   );
+
+  const addFocus = (event) => {
+    event.target.style.boxShadow = "0 0 5px 3px #ff0015";
+  };
+
+  const removeFocus = (event) => {
+    event.target.style.boxShadow = "none";
+  };
 </script>
 
 <style scoped>
@@ -194,39 +209,16 @@
     gap: 10px;
     transition: max-height 0.6s;
     padding-right: 10px;
-    border: 3px solid hsl(0, 0%, 65%);
+    border: 3px solid #888;
     padding: 10px;
   }
 
   .cards::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  .cards::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-
-  .cards::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-  }
-
-  .cards::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    width: 0px;
   }
 
   .cards:hover {
-    box-shadow: 0 0 10px #888;
+    box-shadow: inset 0 0 10px #888;
     transform: scale(1.05);
-  }
-
-  .cards:hover .item-card-h {
-    transform: scale(1.05);
-  }
-
-  .item-card-h:hover {
-    box-shadow: 0 0 10px #888;
-    transform: scale(1.1);
   }
 </style>

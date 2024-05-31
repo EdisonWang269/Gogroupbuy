@@ -75,6 +75,8 @@
     grid-template-columns: repeat(2, 1fr);
     grid-row-gap: 16px;
     overflow-y: auto;
+    place-items: center;
+    overflow: visible;
   }
 
   .items::-webkit-scrollbar {
@@ -84,43 +86,39 @@
 
   .card {
     cursor: pointer;
-    width: 90%;
+    width: 80%;
     transition: all 0.3s ease;
   }
 
   .card:hover {
-    transform: scale(1.05);
+    transform: scale(1.075);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    animation: shakeAndScale 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    animation-iteration-count: infinite;
   }
 
-  .card:hover::after,
-  .card:hover::before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transform: rotate(180deg);
-    transform-origin: bottom;
-    z-index: -1;
-  }
-
-  .card:hover .item-card-name {
-    color: #ef2a39;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;
-  }
-
-  .card:hover .item-card-price {
-    color: #ef2a39;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  }
-
-  .card:hover .item-card-img {
-    filter: blur(10px);
-    opacity: 0.5;
+  @keyframes shakeAndScale {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0) scale(1.075);
+    }
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0) scale(1.075);
+    }
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0) scale(1.075);
+    }
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0) scale(1.075);
+    }
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1.05);
+    }
   }
 
   .nav-bar {

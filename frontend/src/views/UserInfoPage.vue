@@ -47,23 +47,31 @@
     margin-left: 5%;
     margin-top: 48px;
     text-align: left;
-    transition: transform 0.3s;
-  }
-  h1.title:hover {
-    transform: translateY(-10px) rotate(10deg);
   }
   img.userImg {
     display: block;
     height: 115px;
-    width: auto;
-    border-radius: 35px;
+    width: 115px;
+    border-radius: 50%;
     margin: 60px auto;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s;
     transform: scale(1.3);
   }
   img.userImg:hover {
-    transform: scale(1.4);
+    box-shadow: 0 0 30px #ff182b;
+    animation: rotateImage 2s infinite;
+  }
+  @keyframes rotateImage {
+    0% {
+      transform: scale(1.4) rotate(0deg);
+    }
+    50% {
+      transform: scale(1.4) rotate(360deg);
+    }
+    100% {
+      transform: scale(1.4) rotate(0deg);
+    }
   }
   .infoBar {
     display: flex;
