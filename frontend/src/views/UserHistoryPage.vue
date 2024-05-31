@@ -24,7 +24,7 @@
         class="cards"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
-          maxHeight: selected !== 'all' ? '550px' : '325px',
+          maxHeight: selected !== 'all' ? `${cardsMaxHeight}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -47,7 +47,7 @@
         id="wait"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
-          maxHeight: selected !== 'all' ? '550px' : '325px',
+          maxHeight: selected !== 'all' ? `${cardsMaxHeight}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -69,7 +69,7 @@
         id="history"
         :style="{
           marginBottom: '50px',
-          maxHeight: selected !== 'all' ? '550px' : '325px',
+          maxHeight: selected !== 'all' ? `${cardsMaxHeight}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -95,6 +95,7 @@
 
   const store = useStore();
   const selected = ref("all");
+  const cardsMaxHeight = ref(200);
 
   const showUnshipped = ref(true);
   const showWaiting = ref(true);
@@ -118,6 +119,16 @@
       showWaiting.value = false;
       showHistory.value = true;
     }
+
+    document.querySelector(".form-select").style.transform = "scale(1.15)";
+    setTimeout(() => {
+      document.querySelector(".form-select").style.transform = "scale(1)";
+    }, 100);
+
+    cardsMaxHeight.value = 200;
+    setTimeout(() => {
+      cardsMaxHeight.value = 550;
+    }, 100);
   };
 
   const unshippedList = store.getters.getOrders.filter(
@@ -131,7 +142,7 @@
   );
 
   const addFocus = (event) => {
-    event.target.style.boxShadow = "0 0 5px 3px #ff0015";
+    event.target.style.boxShadow = "0 0 0";
   };
 
   const removeFocus = (event) => {
@@ -163,6 +174,7 @@
     margin-left: 5%;
     margin-top: 48px;
     margin-bottom: 24px;
+    cursor: pointer;
   }
 
   .form-select,
@@ -220,5 +232,9 @@
   .cards:hover {
     box-shadow: inset 0 0 10px #888;
     transform: scale(1.05);
+  }
+
+  select option {
+    max-width: 7px;
   }
 </style>
