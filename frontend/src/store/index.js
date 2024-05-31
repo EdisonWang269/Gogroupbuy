@@ -40,7 +40,7 @@ export default createStore({
   state: {
     items: [],
     orders: [],
-    storeID: "store1", // TODO: liff 接收 store_id, userID
+    storeID: "store1",
     userID: "customer1",
     currItemID: "",
     currItemNum: 0,
