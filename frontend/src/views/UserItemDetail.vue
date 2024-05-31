@@ -46,7 +46,7 @@
     @confirmed="checkAndNoPhone"
   ></confirm-pop>
   <phone-pop v-if="noPhoneNum" class="pop" @cancelled="cancel" />
-  <nav-bar />
+  <nav-bar class="navBar"/>
 </template>
 
 <script setup>
@@ -100,13 +100,20 @@
 </script>
 
 <style scoped>
+.content{
+  margin-bottom: 20%;
+}
+.navBar{
+  position: fixed;
+  bottom: 0;
+}
   i {
     font-size: 28px;
     font-weight: 700;
   }
 
   h1 {
-    font-weight: 700;
+    font-weight: 500;
     display: inline-block;
     text-align: center;
     position: relative;
@@ -178,6 +185,7 @@
     font-weight: bold;
   }
   .price {
+    font-weight: lighter;
     font-size: 24px;
     vertical-align: baseline;
   }

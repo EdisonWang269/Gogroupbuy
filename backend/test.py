@@ -102,17 +102,19 @@ def create_group_buying_product(store_id):
     return jsonify({'error': 'Failed to create group_buying_product'}), 500      
 
 
-#到貨時通知顧客：獲取一項團購商品的所有訂購者
-@app.route("/api/<string:store_id>/Order/<int:group_buying_id>", methods = ["GET"])
-def get_userid_by_group_buying_id(store_id, group_buying_id):
-    query = '''SELECT `userid`
-                FROM `Order` AS O,`Group_buying_product` AS G,`Product` AS P
-                WHERE O.group_buying_id = G.group_buying_id
-                AND G.product_id = P.product_id
-                AND P.store_id = %s
-                AND O.group_buying_id = %s;             
+#到貨時通知顧客/搜尋：從商品名稱獲取一項團購商品的所有訂購者的訂單資料
+# （回傳user_name/訂貨數量/手機號碼/訂單狀態)
+@app.route("/api/<string:store_id>/Order/<string:product_name>", methods = ["GET"])
+def get_userinfo_by_product_name(store_id, product_name):
+    query = '''SELECT c.user_name, o.quantity, c.phone, o.receive_status
+                FROM `Order` AS o,`Group_buying_product` AS g,`Product` AS p, `Customer` AS c
+                WHERE o.group_buying_id = g.group_buying_id
+                AND g.product_id = p.product_id
+                AND c.userid = o.userid
+                AND p.store_id = %s
+                AND p.product_name = %s;             
     '''
-    userids = execute_query(query, (store_id, group_buying_id), True)
+    userids = execute_query(query, (store_id, product_name), True)
     data = []
     if userids:
         data.append(
@@ -122,7 +124,7 @@ def get_userid_by_group_buying_id(store_id, group_buying_id):
         )
         return jsonify(data), 200
 
-    return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404  
+    return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404  
 
 #取得user的歷史訂單 回傳productid,productname,到貨時間,可領取天數,訂單狀態,圖片
 @app.route("/api/<string:store_id>/Order/<string:userid>/",methods = ["GET"] )
@@ -150,13 +152,13 @@ def get_user_all_order_by_userid(store_id, userid):
 
     return jsonify({'message' : 'Fail to get user all order by userid'}), 404 
     
-#結單時管理者進貨（更新團購商品：到貨日期/領取截止日/inventory...） 
-#前端畫面有缺：商品上架缺supplier_name，缺管理者進貨的頁面
+#結單時管理者進貨（更新團購商品：inventory/purchase_quantity/cost） 
+#前端管理者畫面有缺：商品上架缺supplier_name，缺管理者進貨的頁面
 #更改結單日期
-#到貨時更新到貨日期
+#到貨時(更新團購商品：到貨日期/領取截止日)
 #到貨時開始計算停止領取日期
 #增加現場購買客人
-
+#下架商品時(更新團購商品：income)
         
 if __name__ == "__main__":
     app.run()

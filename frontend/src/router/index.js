@@ -4,15 +4,38 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
+      path: "/",
+      name: "userAll",
+      redirect: "/home",
+      component: () => import("../views/UserAll.vue"),
+      children:[
+        {
+          path: "home",
+          name: "home",
+          component: () => import("../views/UserHomePage.vue"),
+        },
+        {
+          path: "history",
+          name: "historyPage",
+          component: () => import("../views/UserHistoryPage.vue"),
+        },
+        {
+          path: "userInfo",
+          name: "userInfo",
+          component: () => import("../views/UserInfoPage.vue"),
+        },
+      ],
+    },
+    {
       path: "/nav",
       name: "navbar",
       component: () => import("../components/NavBar.vue"),
     },
-    {
-      path: "/",
-      name: "homePage",
-      component: () => import("../views/UserHomePage.vue"),
-    },
+    // {
+    //   path: "/",
+    //   name: "homePage",
+    //   component: () => import("../views/UserHomePage.vue"),
+    // },
     {
       path: "/home/item/:itemID",
       name: "userItemDetail",
@@ -28,16 +51,16 @@ const router = createRouter({
       name: "confirmPage",
       component: () => import("../views/UserConfirmPage.vue"),
     },
-    {
-      path: "/history",
-      name: "historyPage",
-      component: () => import("../views/UserHistoryPage.vue"),
-    },
-    {
-      path: "/userInfo",
-      name: "userInfo",
-      component: () => import("../views/UserInfoPage.vue"),
-    },
+    // {
+    //   path: "/history",
+    //   name: "historyPage",
+    //   component: () => import("../views/UserHistoryPage.vue"),
+    // },
+    // {
+    //   path: "/userInfo",
+    //   name: "userInfo",
+    //   component: () => import("../views/UserInfoPage.vue"),
+    // },
     {
       path: "/storeLogIn",
       name: "storeLogIn",
@@ -52,7 +75,7 @@ const router = createRouter({
         {
           path: "itemManager",
           name: "itemManager",
-          component: () => import("../views/StoreCont.vue"),
+          component: () => import("../views/StoreItemManage.vue"),
         },
         {
           path: "orderManager",
