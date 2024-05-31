@@ -115,7 +115,7 @@ def get_all_orders_by_userid(userid):
                 JOIN 
                     Customer c ON o.userid = c.userid AND c.store_id = p.store_id
                 WHERE 
-                    c.store_id = %s AND 
+                    p.store_id = %s AND 
                     c.userid = %s;
             """ 
     orders = execute_query(query, (store_id, userid), True)
