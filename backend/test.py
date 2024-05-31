@@ -94,19 +94,52 @@ def create_group_buying_product(store_id):
     statement_date = data.get('statement_date')
     product_id = data.get('product_id')
     
-    query = 'INSERT INTO `Group_buying_product`(launch_date, statement_date, product_id) VALUES(%s, %s, %s);'
-    result = execute_query(query, (launch_date, statement_date, product_id,))   
+    query = 'SELECT store_id FROM Product WHERE product_id = %s'
+    sid = execute_query(query, (product_id,))
+    if sid[0] == store_id:
+        query = 'INSERT INTO `Group_buying_product`(launch_date, statement_date, product_id) VALUES(%s, %s, %s);'
+        result = execute_query(query, (launch_date, statement_date, product_id,))
+        if result:
+            return jsonify({'message': 'group_buying_product created successfully'}), 200
+        return jsonify({'error': 'Failed to create group_buying_product'}), 500
     
-    if result:
-         return jsonify({'message': 'group_buying_product created successfully'}), 200
-    return jsonify({'error': 'Failed to create group_buying_product'}), 500      
+    return jsonify({'error': 'this product not in this store'}), 500
 
+ #結單時管理者進貨，更新團購商品：inventory/purchase_quantity/cost
+@app.route("/api/<string:store_id>/product/<int:group_buying_id>/check", methods = ['POST'])
+def update_purchase_quantity(store_id, group_buying_id):
+    data = request.json
+    purchase_quantity = data.get('purchase_quantity')
+    cost = data.get('cost')
+      
+    query = '''UPDATE `Group_buying_product`
+                SET purchase_quantity = %s, cost = %s, inventory = %s
+                WHERE group_buying_id = %s'''
+    result = execute_query(query,(purchase_quantity,cost,purchase_quantity,group_buying_id, ))
+    if result:
+        return jsonify({'message': 'group_buying_product purchase_quantity updated successfully'}), 200
+    return jsonify({'error': 'Failed to update group_buying_produc purchase_quantityt'}), 500     
+    
+#到貨時(更新團購商品：到貨日期arrival_date/領取截止日due_days)
+@app.route("/api/<string:store_id>/product/<int:group_buying_id>/arrival", methods = ['POST'])
+def update_arrival_date(store_id, group_buying_id):
+    data = request.json
+    arrival_date = data.get('arrival_date')
+    due_days = data.get('due_days')
+    
+    query = '''UPDATE `Group_buying_product`
+                SET arrival_date = %s, due_days = %s
+                WHERE group_buying_id = %s'''
+    result = execute_query(query, (arrival_date, due_days, group_buying_id))
+    if result:
+         return jsonify({'message': 'arrival_date updated successfully'}), 200
+    return jsonify({'error': 'Failed to update arrival_date'}), 500                      
 
 #到貨時通知顧客/搜尋：從商品名稱獲取一項團購商品的所有訂購者的訂單資料
-# （回傳user_name/訂貨數量/手機號碼/訂單狀態)
+# （回傳user_name/訂貨數量/領取期限/手機號碼/訂單狀態)
 @app.route("/api/<string:store_id>/Order/<string:product_name>", methods = ["GET"])
 def get_userinfo_by_product_name(store_id, product_name):
-    query = '''SELECT c.user_name, o.quantity, c.phone, o.receive_status
+    query = '''SELECT c.user_name, o.quantity, g.arrival_date, g.due_days, c.phone, o.receive_status
                 FROM `Order` AS o,`Group_buying_product` AS g,`Product` AS p, `Customer` AS c
                 WHERE o.group_buying_id = g.group_buying_id
                 AND g.product_id = p.product_id
@@ -114,14 +147,19 @@ def get_userinfo_by_product_name(store_id, product_name):
                 AND p.store_id = %s
                 AND p.product_name = %s;             
     '''
-    userids = execute_query(query, (store_id, product_name), True)
+    users = execute_query(query, (store_id, product_name), True)
     data = []
-    if userids:
-        data.append(
-            {
-                "userids":userids,
-            }
-        )
+    if users:
+        for user in users:
+            data.append(
+                {
+                  "user_name" : user[0],
+                  "quantity" : user[1],
+                  "領取期限" : user[2] + datetime.timedelta(days=user[3]),
+                  "phone" : user[4],
+                  "receive_status" : user[5]
+                }
+             )
         return jsonify(data), 200
 
     return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404  
@@ -152,11 +190,10 @@ def get_user_all_order_by_userid(store_id, userid):
 
     return jsonify({'message' : 'Fail to get user all order by userid'}), 404 
     
-#結單時管理者進貨（更新團購商品：inventory/purchase_quantity/cost） 
-#前端管理者畫面有缺：商品上架缺supplier_name，缺管理者進貨的頁面
+
+
 #更改結單日期
-#到貨時(更新團購商品：到貨日期/領取截止日)
-#到貨時開始計算停止領取日期
+
 #增加現場購買客人
 #下架商品時(更新團購商品：income)
         
