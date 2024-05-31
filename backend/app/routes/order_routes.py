@@ -136,7 +136,7 @@ def get_all_orders_by_userid(userid):
             )
         return jsonify(data), 200
 
-    return jsonify({'message' : 'Fail to get all orders by phone'}), 404
+    return jsonify({'message' : 'Fail to get all orders by userid'}), 404
 
 
 # 用手機查詢一名客戶所有清單
@@ -164,7 +164,7 @@ def get_all_orders_by_phone(phone):
                 JOIN 
                     Product p ON gbp.product_id = p.product_id
                 WHERE c.phone = %s
-                AND c.store_id = %s;
+                AND p.store_id = %s;
             """
     orders = execute_query(query, (phone, store_id), True)
     
