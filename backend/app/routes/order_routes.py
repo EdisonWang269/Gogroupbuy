@@ -92,10 +92,57 @@ def get_order_by_order_id(order_id):
     
     return jsonify({'message':'Fail to get order by orderid'}), 404
 
-# 查詢一名客戶所有清單
-@order_bp.route("/api/order/<string:phone>", methods=["GET"])
+# 用userid查詢一名客戶所有清單
+@order_bp.route("/api/order/<string:userid>", methods=["GET"])
 @jwt_required()
-def get_all_orders_by_userid(phone):
+def get_all_orders_by_userid(userid):
+    identity = get_jwt_identity()
+    store_id = identity.get('store_id')
+
+    query = """
+                SELECT 
+                    p.product_name, 
+                    gbp.arrival_date, 
+                    gbp.due_days, 
+                    o.receive_status,
+                    p.product_picture
+                FROM 
+                    `Order` o
+                JOIN 
+                    Group_buying_product gbp ON o.group_buying_id = gbp.group_buying_id
+                JOIN 
+                    Product p ON gbp.product_id = p.product_id
+                JOIN 
+                    Customer c ON o.userid = c.userid AND c.store_id = p.store_id
+                WHERE 
+                    c.store_id = %s AND 
+                    c.userid = %s;
+            """ 
+    orders = execute_query(query, (store_id, userid), True)
+    
+    data = []
+    if orders:
+        for order in orders:
+            arrival_date = order[1]
+            due_days = order[2]
+            due_date = arrival_date + datetime.timedelta(days=due_days)
+            data.append(
+            {
+                "product_name": order[0],
+                "due_date": due_date,
+                "receive_status": order[3],
+                "product_picture": order[4]
+            }
+            )
+        return jsonify(data), 200
+
+    return jsonify({'message' : 'Fail to get all orders by phone'}), 404
+
+
+# 用手機查詢一名客戶所有清單
+@order_bp.route("/api/order/phone/<string:phone>", methods=["GET"])
+@jwt_required()
+def get_all_orders_by_phone(phone):
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -139,7 +186,7 @@ def get_all_orders_by_userid(phone):
             )
         return jsonify(data), 200
 
-    return jsonify({'message' : 'Fail to get all orders by userid'}), 404
+    return jsonify({'message' : 'Fail to get all orders by phone'}), 404
 
 # @order_bp.route("/api/<string:userid>/<int:status>", methods=["GET"])
 # @jwt_required()
