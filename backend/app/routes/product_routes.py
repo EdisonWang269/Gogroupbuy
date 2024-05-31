@@ -26,6 +26,7 @@ def get_all_products_by_storename():
                     P.product_id,
                     P.store_id,
                     P.price,
+                    P.unit,
                     P.product_describe,
                     P.supplier_name,
                     P.product_name,
@@ -57,10 +58,11 @@ def get_all_products_by_storename():
                     "product_id": product[9],
                     "store_id": product[10],
                     "price": product[11],
-                    "product_describe": product[12],
-                    "supplier_name": product[13],
-                    "product_name": product[14],
-                    "product_picture": product[15]
+                    "unit": product[12],
+                    "product_describe": product[13],
+                    "supplier_name": product[14],
+                    "product_name": product[15],
+                    "product_picture": product[16]
                 }
             )
         return jsonify(data), 200
@@ -88,6 +90,7 @@ def get_product_by_group_buying_id(group_buying_id):
                     P.product_id,
                     P.store_id,
                     P.price,
+                    p.unit,
                     P.product_describe,
                     P.supplier_name,
                     P.product_name,
@@ -118,10 +121,11 @@ def get_product_by_group_buying_id(group_buying_id):
                     "product_id": product[9],
                     "store_id": product[10],
                     "price": product[11],
-                    "product_describe": product[12],
-                    "supplier_name": product[13],
-                    "product_name": product[14],
-                    "product_picture": product[15]
+                    "unit": product[12],
+                    "product_describe": product[13],
+                    "supplier_name": product[14],
+                    "product_name": product[15],
+                    "product_picture": product[16]
                 }
         return jsonify(product_dict), 200
 
