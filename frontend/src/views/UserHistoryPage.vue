@@ -209,11 +209,7 @@
     gap: 10px;
     transition: max-height 0.6s;
     padding-right: 10px;
-<<<<<<< HEAD
     border: 3px solid #888;
-=======
-    /* border: 3px solid hsl(0, 0%, 65%); */
->>>>>>> f4e025be6440ccba18b5d268c4326792022d96ac
     padding: 10px;
   }
 

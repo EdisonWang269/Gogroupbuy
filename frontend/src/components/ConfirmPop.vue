@@ -40,6 +40,18 @@
       receive_status: "未到貨",
     };
     store.commit("addWaitingOrder", newOrder);
+
+    fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.state.token}`,
+      },
+      body: JSON.stringify({
+        group_buying_id: store.getters.currItem.group_buying_id,
+        quantity: store.state.currItemNum,
+      }),
+    });
   };
 </script>
 
