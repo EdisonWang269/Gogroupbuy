@@ -7,7 +7,7 @@ CREATE TABLE Group_buying_merchant(
 	store_id VARCHAR(255),
 	address VARCHAR(255),
 	business_hours VARCHAR(255),
-	CONSTRAINT Group_buying_merchant_PK  PRIMARY KEY(merchant_userid),
+	CONSTRAINT Group_buying_merchant_PK  PRIMARY KEY(store_id),
 	UNIQUE(store_id)
 );
 

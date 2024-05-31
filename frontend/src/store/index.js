@@ -27,10 +27,8 @@ function changeStatus(status) {
 }
 
 function formatOrder(order) {
-  order.arrival_date = changeDate(order.arrival_date);
-  order.launch_date = changeDate(order.launch_date);
-  if (order.statement_date !== "未到貨") {
-    order.statement_date = changeDate(order.statement_date);
+  if (order.due_date !== "未到貨") {
+    order.due_date = changeDate(order.due_date);
   }
   order.receive_status = changeStatus(order.receive_status);
   return order;
@@ -40,7 +38,7 @@ export default createStore({
   state: {
     items: [],
     orders: [],
-    storeID: "store1", // TODO: liff 接收 store_id, userID
+    storeID: "store1",
     userID: "customer1",
     currItemID: "",
     currItemNum: 0,

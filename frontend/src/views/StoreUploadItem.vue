@@ -6,7 +6,7 @@
     <div class="uploadArea">
       <div>
         <span>商品名稱</span>
-        <el-input class="input"></el-input>
+        <el-input class="input" v-model="name"></el-input>
       </div>
       <div>
         <span>照片檔案</span>
@@ -28,12 +28,23 @@
         </el-upload>
       </div>
       <div>
+        <span>商品供應商</span>
+        <el-input class="input" v-model="supplier"></el-input>
+      </div>
+      <div>
         <span>商品價格（寫法： 250/個）</span>
-        <el-input class="input"></el-input>
+        <el-input class="input" v-model="price"></el-input>
       </div>
       <div>
         <span>結單日期</span>
-        <el-input class="input">
+        <div class="block">
+          <el-date-picker
+            v-model="endDate"
+            type="datetime"
+            placeholder="Select date and time"
+          />
+        </div>
+        <el-input class="input" v-model="endDate">
           <template #prefix>
             <i class="bi bi-calendar3"></i>
           </template>
@@ -41,14 +52,21 @@
       </div>
       <div>
         <span>商品說明</span>
-        <textarea></textarea>
+        <textarea v-model="content"></textarea>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-  export default {};
+<script setup>
+import { ref } from 'vue';
+  const name = ref("");
+  const price = ref("");
+  const supplier = ref("");
+  const fileList = ref([]);
+  const content = ref("");
+  const endDate = ref("");
+
 </script>
 
 <style scoped>

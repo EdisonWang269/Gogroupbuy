@@ -5,7 +5,10 @@
       <div class="content">
         <span>您將訂購</span><br />
         <span>「{{ store.getters.currItem.product_name }}」</span><br />
-        <span>數量：「{{ store.state.currItemNum }}」</span>
+        <span
+          >數量：「{{ store.state.currItemNum }}
+          {{ store.getters.currItem.unit }}」</span
+        >
       </div>
       <div class="buttonArea">
         <button id="cancel" @click="cancel">取消</button>
@@ -32,19 +35,31 @@
     const newOrder = {
       group_buying_id: store.getters.currItem.group_buying_id,
       product_name: store.getters.currItem.product_name,
-      statement_date: "未到貨",
+      due_date: "未到貨",
       quantity: store.state.currItemNum,
       receive_status: "未到貨",
     };
     store.commit("addWaitingOrder", newOrder);
+
+    fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${store.state.token}`,
+      },
+      body: JSON.stringify({
+        group_buying_id: store.getters.currItem.group_buying_id,
+        quantity: store.state.currItemNum,
+      }),
+    });
   };
 </script>
 
 <style scoped>
   .all {
     background-color: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     /* border-radius: 35px; */
   }
 

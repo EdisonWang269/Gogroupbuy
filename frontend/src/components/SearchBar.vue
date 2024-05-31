@@ -1,7 +1,7 @@
 <template>
   <div class="input-group input-group-lg" id="searchBar">
     <span class="input-group-text" id="addon-wrapping"
-      ><i class="bi bi-search" id="search"></i
+      ><i class="bi bi-search glow" id="search"></i
     ></span>
     <input
       type="text"
@@ -10,6 +10,8 @@
       aria-describedby="inputGroup-sizing-lg"
       v-model="keyword"
       @keydown.enter="search"
+      @focus="addFocus"
+      @blur="removeFocus"
     />
   </div>
 </template>
@@ -30,6 +32,14 @@
 
   const search = () => {
     store.dispatch("searchProduct");
+  };
+
+  const addFocus = (event) => {
+    event.target.style.boxShadow = "0 0 20px #ff0015";
+  };
+
+  const removeFocus = (event) => {
+    event.target.style.boxShadow = "none";
   };
 </script>
 
@@ -56,8 +66,29 @@
     /* border-radius: 20px 0 0 20px; */
   }
 
+  .glow {
+    color: #ef2a39;
+    transition: all 0.3s;
+  }
+
   #searchBar:hover #search {
     transform: translateX(5px);
+  }
+
+  #searchBar:hover .glow {
+    animation: glow 1s ease-in-out infinite;
+  }
+
+  @keyframes glow {
+    0% {
+      text-shadow: 0 0 5px #ef2a39;
+    }
+    50% {
+      text-shadow: 0 0 40px #ff0015;
+    }
+    100% {
+      text-shadow: 0 0 5px #ef2a39;
+    }
   }
 
   #searchBar:hover {

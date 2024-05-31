@@ -24,7 +24,6 @@
   .card {
     border-radius: 20px;
     width: 90%;
-
     margin: 0 auto;
     display: flex;
     flex-direction: row;
@@ -34,6 +33,7 @@
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);
   }
   .card-body {
+    flex: 1;
     padding: 0;
   }
   .card-title {
@@ -42,7 +42,7 @@
   }
 
   img {
-    width: 120px;
+    width: 40%;
     height: auto;
   }
 </style>

@@ -17,7 +17,7 @@
       <el-input
         v-model="searchInput"
         id="search"
-        placeholder="搜尋用戶、訂購商品"
+        placeholder="搜尋手機、訂購商品"
       >
         <template #prefix>
           <i class="bi bi-search"></i>

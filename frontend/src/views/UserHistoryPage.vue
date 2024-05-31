@@ -1,6 +1,12 @@
 <template>
   <h1><i class="bi bi-list"></i>歷史訂單</h1>
-  <select class="form-select" v-model="selected" @change="change">
+  <select
+    class="form-select"
+    v-model="selected"
+    @change="change"
+    @focus="addFocus"
+    @blur="removeFocus"
+  >
     <option value="all" selected>全部訂單</option>
     <option value="unshipped">未到貨訂單</option>
     <option value="waiting">待領訂單</option>
@@ -18,16 +24,17 @@
         class="cards"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
-          maxHeight: selected !== 'all' ? '550px' : '325px',
+          maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
           overflowY: 'auto',
         }"
       >
         <item-card-h
           v-for="item in unshippedList"
+          class="item-card"
           :key="item.order_id"
           :img="item.product_picture"
           :name="item.product_name"
-          :dueDate="item.statement_date"
+          :dueDate="item.due_date"
           :status="item.receive_status"
         />
       </div>
@@ -40,7 +47,7 @@
         id="wait"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
-          maxHeight: selected !== 'all' ? '550px' : '325px',
+          maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -49,7 +56,7 @@
           :key="item.order_id"
           :img="item.product_picture"
           :name="item.product_name"
-          :dueDate="item.statement_date"
+          :dueDate="item.due_date"
           :status="item.receive_status"
         />
       </div>
@@ -62,7 +69,7 @@
         id="history"
         :style="{
           marginBottom: '50px',
-          maxHeight: selected !== 'all' ? '550px' : '325px',
+          maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -71,23 +78,24 @@
           :key="item.order_id"
           :img="item.product_picture"
           :name="item.product_name"
-          :dueDate="item.statement_date"
+          :dueDate="item.due_date"
           :status="item.receive_status"
         />
       </div>
     </div>
   </div>
-  <nav-bar class="nav-bar" />
+  <!-- <nav-bar class="nav-bar" /> -->
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, onMounted } from "vue";
   import { useStore } from "vuex";
   import ItemCardH from "../components/ItemCardH.vue";
-  import NavBar from "@/components/NavBar.vue";
+  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const selected = ref("all");
+  const windowHeight = ref(0);
 
   const showUnshipped = ref(true);
   const showWaiting = ref(true);
@@ -111,6 +119,11 @@
       showWaiting.value = false;
       showHistory.value = true;
     }
+
+    document.querySelector(".form-select").style.transform = "scale(1.15)";
+    setTimeout(() => {
+      document.querySelector(".form-select").style.transform = "scale(1)";
+    }, 100);
   };
 
   const unshippedList = store.getters.getOrders.filter(
@@ -122,6 +135,21 @@
   const historyList = store.getters.getOrders.filter(
     (item) => item.receive_status === "已領取"
   );
+
+  const addFocus = (event) => {
+    event.target.style.boxShadow = "0 0 0";
+  };
+
+  const removeFocus = (event) => {
+    event.target.style.boxShadow = "none";
+  };
+
+  onMounted(() => {
+    windowHeight.value = window.innerHeight;
+    window.addEventListener("resize", () => {
+      windowHeight.value = window.innerHeight;
+    });
+  });
 </script>
 
 <style scoped>
@@ -148,6 +176,7 @@
     margin-left: 5%;
     margin-top: 48px;
     margin-bottom: 24px;
+    cursor: pointer;
   }
 
   .form-select,
@@ -194,39 +223,19 @@
     gap: 10px;
     transition: max-height 0.6s;
     padding-right: 10px;
-    border: 3px solid hsl(0, 0%, 65%);
+    border: 3px solid #888;
     padding: 10px;
   }
 
   .cards::-webkit-scrollbar {
-    width: 5px;
+    width: 0px;
   }
-
-  .cards::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-
-  .cards::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-  }
-
-  .cards::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-
   .cards:hover {
-    box-shadow: 0 0 10px #888;
+    box-shadow: inset 0 0 10px #888;
     transform: scale(1.05);
   }
 
-  .cards:hover .item-card-h {
-    transform: scale(1.05);
-  }
-
-  .item-card-h:hover {
-    box-shadow: 0 0 10px #888;
-    transform: scale(1.1);
+  select option {
+    max-width: 7px;
   }
 </style>

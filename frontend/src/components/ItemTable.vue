@@ -4,8 +4,8 @@
       <el-table-column prop="name" label="顧客姓名" />
       <el-table-column prop="orderNum" label="數量" />
       <el-table-column
-        prop="orderDate"
-        label="訂購日期"
+        prop="dueDate"
+        label="領取期限"
         :filter-method="filterHandler"
         :filters="dateFilters"
       />
@@ -25,14 +25,14 @@
               size="large"
               @change="handleChange(scope.row)"
             />
-            <el-button
+            <!-- <el-button
               type="danger"
               round
               size="small"
               v-if="!scope.row.checked"
               @click="singleNotify(scope.row.name)"
               >通知</el-button
-            >
+            > -->
           </div>
         </template>
       </el-table-column>
@@ -57,7 +57,7 @@
         {
           name: "Tom",
           orderNum: 1,
-          orderDate: "2019/05/20",
+          dueDate: "2019/05/20",
           phoneNum: "0912330330",
           status: true,
           checked: true,
@@ -65,7 +65,7 @@
         {
           name: "Alex",
           orderNum: 1,
-          orderDate: "2019/05/20",
+          dueDate: "2019/05/20",
           phoneNum: "0912330330",
           status: false,
           checked: false,
@@ -73,7 +73,7 @@
         {
           name: "Tom",
           orderNum: 1,
-          orderDate: "2019/07/20",
+          dueDate: "2019/07/20",
           phoneNum: "0912330330",
           status: true,
           checked: true,
@@ -103,7 +103,7 @@
       };
       const dates = computed(() => {
         const uniqueDates = [
-          ...new Set(tableData.value.map((item) => item.orderDate)),
+          ...new Set(tableData.value.map((item) => item.dueDate)),
         ];
         return uniqueDates;
       });

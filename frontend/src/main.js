@@ -11,7 +11,7 @@ import store from "./store";
 liff
   .init({ liffId: "2004368945-ZXAjYNkb" })
   .then(() => {
-    // LIFF 初始化成功，進行其他操作，例如取得用戶資訊等
+    //TODO: get userid (要怎麼登入?)
   })
   .catch((err) => {
     console.error("LIFF 初始化失敗", err);

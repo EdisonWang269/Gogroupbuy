@@ -3,12 +3,23 @@
     <router-link to="/"><i class="bi bi-arrow-left-short"></i></router-link>
     <h1>恩恩的團購</h1>
   </div>
-  <img :src="item.product_picture" />
+  <!-- <img
+    :src="item.product_picture"
+    class="item-img"
+    @mouseenter="hoverImg"
+    @mouseleave="leaveImg"
+  /> -->
+  <img
+    src="../assets/user.jpg"
+    class="item-img"
+    @mouseenter="hoverImg"
+    @mouseleave="leaveImg"
+  />
   <div class="main">
     <div class="namePart">
       <p class="name">
         {{ item.product_name }} <br />
-        <span class="price">價格：$ {{ item.price }} / {{ item.measure }}</span>
+        <span class="price">價格：$ {{ item.price }} / {{ item.unit }}</span>
       </p>
     </div>
     <div class="num">
@@ -35,7 +46,7 @@
     @confirmed="checkAndNoPhone"
   ></confirm-pop>
   <phone-pop v-if="noPhoneNum" class="pop" @cancelled="cancel" />
-  <nav-bar />
+  <nav-bar class="navBar"/>
 </template>
 
 <script setup>
@@ -89,13 +100,20 @@
 </script>
 
 <style scoped>
+.content{
+  margin-bottom: 20%;
+}
+.navBar{
+  position: fixed;
+  bottom: 0;
+}
   i {
     font-size: 28px;
     font-weight: 700;
   }
 
   h1 {
-    font-weight: 700;
+    font-weight: 500;
     display: inline-block;
     text-align: center;
     position: relative;
@@ -109,7 +127,7 @@
     align-items: center;
   }
 
-  img {
+  .item-img {
     width: auto;
     height: 40vh;
     /* border: 1px solid gray; */
@@ -117,6 +135,35 @@
     margin: 0 auto;
     margin-bottom: 5px;
     border-radius: 10px;
+    transition: transform 0.3s;
+    position: relative;
+    z-index: 10;
+  }
+
+  .item-img:hover {
+    animation: scale-up-down 0.5s infinite alternate;
+  }
+
+  @keyframes scale-up-down {
+    0% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1.27);
+    }
+  }
+
+  .item-img:not(:hover) {
+    animation: fade-out-scale 0.5s ease-out forwards;
+  }
+
+  @keyframes fade-out-scale {
+    0% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
   }
 
   .main {
@@ -132,11 +179,13 @@
     display: block;
     margin-bottom: 0;
   }
+
   .name {
     font-size: 32px;
     font-weight: bold;
   }
   .price {
+    font-weight: lighter;
     font-size: 24px;
     vertical-align: baseline;
   }
@@ -204,6 +253,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 999;
   }
 
   .bi.bi-dash-square-fill,
