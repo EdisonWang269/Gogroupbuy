@@ -20,189 +20,199 @@
       </div>
     </div>
   </div>
-  <big-button :action="buttonAct" @click="order" />
+  <big-button :action="buttonAct" class="hover-button" @click="checkOrder" />
   <div class="content">
     <span>結單日期：{{ item.statement_date }}</span>
     <span>商品說明：</span>
     <span id="content">{{ item.product_describe }}</span>
   </div>
   <confirm-pop
-    v-if="ordercheck"
+    v-if="orderCheck"
     class="pop"
     :name="item.product_name"
     :orderNum="orderNum"
-    @isCancelled="cancel"
+    @cancelled="cancel"
     @confirmed="checkAndNoPhone"
   ></confirm-pop>
-  <phone-pop v-if="noPhoneNum" class="pop" @isCancelled="cancel" />
+  <phone-pop v-if="noPhoneNum" class="pop" @cancelled="cancel" />
   <nav-bar />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useStore } from "vuex";
+  import { ref } from "vue";
+  import { useStore } from "vuex";
+  import { useRouter } from "vue-router";
 
-import BigButton from "../components/BigButton.vue";
-import ConfirmPop from "@/components/ConfirmPop.vue";
-import PhonePop from "../components/PhonePop.vue";
-import NavBar from "@/components/NavBar.vue";
+  import BigButton from "../components/BigButton.vue";
+  import ConfirmPop from "@/components/ConfirmPop.vue";
+  import PhonePop from "../components/PhonePop.vue";
+  import NavBar from "@/components/NavBar.vue";
 
-const store = useStore();
+  const store = useStore();
+  const router = useRouter();
 
-const item = store.getters.currItem;
-const buttonAct = "立即下單";
-const orderNum = ref(1);
+  const item = store.getters.currItem;
+  const buttonAct = "立即下單";
+  const orderNum = ref(1);
 
-const addOrder = () => {
-  orderNum.value++;
-};
+  const addOrder = () => {
+    orderNum.value++;
+  };
 
-const minOrder = () => {
-  orderNum.value--;
-  if (orderNum.value < 1) {
-    orderNum.value = 1;
-  }
-};
+  const minOrder = () => {
+    orderNum.value--;
+    if (orderNum.value < 1) {
+      orderNum.value = 1;
+    }
+  };
 
-const ordercheck = ref(false);
-const order = () => {
-  if (orderNum.value > 0) {
-    store.commit("setCurrItemNum", orderNum.value);
-    ordercheck.value = true;
-  }
-};
+  const orderCheck = ref(false);
+  const checkOrder = () => {
+    if (orderNum.value > 0) {
+      store.commit("setCurrItemNum", orderNum.value);
+      orderCheck.value = true;
+    }
+  };
 
-const noPhoneNum = ref(false);
-const checkAndNoPhone = (value) => {
-  if (value == true) {
-    noPhoneNum.value = true;
-    ordercheck.value = false;
-  }
-};
+  const noPhoneNum = ref(false);
+  const checkAndNoPhone = () => {
+    noPhoneNum.value = store.state.userPhone === "";
 
-const cancel = (value) => {
-  if (value == true) {
-    ordercheck.value = false;
-  }
-};
+    if (orderCheck.value && !noPhoneNum.value) {
+      router.push("/home/item/confirm");
+    }
+  };
+
+  const cancel = () => {
+    orderCheck.value = false;
+  };
 </script>
 
 <style scoped>
-i {
-  font-size: 28px;
-  font-weight: 700;
-}
-
-h1 {
-  font-weight: 700;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-  margin: 0 auto;
-}
-
-.header {
-  display: flex;
-  padding: 20px 12px 0 12px;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-img {
-  width: auto;
-  height: 40vh;
-  /* border: 1px solid gray; */
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 5px;
-  border-radius: 10px;
-}
-
-.main {
-  display: flex;
-  color: #3c2f2f;
-  /* gap:5%; */
-  /* padding: 0 5px; */
-  /* margin: 0 auto; */
-  justify-content: space-evenly;
-}
-
-.namePart {
-  display: block;
-  margin-bottom: 0;
-}
-.name {
-  font-size: 32px;
-  font-weight: bold;
-}
-.price {
-  font-size: 24px;
-  vertical-align: baseline;
-}
-
-.orderPlace {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20%;
-  padding-left: 10px;
-  /* padding-bottom: 40px; */
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-}
-
-i {
-  color: #ef2a39;
-  font-size: 45px;
-  cursor: pointer;
-}
-
-.num {
-  position: relative;
-  display: flex;
-  gap: 0;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: baseline;
-}
-.num > p {
-  font-size: 24px;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-/* button{
-    background-color:#3C2F2F;
-    border: none;
-    border-radius: 20px;
-    box-shadow: 3px 3px 8px 3px rgba(0, 0, 0, 0.2);
-    display: block;
-    width: 90%;
-    font-size: 32px;
+  i {
+    font-size: 28px;
     font-weight: 700;
-    color: white;
+  }
+
+  h1 {
+    font-weight: 700;
+    display: inline-block;
+    text-align: center;
+    position: relative;
     margin: 0 auto;
-    padding: 10px 0;
-} */
-.content {
-  margin-top: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-size: 24px;
-  padding: 5px 5%;
-  color: #3c2f2f;
-  text-align: left;
-}
+  }
 
-#content {
-  font-size: 16px;
-  color: #6a6a6a;
-}
+  .header {
+    display: flex;
+    padding: 20px 12px 0 12px;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-.pop {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+  img {
+    width: auto;
+    height: 40vh;
+    /* border: 1px solid gray; */
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 5px;
+    border-radius: 10px;
+  }
+
+  .main {
+    display: flex;
+    color: #3c2f2f;
+    /* gap:5%; */
+    /* padding: 0 5px; */
+    /* margin: 0 auto; */
+    justify-content: space-evenly;
+  }
+
+  .namePart {
+    display: block;
+    margin-bottom: 0;
+  }
+  .name {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  .price {
+    font-size: 24px;
+    vertical-align: baseline;
+  }
+
+  .orderPlace {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20%;
+    padding-left: 10px;
+    /* padding-bottom: 40px; */
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+  }
+
+  i {
+    color: #ef2a39;
+    font-size: 45px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  i:hover {
+    color: #d41e1e;
+  }
+
+  .num {
+    position: relative;
+    display: flex;
+    gap: 0;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: baseline;
+  }
+  .num > p {
+    font-size: 24px;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .hover-button {
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  .hover-button:hover {
+    background-color: #3c2f2f;
+    transform: scale(1.1);
+  }
+
+  .content {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 24px;
+    padding: 5px 5%;
+    color: #3c2f2f;
+    text-align: left;
+  }
+
+  #content {
+    font-size: 16px;
+    color: #6a6a6a;
+  }
+
+  .pop {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .bi.bi-dash-square-fill,
+  .bi.bi-plus-square-fill {
+    transition: transform 0.3s, color 0.3s;
+  }
+  .bi.bi-dash-square-fill:hover,
+  .bi.bi-plus-square-fill:hover {
+    transform: scale(1.15);
+    color: hsl(0, 100%, 50%);
+  }
 </style>

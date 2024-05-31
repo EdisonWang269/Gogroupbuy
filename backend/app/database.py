@@ -1,10 +1,17 @@
+from flaskext.mysql import MySQL
 import mysql.connector
 
+import configparser
+
+config_path = '/home/wangpython/Gogroupbuy/backend/config.ini'
+config = configparser.ConfigParser()
+config.read(config_path)
+
 DB_CONFIG = {
-  'user': 'root',
-  'password': 'root',
-  'host': '127.0.0.1',
-  'database': 'Groupbuy',
+  'user': config['db']['username'],
+  'password': config['db']['password'],
+  'host': config['db']['host'],
+  'database': config['db']['database'],
 }
 
 def get_database_connection():

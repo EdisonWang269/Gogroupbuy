@@ -1,7 +1,9 @@
+import datetime
 from flask import Blueprint, request, jsonify
 from ..database import execute_query
+from ..sendmess import send_message
 
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
 
 order_bp = Blueprint('order', __name__)
 
@@ -236,3 +238,41 @@ def get_all_orders_by_userid_and_status(userid, status):
         return jsonify(data), 200
 
     return jsonify({'message' : 'Fail to get all orders by userid and status'}), 404
+
+#到貨時通知顧客：獲取一項團購商品的所有訂購者
+@order_bp.route("/api/order/notify/<int:group_buying_id>", methods = ["GET"])
+@jwt_required()
+def get_userid_by_group_buying_id(group_buying_id):
+    claims = get_jwt()
+    role = claims['role']
+
+    if role != 'merchant':
+        return jsonify({"message":"權限不足"}), 400
+    
+    query = """
+                SELECT O.userid, P.product_name, P.price, O.quantity, DATE(GBP.arrival_date) AS arrival_date, GBP.due_days
+                FROM `Order` O
+                JOIN Group_buying_product GBP ON O.group_buying_id = GBP.group_buying_id
+                JOIN Product P ON GBP.product_id = P.product_id
+                WHERE O.group_buying_id = %s 
+                AND O.receive_status = FALSE;
+
+            """
+    results = execute_query(query, (group_buying_id,), True)
+
+    if not results:
+        return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
+
+    for result in results:
+        userid = result[0]
+        product_name = result[1]
+        price = result[2]
+        quantity = result[3]
+        arrival_date = result[4]
+        due_days = result[5]
+        due_date = arrival_date + datetime.timedelta(days=due_days)
+        message = f'您訂購的{product_name}已到貨，請備妥${price*quantity}，於{due_date}前來店內取貨，謝謝。'
+
+        send_message(userid, message)
+    
+    return jsonify({'message' : 'Send message successfully'}), 200

@@ -3,20 +3,18 @@
 </template>
 
 <script>
-export default {
-    props:['action','icon'],
-
-}
+  export default {
+    props: ["action", "icon"],
+  };
 </script>
 
 <style scoped>
-.button{
-    background-color: #4763E4;
+  .button {
+    background-color: #4763e4;
     text-align: center;
     border-radius: 12px;
     color: #fff;
     padding: 13px;
     border: none;
-}
-
+  }
 </style>

@@ -32,12 +32,12 @@ def check_role(store_id, userid):
     # 未註冊
     return {}
 
-# 登入時呼叫授予身份，並更新user_name
-@user_bp.route("/api/user/<string:store_id>", methods=["POST"])
-def login_check(store_id):
+# 登入時授予身份
+@user_bp.route("/api/user", methods=["POST"])
+def login_check():
     data = request.json
+    store_id = data.get('store_id')
     userid = data.get('userid')
-    user_name = data.get('user_name')
 
     role_info = check_role(store_id, userid)
     if role_info:
@@ -48,24 +48,14 @@ def login_check(store_id):
             return jsonify(access_token=access_token)
  
         elif role_info["role"] == "customer":
-
-            # 更新user_name
-            if role_info["info"][2] != user_name:
-                query = "UPDATE Customer SET user_name = %s WHERE userid = %s AND store_id = %s"
-                result = execute_query(query, (user_name, userid, store_id))
-                if result:
-                    print("secc update user_name")
-                else:
-                    print("fail to update user_name")
-
             identity = {"store_id": store_id, "userid": userid}
             additional_claims = {"role": "customer"}
             access_token = create_access_token(identity=identity, additional_claims=additional_claims)
             return jsonify(access_token=access_token)
 
     else:
-        query = "INSERT INTO Customer (userid, store_id, user_name) VALUES(%s, %s, %s);"
-        result = execute_query(query, (userid, store_id, user_name))
+        query = "INSERT INTO Customer (userid, store_id) VALUES(%s, %s);"
+        result = execute_query(query, (userid, store_id))
         if result:
             identity = {"store_id": store_id, "userid": userid}
             additional_claims = {"role": "customer"}
@@ -74,13 +64,14 @@ def login_check(store_id):
         
         return jsonify({"message": "Enroll failed"}), 404
 
-# 更改用戶電話
+# 更改用戶名字和電話
 @user_bp.route("/api/user", methods=["PUT"])
 @jwt_required()
 def update_user_info():
     data = request.json
     phone = data.get('phone')
-
+    user_name = data.get('user_name')
+    
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
     userid = identity.get('userid')
@@ -91,8 +82,8 @@ def update_user_info():
     if role == "merchant":
         return jsonify({"message": "Merchant don't have phone"}), 404
 
-    query = "UPDATE Customer SET phone = %s WHERE userid = %s AND store_id = %s"
-    result = execute_query(query, (phone, userid, store_id))
+    query = "UPDATE Customer SET user_name = %s, phone = %s WHERE userid = %s AND store_id = %s"
+    result = execute_query(query, (user_name, phone, userid, store_id))
     if result:
         return jsonify({"message": "Update user info successfully"}), 200
     
@@ -137,3 +128,7 @@ def update_user_blacklist(operation):
         return jsonify({"message": "Update user blacklist successfully"}), 200
     
     return jsonify({"message": "Fail to update user blacklist"}), 200
+
+
+
+    
