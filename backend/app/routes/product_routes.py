@@ -91,6 +91,8 @@ def get_product_by_group_buying_id(group_buying_id):
     ---
     tags:
         - Product
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: group_buying_id
         in: path
@@ -170,6 +172,8 @@ def create_product():
     ---
     tags:
       - Product
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: body
         in: body
@@ -246,6 +250,8 @@ def create_group_buying_product():
     ---
     tags:
       - Product
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: body
         in: body
@@ -311,6 +317,8 @@ def update_purchase_quantity(group_buying_id):
     ---
     tags:
       - Product
+    security:
+      - APIKeyHeader: []
     parameters:
           - name: group_buying_id
             in: path
@@ -368,6 +376,8 @@ def update_arrival_date(group_buying_id):
     ---
     tags:
       - Product
+    security:
+      - APIKeyHeader: []
     parameters:
           - name: group_buying_id
             in: path

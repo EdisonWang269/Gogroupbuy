@@ -101,6 +101,8 @@ def update_user_info():
     ---
     tags:
       - User
+    security:
+      - APIKeyHeader: []
     parameters:
           - name: body
             in: body
@@ -154,6 +156,8 @@ def update_user_blacklist(operation):
     ---
     tags:
       - User
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: operation
         in: path

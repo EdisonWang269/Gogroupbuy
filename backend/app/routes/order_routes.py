@@ -16,6 +16,8 @@ def create_order():
     ---
     tags:
       - Order
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: body
         in: body
@@ -61,6 +63,8 @@ def get_order_by_order_id(order_id):
     ---
     tags:
       - Order
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: order_id
         in: path
@@ -144,6 +148,8 @@ def get_all_orders_by_userid(userid):
     ---
     tags:
       - Order
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: userid
         in: path
@@ -208,6 +214,8 @@ def get_all_orders_by_phone(phone):
     ---
     tags:
       - Order
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: phone
         in: path
@@ -273,6 +281,8 @@ def get_userinfo_by_product_name(product_name):
     ---
     tags:
       - Order
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: product_name
         in: path
@@ -322,6 +332,8 @@ def get_userid_by_group_buying_id(group_buying_id):
     ---
     tags:
       - Order
+    security:
+      - APIKeyHeader: []
     parameters:
       - name: group_buying_id
         in: path
