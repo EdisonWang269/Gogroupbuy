@@ -14,6 +14,8 @@ def get_all_products_by_storename():
     ---
     tags:
       - Product
+    security:
+      - APIKeyHeader: []
     responses:
       200:
         description: Get all products by storeid successfully
