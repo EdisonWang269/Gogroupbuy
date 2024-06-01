@@ -35,7 +35,7 @@
   };
 
   const addFocus = (event) => {
-    event.target.style.boxShadow = "0 0 20px #ff0015";
+    event.target.style.boxShadow = "0 0 20px #9d9d9d";
   };
 
   const removeFocus = (event) => {

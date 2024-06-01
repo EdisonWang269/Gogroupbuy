@@ -54,18 +54,33 @@
         <span>商品說明</span>
         <textarea v-model="content"></textarea>
       </div>
+      <div class="buttons">
+        <store-button :action="'確認上架'" class="button"/>
+        <button class="button" id="delete" @click="deleteAll">全部刪除</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import StoreButton from '../components/StoreButton.vue';
   const name = ref("");
   const price = ref("");
   const supplier = ref("");
   const fileList = ref([]);
   const content = ref("");
   const endDate = ref("");
+
+  const deleteAll = () =>{
+    name.value = "";
+    price.value = "";
+    supplier.value = "";
+    fileList.value = [];
+    content.value = "";
+    endDate.value = "";
+
+  }
 
 </script>
 
@@ -107,5 +122,18 @@ import { ref } from 'vue';
     border-radius: 12px;
     padding: 16px;
     height: 150px;
+  }
+  .buttons{
+    display: flex;
+    gap: 10px;
+  }
+  .button{
+    width: 200px;
+    height: 48px;
+  }
+  #delete{
+    border: 1px solid #D4D4D8;
+    border-radius: 10px;
+    background-color: #fff;
   }
 </style>
