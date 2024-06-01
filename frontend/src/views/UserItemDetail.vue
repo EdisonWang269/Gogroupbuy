@@ -135,34 +135,23 @@
     margin: 0 auto;
     margin-bottom: 5px;
     border-radius: 10px;
-    transition: transform 0.3s;
     position: relative;
     z-index: 10;
   }
 
   .item-img:hover {
-    animation: scale-up-down 0.5s infinite alternate;
+    animation: scale-up-down 2s forwards;
   }
 
   @keyframes scale-up-down {
     0% {
       transform: scale(1.1);
     }
-    100% {
-      transform: scale(1.27);
-    }
-  }
-
-  .item-img:not(:hover) {
-    animation: fade-out-scale 0.5s ease-out forwards;
-  }
-
-  @keyframes fade-out-scale {
-    0% {
-      transform: scale(1.2);
+    20% {
+      transform: scale(1.28);
     }
     100% {
-      transform: scale(1, 1);
+      transform: scale(1);
     }
   }
 
@@ -227,9 +216,14 @@
 
   .hover-button {
     transition: background-color 0.3s, transform 0.3s;
+    background-color: #3c2f2f;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: white;
   }
   .hover-button:hover {
-    background-color: #3c2f2f;
+    background-color: #ef2a39;
     transform: scale(1.1);
   }
 
@@ -259,10 +253,22 @@
   .bi.bi-dash-square-fill,
   .bi.bi-plus-square-fill {
     transition: transform 0.3s, color 0.3s;
+    color: #333333;
   }
-  .bi.bi-dash-square-fill:hover,
+
+  .bi.bi-dash-square-fill:hover {
+    transform: scale(1.05);
+    color: #333333;
+  }
+
   .bi.bi-plus-square-fill:hover {
     transform: scale(1.15);
     color: hsl(0, 100%, 50%);
+  }
+
+  .bi.bi-dash-square-fill,
+  .bi.bi-plus-square-fill :not(:hover) {
+    transform: scale(1);
+    color: #333333;
   }
 </style>

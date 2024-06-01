@@ -184,7 +184,7 @@
     gap: 10px;
     transition: max-height 0.6s;
     padding-right: 10px;
-    border: 1px dotted lightgrey;
+    border: 1px solid lightgrey;
     /* border-right: 1px solid lightgrey; */
     border-radius: 5px;
     padding: 10px;
