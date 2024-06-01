@@ -188,6 +188,38 @@ def get_all_orders_by_phone(phone):
 
     return jsonify({'message' : 'Fail to get all orders by phone'}), 404
 
+# 從商品名稱獲取一項團購商品的所有訂購者的訂單資料
+# （回傳user_name/訂貨數量/領取期限/手機號碼/訂單狀態)
+@order_bp.route("/api/order/productname/<string:product_name>", methods = ["GET"])
+def get_userinfo_by_product_name(product_name):
+    identity = get_jwt_identity()
+    store_id = identity.get('store_id')
+
+    query = '''SELECT c.user_name, o.quantity, g.arrival_date, g.due_days, c.phone, o.receive_status
+                FROM `Order` AS o,`Group_buying_product` AS g,`Product` AS p, `Customer` AS c
+                WHERE o.group_buying_id = g.group_buying_id
+                AND g.product_id = p.product_id
+                AND c.userid = o.userid
+                AND p.store_id = %s
+                AND p.product_name = %s;             
+    '''
+    orders = execute_query(query, (store_id, product_name), True)
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                  "user_name" : order[0],
+                  "quantity" : order[1],
+                  "due_date" : order[2] + datetime.timedelta(days=order[3]),
+                  "phone" : order[4],
+                  "receive_status" : order[5]
+                }
+             )
+        return jsonify(data), 200
+
+    return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404  
+
 # @order_bp.route("/api/<string:userid>/<int:status>", methods=["GET"])
 # @jwt_required()
 # def get_all_orders_by_userid_and_status(userid, status):
