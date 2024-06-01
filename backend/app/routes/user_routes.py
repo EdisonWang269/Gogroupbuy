@@ -163,6 +163,16 @@ def update_user_blacklist(operation):
         in: path
         type: string
         description: 0:黑名單歸零, 1:黑名單加一, -1:黑名單減一
+      - name: body
+        in: body
+        schema:
+            type: object
+            required:
+                - userid
+            properties:
+                userid:
+                  type: string
+                  description: userid
     responses:
         200:
             description: 更新用戶黑名單成功
