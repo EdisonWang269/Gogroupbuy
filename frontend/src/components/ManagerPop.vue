@@ -56,7 +56,6 @@
             style="width: 95%"
             placeholder="Please input"
           />
-          <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
         </div>
       </div>
       <div class="editDate" v-if="type === 'arriveManage'">
@@ -86,7 +85,7 @@
   import { ref } from "vue";
   import StoreButton from "./StoreButton.vue";
   export default {
-    props: ["usage", "original", "type", "customerName"],
+    props: ["usage", "original", "type", "customerName", ""],
     components: {
       StoreButton,
     },
