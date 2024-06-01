@@ -27,7 +27,7 @@ def create_app():
     CORS(app)
 
     swagger_template = {"securityDefinitions": {"APIKeyHeader": {"type": "apiKey", "name": "Authorization", "in": "header"}}}
-    Swagger(app)
+    Swagger(app, template=swagger_template)
     
     app.register_blueprint(user_bp)
     app.register_blueprint(product_bp)
