@@ -8,7 +8,7 @@
   export default {
     name: "App",
     methods: {
-      ...mapActions("user", ["fetchInit"]),
+      ...mapActions(["fetchInit"]),
     },
     mounted() {
       this.fetchInit();

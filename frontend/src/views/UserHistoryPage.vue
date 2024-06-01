@@ -15,7 +15,7 @@
         @click="selected = 'unshipped'"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
-          maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
+          maxHeight: selected !== 'all' ? `${windowHeight - 325}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -39,7 +39,7 @@
         @click="selected = 'waiting'"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
-          maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
+          maxHeight: selected !== 'all' ? `${windowHeight - 325}px` : '200px',
           overflowY: 'auto',
         }"
       >
@@ -62,7 +62,7 @@
         @click="selected = 'history'"
         :style="{
           marginBottom: '50px',
-          maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
+          maxHeight: selected !== 'all' ? `${windowHeight - 325}px` : '200px',
           overflowY: 'auto',
         }"
       >

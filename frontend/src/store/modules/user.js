@@ -9,7 +9,6 @@ const state = {
   currItemNum: 0,
   userPhone: "09123456789",
   keyword: "",
-  token: "",
 };
 
 const getters = {
@@ -44,9 +43,6 @@ const mutations = {
   setStoreID(state, storeID) {
     state.storeID = storeID;
   },
-  setToken(state, token) {
-    state.token = token;
-  },
   setOrders(state, orders) {
     state.orders = orders;
   },
@@ -68,48 +64,24 @@ const mutations = {
 };
 
 const actions = {
-  async fetchItems({ commit, state }) {
+  async fetchItems({ commit, rootState }) {
     const response = await fetch(`/api/product`, {
       headers: {
-        Authorization: `Bearer ${state.token}`,
+        Authorization: `Bearer ${rootState.token}`,
       },
     });
     const data = await response.json();
     commit("setItems", data);
   },
 
-  async fetchOrders({ commit, state }) {
+  async fetchOrders({ commit, rootState }) {
     const response = await fetch(`/api/order/${state.userID}`, {
       headers: {
-        Authorization: `Bearer ${state.token}`,
+        Authorization: `Bearer ${rootState.token}`,
       },
     });
     const data = await response.json();
     commit("setOrders", data);
-  },
-
-  async fetchToken({ commit, state }) {
-    const response = await fetch(`/api/user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userid: state.userID,
-        store_id: state.storeID,
-      }),
-    });
-    const data = await response.json();
-    commit("setToken", data.access_token);
-  },
-
-  async fetchInit({ dispatch }) {
-    try {
-      await dispatch("fetchToken");
-      await Promise.all([dispatch("fetchItems"), dispatch("fetchOrders")]);
-    } catch (error) {
-      console.error("Error in fetchInit:", error);
-    }
   },
 };
 
