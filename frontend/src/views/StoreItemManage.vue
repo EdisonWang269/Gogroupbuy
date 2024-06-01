@@ -1,5 +1,6 @@
 <template>
   <manager-pop
+    class="pop"
     :usage="topic"
     :original="endDate"
     :type="type"
@@ -178,6 +179,9 @@
 </script>
 
 <style scoped>
+  .pop{
+    transition: transform 
+  }
   .all {
     background-color: #fafafa;
     width: 100%;

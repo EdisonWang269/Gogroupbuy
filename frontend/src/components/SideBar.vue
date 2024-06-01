@@ -45,6 +45,10 @@
         </el-menu>
       </el-col>
     </el-row>
+    <div class="managerName">
+      <img src="../assets/user.jpg">
+      <div><span>{{ managerName }}</span><span>{{ managerMail }}</span></div> 
+    </div>
   </div>
 </template>
 
@@ -53,6 +57,8 @@
   import { useRouter } from "vue-router";
   export default {
     setup(props, { emit }) {
+      const managerName = ref("賴巧忍");
+      const managerMail = ref("choco@gmail.com");
       const router = useRouter();
       const itemName = ref("香帥芋泥蛋糕");
       const itemList = ref([]);
@@ -72,6 +78,8 @@
         toItem,
         toOrder,
         toUpload,
+        managerName,
+        managerMail,
       };
     },
   };
@@ -133,5 +141,26 @@
     color: white;
     font-weight: 700;
     background-color: #4256d0;
+  }
+  .managerName {
+    width: 100%;
+    z-index: 5;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 8px;
+    position: absolute;
+    bottom: 32px;
+    left: 20px;
+  }
+  .managerName img{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+  .managerName div{
+    display:flex;
+    flex-direction: column;
+    color: #fff;
   }
 </style>
