@@ -130,14 +130,14 @@
     --active-color: #fff;
   }
 
-  ::v-deep .el-menu-item {
+  :deep(.el-menu-item){
     color: white;
     font-weight: 200;
     padding: 0;
     /* height: 35px; */
   }
 
-  ::v-deep .el-menu-item.is-active {
+  :deep(.el-menu-item.is-active){
     color: white;
     font-weight: 700;
     background-color: #4256d0;

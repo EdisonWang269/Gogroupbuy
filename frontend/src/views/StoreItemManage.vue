@@ -229,7 +229,7 @@
   i {
     color: black;
   }
-  ::v-deep .el-input__wrapper {
+  :deep(.el-input__wrapper){
     padding: 8px 16px;
     border-radius: 10px;
     border: 1px solid #4763e4;
