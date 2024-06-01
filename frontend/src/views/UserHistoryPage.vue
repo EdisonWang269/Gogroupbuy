@@ -1,17 +1,7 @@
 <template>
-  <h1><i class="bi bi-list"></i>歷史訂單</h1>
-  <select
-    class="form-select"
-    v-model="selected"
-    @change="change"
-    @focus="addFocus"
-    @blur="removeFocus"
-  >
-    <option value="all" selected>全部訂單</option>
-    <option value="unshipped">未到貨訂單</option>
-    <option value="waiting">待領訂單</option>
-    <option value="history">歷史訂單</option>
-  </select>
+  <div class="header" @click="selected = 'all'">
+    <h1><i class="bi bi-list"></i>歷史訂單</h1>
+  </div>
 
   <div class="content">
     <div
@@ -22,6 +12,7 @@
       <p class="title">未到貨訂單</p>
       <div
         class="cards"
+        @click="selected = 'unshipped'"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
           maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
@@ -45,6 +36,7 @@
       <div
         class="cards"
         id="wait"
+        @click="selected = 'waiting'"
         :style="{
           marginBottom: selected !== 'all' ? '50px' : '0px',
           maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
@@ -67,6 +59,7 @@
       <div
         class="cards"
         id="history"
+        @click="selected = 'history'"
         :style="{
           marginBottom: '50px',
           maxHeight: selected !== 'all' ? `${windowHeight - 375}px` : '200px',
@@ -84,14 +77,12 @@
       </div>
     </div>
   </div>
-  <!-- <nav-bar class="nav-bar" /> -->
 </template>
 
 <script setup>
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, watch } from "vue";
   import { useStore } from "vuex";
   import ItemCardH from "../components/ItemCardH.vue";
-  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const selected = ref("all");
@@ -100,6 +91,10 @@
   const showUnshipped = ref(true);
   const showWaiting = ref(true);
   const showHistory = ref(true);
+
+  watch(selected, () => {
+    change();
+  });
 
   const change = () => {
     if (selected.value === "all") {
@@ -119,30 +114,17 @@
       showWaiting.value = false;
       showHistory.value = true;
     }
-
-    document.querySelector(".form-select").style.transform = "scale(1.15)";
-    setTimeout(() => {
-      document.querySelector(".form-select").style.transform = "scale(1)";
-    }, 100);
   };
 
-  const unshippedList = store.getters.getOrders.filter(
+  const unshippedList = store.getters["user/getOrders"].filter(
     (item) => item.receive_status == "未到貨"
   );
-  const waitingList = store.getters.getOrders.filter(
+  const waitingList = store.getters["user/getOrders"].filter(
     (item) => item.receive_status === "待領取"
   );
-  const historyList = store.getters.getOrders.filter(
+  const historyList = store.getters["user/getOrders"].filter(
     (item) => item.receive_status === "已領取"
   );
-
-  const addFocus = (event) => {
-    event.target.style.boxShadow = "0 0 0";
-  };
-
-  const removeFocus = (event) => {
-    event.target.style.boxShadow = "none";
-  };
 
   onMounted(() => {
     windowHeight.value = window.innerHeight;
@@ -170,32 +152,10 @@
     width: 100%;
     z-index: 999;
   }
-
-  .form-select {
-    width: 150px;
-    margin-left: 5%;
-    margin-top: 48px;
-    margin-bottom: 24px;
-    cursor: pointer;
+  .header {
+    display: flex;
+    margin-bottom: 7%;
   }
-
-  .form-select,
-  .form-select option {
-    background-color: #efefef8e;
-    color: #333;
-    border: none;
-    outline: none;
-    padding: 12px 24px;
-    border-radius: 4px;
-    appearance: none;
-    font-size: 16px;
-  }
-
-  .option {
-    border-radius: 1px;
-    font-size: 16px;
-  }
-
   .content {
     display: flex;
     flex-direction: column;
@@ -233,9 +193,5 @@
   .cards:hover {
     box-shadow: inset 0 0 10px #888;
     transform: scale(1.05);
-  }
-
-  select option {
-    max-width: 7px;
   }
 </style>

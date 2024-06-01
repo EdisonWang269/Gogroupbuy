@@ -46,7 +46,7 @@
     @confirmed="checkAndNoPhone"
   ></confirm-pop>
   <phone-pop v-if="noPhoneNum" class="pop" @cancelled="cancel" />
-  <nav-bar class="navBar"/>
+  <nav-bar />
 </template>
 
 <script setup>
@@ -57,12 +57,12 @@
   import BigButton from "../components/BigButton.vue";
   import ConfirmPop from "@/components/ConfirmPop.vue";
   import PhonePop from "../components/PhonePop.vue";
-  import NavBar from "@/components/NavBar.vue";
+  import NavBar from "../components/NavBar.vue";
 
   const store = useStore();
   const router = useRouter();
 
-  const item = store.getters.currItem;
+  const item = store.getters["user/currItem"];
   const buttonAct = "立即下單";
   const orderNum = ref(1);
 
@@ -80,14 +80,14 @@
   const orderCheck = ref(false);
   const checkOrder = () => {
     if (orderNum.value > 0) {
-      store.commit("setCurrItemNum", orderNum.value);
+      store.commit("user/setCurrItemNum", orderNum.value);
       orderCheck.value = true;
     }
   };
 
   const noPhoneNum = ref(false);
   const checkAndNoPhone = () => {
-    noPhoneNum.value = store.state.userPhone === "";
+    noPhoneNum.value = store.state.user.userPhone === "";
 
     if (orderCheck.value && !noPhoneNum.value) {
       router.push("/home/item/confirm");
@@ -100,13 +100,13 @@
 </script>
 
 <style scoped>
-.content{
-  margin-bottom: 20%;
-}
-.navBar{
-  position: fixed;
-  bottom: 0;
-}
+  .content {
+    margin-bottom: 20%;
+  }
+  .navBar {
+    position: fixed;
+    bottom: 0;
+  }
   i {
     font-size: 28px;
     font-weight: 700;
