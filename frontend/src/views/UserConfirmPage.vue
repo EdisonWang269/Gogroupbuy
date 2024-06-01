@@ -12,17 +12,21 @@
   </div>
   <big-button :action="action" @click="backToHome" class="back" />
   <div class="otherItem">
-    <div
-      class="card"
-      v-for="item in items"
-      :key="item.group_buying_id"
-      @click="checkDetail(item.group_buying_id)"
-      :class="{ 'card-hover': hoveredItem === item.group_buying_id }"
-      @mouseenter="hoveredItem = item.group_buying_id"
-      @mouseleave="hoveredItem = null"
-    >
-      <item-card v-bind="item" style="transform: scale(1.1)" />
-    </div>
+    <!-- <div
+      style="transform: scale(1.1)" 
+    > -->
+      <item-card 
+        v-bind="item" 
+        
+        class="card"
+        v-for="item in items"
+        :key="item.group_buying_id"
+        @click="checkDetail(item.group_buying_id)"
+        :class="{ 'card-hover': hoveredItem === item.group_buying_id }"
+        @mouseenter="hoveredItem = item.group_buying_id"
+        @mouseleave="hoveredItem = null"
+      />
+    <!-- </div> -->
   </div>
   <nav-bar class="navBar" />
 </template>
@@ -128,15 +132,15 @@
   }
 
   .card {
-    margin-top: 12px;
-    background-color: transparent;
-    border: none;
-    position: relative;
-    display: flex;
-    justify-content: center;
+    /* margin-top: 12px; */
+    /* background-color: transparent; */
+    /* border: none; */
+    /* position: relative; */
+    /* display: flex; */
+    /* justify-content: center; */
     align-items: center;
     transition: all 0.3s ease;
-    width: 80%;
+    width: 90%;
   }
 
   .card-hover {

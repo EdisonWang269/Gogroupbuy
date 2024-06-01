@@ -4,7 +4,7 @@
 
     <div class="content">
       <store-nav class="nav" :action="firstStep" :item="secondStep" />
-      <div class="con"><router-view></router-view> //TODO: 這什麼</div>
+      <div class="con"><router-view></router-view></div>
     </div>
   </div>
 </template>

@@ -36,33 +36,9 @@
       </div>
       <div class="addCus" v-else-if="type === 'addCus'">
         <div>
-          <span>顧客姓名</span>
-          <el-input
-            v-model="addName"
-            style="width: 95%"
-            placeholder="Please input"
-          />
-        </div>
-        <div>
-          <span>手機號碼</span>
-          <el-input
-            v-model="addPhone"
-            style="width: 95%"
-            placeholder="Please input"
-          />
-        </div>
-        <div>
-          <span>訂購日期</span>
-          <el-input
-            v-model="addOrderDate"
-            style="width: 95%"
-            placeholder="Please input"
-          />
-        </div>
-        <div>
           <span>訂購數量</span>
           <el-input
-            v-model="addOrderNum"
+            v-model="addNum"
             style="width: 95%"
             placeholder="Please input"
           />
@@ -80,7 +56,6 @@
             style="width: 95%"
             placeholder="Please input"
           />
-          <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
         </div>
       </div>
       <div class="editDate" v-if="type === 'arriveManage'">
@@ -110,7 +85,7 @@
   import { ref } from "vue";
   import StoreButton from "./StoreButton.vue";
   export default {
-    props: ["usage", "original", "type", "customerName"],
+    props: ["usage", "original", "type", "customerName", ""],
     components: {
       StoreButton,
     },
@@ -122,10 +97,7 @@
       const updated = ref("");
       const alertShow = ref(false);
       const notifyMessage = ref("");
-      const addName = ref("");
-      const addPhone = ref("");
-      const addOrderDate = ref("");
-      const addOrderNum = ref();
+      const addNum = ref();
       const alert = () => {
         if (updated.value == "") {
           alertShow.value = true;
@@ -155,10 +127,7 @@
         check,
         alertShow,
         notifyMessage,
-        addName,
-        addPhone,
-        addOrderNum,
-        addOrderDate,
+        addNum,
         totalNum,
         cost,
         arriveDate,
@@ -254,9 +223,9 @@
     gap: 8px;
   }
   .addCus {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-row-gap: 16px;
+    grid-row-gap: 16px; */
   }
 </style>

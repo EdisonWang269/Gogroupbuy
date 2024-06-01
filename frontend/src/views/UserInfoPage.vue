@@ -61,7 +61,7 @@
     transform: scale(1.3);
   }
   img.userImg:hover {
-    box-shadow: 0 0 30px #ff182b;
+    box-shadow: 0 0 20px #c6c6c6;
     animation: rotateImage 2s infinite;
   }
   @keyframes rotateImage {

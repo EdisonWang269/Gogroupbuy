@@ -139,6 +139,7 @@
     margin-top: 48px;
     margin-left: 5%;
     text-align: left;
+    cursor: pointer;
   }
 
   i {
@@ -183,7 +184,9 @@
     gap: 10px;
     transition: max-height 0.6s;
     padding-right: 10px;
-    border: 3px solid #888;
+    border: 1px dotted lightgrey;
+    /* border-right: 1px solid lightgrey; */
+    border-radius: 5px;
     padding: 10px;
   }
 
@@ -191,7 +194,7 @@
     width: 0px;
   }
   .cards:hover {
-    box-shadow: inset 0 0 10px #888;
-    transform: scale(1.05);
+    box-shadow: inset 0 0 10px #c8c7c7;
+    transform: scale(1.02);
   }
 </style>

@@ -146,24 +146,24 @@
   /* ::v-deep .el-table__header-wrapper, .el-table__body-wrapper, .el-table__row, .cell{
     background-color: #FAFAFA;
 } */
-  ::v-deep .el-tag.el-tag--danger.el-tag--light.is-round {
+  :deep(.el-tag.el-tag--danger.el-tag--light.is-round){
     background-color: #fee2e2;
   }
-  ::v-deep .el-tag.el-tag--danger.el-tag--light.is-round > .el-tag__content {
+  :deep(.el-tag.el-tag--danger.el-tag--light.is-round > .el-tag__content) {
     color: #991b1b;
     font-size: 12px;
   }
-  ::v-deep .el-tag.el-tag--success.el-tag--light.is-round {
+  :deep(.el-tag.el-tag--success.el-tag--light.is-round){
     background-color: #dcfce7;
   }
-  ::v-deep .el-tag.el-tag--success.el-tag--light.is-round > .el-tag__content {
+  :deep(.el-tag.el-tag--success.el-tag--light.is-round > .el-tag__content){
     color: #03543f;
     font-size: 12px;
   }
-  ::v-deep .el-button.el-button--danger.el-button--small.is-round {
+  :deep(.el-button.el-button--danger.el-button--small.is-round){
     background-color: #dc2626;
   }
-  ::v-deep .el-checkbox__input.is-checked > .el-checkbox__inner {
+  :deep(.el-checkbox__input.is-checked > .el-checkbox__inner){
     background-color: #4318ff;
     border-color: #4318ff;
   }

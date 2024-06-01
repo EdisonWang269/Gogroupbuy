@@ -1,5 +1,6 @@
 <template>
   <manager-pop
+    class="pop"
     :usage="topic"
     :original="endDate"
     :type="type"
@@ -178,6 +179,9 @@
 </script>
 
 <style scoped>
+  .pop{
+    transition: transform 
+  }
   .all {
     background-color: #fafafa;
     width: 100%;
@@ -225,7 +229,7 @@
   i {
     color: black;
   }
-  ::v-deep .el-input__wrapper {
+  :deep(.el-input__wrapper){
     padding: 8px 16px;
     border-radius: 10px;
     border: 1px solid #4763e4;

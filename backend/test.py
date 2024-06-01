@@ -190,12 +190,45 @@ def get_user_all_order_by_userid(store_id, userid):
 
     return jsonify({'message' : 'Fail to get user all order by userid'}), 404 
     
+#顧客領取
 
+#增加現場購買客人（更新團購商品庫存量）
+@app.route("/api/<string:store_id>/Product/<int:group_buying_id>/instore_shopping", methods = ["PUT"])
+def update_inventory(store_id, group_buying_id):
+    data = request.json
+    instore_purchase_quantity = data.get('instore_purchase_quantity')
+    query = '''SELECT inventory FROM Group_buying_product WHERE group_buying_id = %s'''
+    inventory = execute_query(query,(group_buying_id,))
+    if inventory[0] - instore_purchase_quantity < 0:
+        return jsonify({'error': 'inventory can not be negative'}), 500   
+    
+    query = '''UPDATE Group_buying_product
+                SET inventory = inventory - %s
+                WHERE group_buying_id = %s'''
+    result = execute_query(query,(instore_purchase_quantity,group_buying_id))
+    print(instore_purchase_quantity)
+    if result:
+         return jsonify({'message': 'inventory updated successfully'}), 200
+    return jsonify({'error': 'Failed to update inventory'}), 500                      
 
 #更改結單日期
-
-#增加現場購買客人
 #下架商品時(更新團購商品：income)
+@app.route("/api/<string:store_id>/Product/<int:group_buying_id>/income", methods = ["PUT"])
+def calculate_income(store_id,group_buying_id):
+    query = '''with get_income (income) as
+                (SELECT (g.purchase_quantity - g.inventory) * p.price
+		        FROM Group_buying_product AS g, Product AS p
+		        WHERE g.product_id = p.product_id
+		        AND g.group_buying_id = %s)
+          
+            UPDATE Group_buying_product
+            SET income = (select income from get_income)
+            WHERE group_buying_id = %s'''
+    result = execute_query(query,(group_buying_id, group_buying_id))
+    
+    if result:
+         return jsonify({'message': 'income updated successfully'}), 200 
+    return jsonify({'error': 'Failed to update income'}), 500       
         
 if __name__ == "__main__":
     app.run()
