@@ -1,13 +1,12 @@
 <template>
   <div class="header">
-    <!-- <router-link to="/"><i class="bi bi-arrow-left-short"></i></router-link> -->
     <h1>恩恩的團購</h1>
   </div>
   <h2>訂單完成<i class="bi bi-check-lg"></i></h2>
   <div class="info">
     你已成功訂購 <br />
-    商品：「{{ store.getters.currItem.product_name }}」 <br />
-    數量：「{{ store.state.currItemNum }} {{ store.getters.currItem.unit }}」
+    商品：「{{ currItem.product_name }}」 <br />
+    數量：「{{ currItemNum }} {{ currItem.unit }}」
     <br />
     <span id="sml">*領取時間與資訊請待團購主通知</span>
   </div>
@@ -40,9 +39,12 @@
   const action = "回到賣場";
   const router = useRouter();
   const store = useStore();
+
+  const currItem = computed(() => store.getters["user/currItem"]);
+  const currItemNum = computed(() => store.state.user.currItemNum);
   const items = computed(() => {
-    return store.getters.filteredItems.filter((item) => {
-      return item.product_name !== store.getters.currItem.product_name;
+    return store.getters["user/filteredItems"].filter((item) => {
+      return item.product_name !== store.getters["user/currItem"].product_name;
     });
   });
 
@@ -51,7 +53,7 @@
   };
 
   const checkDetail = (itemID) => {
-    store.commit("setCurrItemID", itemID);
+    store.commit("user/setCurrItemID", itemID);
     router.push(`/home/item/${itemID}`);
   };
 
