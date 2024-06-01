@@ -9,5 +9,5 @@
     }
   },
   "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-  "include": ["src/**/*"]
+  "include": ["src"]
 }
