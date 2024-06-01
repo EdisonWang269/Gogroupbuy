@@ -25,6 +25,8 @@ def create_app():
 
     jwt = JWTManager(app)
     CORS(app)
+
+    swagger_template = {"securityDefinitions": {"APIKeyHeader": {"type": "apiKey", "name": "Authorization", "in": "header"}}}
     Swagger(app)
     
     app.register_blueprint(user_bp)
