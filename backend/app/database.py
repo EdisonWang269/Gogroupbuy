@@ -1,4 +1,4 @@
-from flaskext.mysql import MySQL
+# from flaskext.mysql import MySQL
 import mysql.connector
 
 import configparser

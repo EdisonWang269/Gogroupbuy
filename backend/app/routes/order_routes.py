@@ -11,6 +11,32 @@ order_bp = Blueprint('order', __name__)
 @order_bp.route("/api/order", methods=["POST"])
 @jwt_required()
 def create_order():
+    """
+    提交一筆訂單
+    ---
+    tags:
+      - Order
+    parameters:
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+            - group_buying_id
+            - quantity
+          properties:
+            group_buying_id:
+              type: integer
+              description: group_buying_id
+            quantity:
+              type: integer
+              description: 購買數量
+    responses:
+      201:
+        description: Order created successfully
+      500:
+        description: Failed to create order
+    """
     data = request.json
     group_buying_id = data.get('group_buying_id')
     quantity = data.get('quantity')
@@ -30,6 +56,23 @@ def create_order():
 @order_bp.route("/api/order/<int:order_id>", methods=["GET"])
 @jwt_required()
 def get_order_by_order_id(order_id):
+    """
+    用order_id查詢一筆訂單
+    ---
+    tags:
+      - Order
+    parameters:
+      - name: order_id
+        in: path
+        type: integer
+        required: true
+        description: Order ID
+    responses:
+      200:
+        description: Order details
+      404:
+        description: Fail to get order by orderid
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -96,6 +139,23 @@ def get_order_by_order_id(order_id):
 @order_bp.route("/api/order/<string:userid>", methods=["GET"])
 @jwt_required()
 def get_all_orders_by_userid(userid):
+    """
+    用userid查詢一名客戶所有清單
+    ---
+    tags:
+      - Order
+    parameters:
+      - name: userid
+        in: path
+        type: string
+        required: true
+        description: userid
+    responses:
+      200:
+        description: User's orders
+      404:
+        description: Fail to get all orders by userid
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -143,6 +203,23 @@ def get_all_orders_by_userid(userid):
 @order_bp.route("/api/order/phone/<string:phone>", methods=["GET"])
 @jwt_required()
 def get_all_orders_by_phone(phone):
+    """
+    用手機查詢一名客戶所有訂單
+    ---
+    tags:
+      - Order
+    parameters:
+      - name: phone
+        in: path
+        type: string
+        required: true
+        description: 手機號碼
+    responses:
+      200:
+        description: User's orders
+      404:
+        description: Fail to get all orders by phone
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -191,6 +268,23 @@ def get_all_orders_by_phone(phone):
 # 從商品名稱獲取一項團購商品的所有訂購者的訂單資料
 @order_bp.route("/api/order/productname/<string:product_name>", methods = ["GET"])
 def get_userinfo_by_product_name(product_name):
+    """
+    從商品名稱獲取一項團購商品的所有訂購者
+    ---
+    tags:
+      - Order
+    parameters:
+      - name: product_name
+        in: path
+        type: string
+        required: true
+        description: 產品名稱
+    responses:
+      200:
+        description: User's orders
+      404:
+        description: Fail to get all orders by product_name
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -223,6 +317,25 @@ def get_userinfo_by_product_name(product_name):
 @order_bp.route("/api/order/notify/<int:group_buying_id>", methods = ["GET"])
 @jwt_required()
 def get_userid_by_group_buying_id(group_buying_id):
+    """
+    一鍵通知該團購所有未取貨的顧客
+    ---
+    tags:
+      - Order
+    parameters:
+      - name: group_buying_id
+        in: path
+        type: integer
+        required: true
+        description: group_buying_id
+    responses:
+      200:
+        description: Send message successfully
+      403:
+        description: 權限不足
+      404:
+        description: Fail to get all userid by group_buying_id
+    """
     claims = get_jwt()
     role = claims['role']
 

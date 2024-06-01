@@ -35,6 +35,34 @@ def check_role(store_id, userid):
 # 登入時授予身份
 @user_bp.route("/api/user", methods=["POST"])
 def login_check():
+    """
+    登入時授予身份, 並回傳token。若查無身份則註冊為新消費者
+    ---
+    tags:
+      - User
+    parameters:
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+            - store_id
+            - userid
+          properties:
+            store_id:
+              type: string
+              description: store_id
+            userid:
+              type: string
+              description: userid
+    responses:
+        201:
+            description: 註冊成功
+        200:
+            description: 登入成功
+        500:
+            description: 登入失敗
+    """
     data = request.json
     store_id = data.get('store_id')
     userid = data.get('userid')
@@ -68,6 +96,34 @@ def login_check():
 @user_bp.route("/api/user", methods=["PUT"])
 @jwt_required()
 def update_user_info():
+    """
+    更改用戶名字和電話
+    ---
+    tags:
+      - User
+    parameters:
+          - name: body
+            in: body
+            schema:
+                type: object
+                required:
+                    - phone
+                    - user_name
+                properties:
+                    phone:
+                      type: string
+                      description: 用戶電話
+                    user_name:
+                      type: string
+                      description: 用戶名字
+    responses:
+        200:
+            description: 更改用戶資訊成功
+        400:
+            description: 商家不可更改電話
+        500:
+            description: 更改用戶資訊失敗
+    """
     data = request.json
     phone = data.get('phone')
     user_name = data.get('user_name')
@@ -93,6 +149,28 @@ def update_user_info():
 @user_bp.route("/api/user/<string:operation>", methods=["PUT"])
 @jwt_required()
 def update_user_blacklist(operation):
+    """
+    修改用戶blacklist
+    ---
+    tags:
+      - User
+    parameters:
+      - name: operation
+        in: path
+        type: string
+        description: 0:黑名單歸零, 1:黑名單加一, -1:黑名單減一
+    responses:
+        200:
+            description: 更新用戶黑名單成功
+        400:
+            description: 商家無黑名單或operation不合法
+        403:
+            description: 權限不足
+        404:
+            description: 用戶不存在
+        500:
+            description: 更新用戶黑名單失敗
+    """
     data = request.json
     userid = data.get('userid')
     
