@@ -14,7 +14,6 @@
       v-bind="item"
     />
   </div>
-  <!-- <nav-bar class="nav-bar" /> -->
 </template>
 
 <script setup>
@@ -24,14 +23,13 @@
 
   import SearchBar from "../components/SearchBar.vue";
   import ItemCard from "../components/ItemCard.vue";
-  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const router = useRouter();
-  const items = computed(() => store.getters.filteredItems);
+  const items = computed(() => store.getters["user/filteredItems"]);
 
   const checkDetail = (itemID) => {
-    store.commit("setCurrItemID", itemID);
+    store.commit("user/setCurrItemID", itemID);
     router.push(`/home/item/${itemID}`);
   };
 </script>

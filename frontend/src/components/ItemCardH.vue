@@ -31,6 +31,7 @@
     gap: 14px;
     border: none;
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);
+    max-height: 200px;
   }
   .card-body {
     flex: 1;

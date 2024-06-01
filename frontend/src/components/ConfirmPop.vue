@@ -4,11 +4,8 @@
       <h1>訂單確認</h1>
       <div class="content">
         <span>您將訂購</span><br />
-        <span>「{{ store.getters.currItem.product_name }}」</span><br />
-        <span
-          >數量：「{{ store.state.currItemNum }}
-          {{ store.getters.currItem.unit }}」</span
-        >
+        <span>「{{ item.product_name }}」</span><br />
+        <span>數量：「{{ orderNum }} {{ item.unit }}」</span>
       </div>
       <div class="buttonArea">
         <button id="cancel" @click="cancel">取消</button>
@@ -19,11 +16,14 @@
 </template>
 
 <script setup>
-  import { defineEmits } from "vue";
+  import { defineEmits, computed } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
   const emit = defineEmits(["cancelled", "confirmed"]);
+
+  const item = computed(() => store.getters["user/currItem"]);
+  const orderNum = computed(() => store.state.user.currItemNum);
 
   const cancel = () => {
     emit("cancelled");
@@ -33,23 +33,23 @@
     emit("confirmed");
 
     const newOrder = {
-      group_buying_id: store.getters.currItem.group_buying_id,
-      product_name: store.getters.currItem.product_name,
+      group_buying_id: item.value.group_buying_id,
+      product_name: item.value.product_name,
       due_date: "未到貨",
-      quantity: store.state.currItemNum,
+      quantity: orderNum.value,
       receive_status: "未到貨",
     };
-    store.commit("addWaitingOrder", newOrder);
+    store.commit("user/addWaitingOrder", newOrder);
 
     fetch("/api/order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${store.state.token}`,
+        Authorization: `Bearer ${store.state.user.token}`,
       },
       body: JSON.stringify({
-        group_buying_id: store.getters.currItem.group_buying_id,
-        quantity: store.state.currItemNum,
+        group_buying_id: item.value.group_buying_id,
+        quantity: orderNum.value,
       }),
     });
   };

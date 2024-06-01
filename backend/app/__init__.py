@@ -6,7 +6,9 @@ from .routes.order_routes import order_bp
 
 from flask_jwt_extended import JWTManager
 
-from flaskext.mysql import MySQL
+# from flaskext.mysql import MySQL
+
+from flasgger import Swagger
 
 import configparser
 import datetime
@@ -21,13 +23,11 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = config['jwt']['JWT_SECRET_KEY']
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=24)
 
-    # app.config['MYSQL_DATABASE_HOST'] = config['db']['host']
-    # app.config['MYSQL_DATABASE_USER'] = config['db']['username']
-    # app.config['MYSQL_DATABASE_PASSWORD'] = config['db']['password']
-    # app.config['MYSQL_DATABASE_DB'] = config['db']['database']
-
     jwt = JWTManager(app)
     CORS(app)
+
+    swagger_template = {"securityDefinitions": {"APIKeyHeader": {"type": "apiKey", "name": "Authorization", "in": "header"}}}
+    Swagger(app, template=swagger_template)
     
     app.register_blueprint(user_bp)
     app.register_blueprint(product_bp)

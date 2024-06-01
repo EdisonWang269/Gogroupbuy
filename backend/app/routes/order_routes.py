@@ -11,6 +11,34 @@ order_bp = Blueprint('order', __name__)
 @order_bp.route("/api/order", methods=["POST"])
 @jwt_required()
 def create_order():
+    """
+    提交一筆訂單
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+            - group_buying_id
+            - quantity
+          properties:
+            group_buying_id:
+              type: integer
+              description: group_buying_id
+            quantity:
+              type: integer
+              description: 購買數量
+    responses:
+      201:
+        description: Order created successfully
+      500:
+        description: Failed to create order
+    """
     data = request.json
     group_buying_id = data.get('group_buying_id')
     quantity = data.get('quantity')
@@ -22,7 +50,7 @@ def create_order():
     result = execute_query(query, (userid, group_buying_id, quantity))
 
     if result:
-        return jsonify({'message': 'Order created successfully'}), 200
+        return jsonify({'message': 'Order created successfully'}), 201
 
     return jsonify({'error': 'Failed to create order'}), 500
 
@@ -30,6 +58,25 @@ def create_order():
 @order_bp.route("/api/order/<int:order_id>", methods=["GET"])
 @jwt_required()
 def get_order_by_order_id(order_id):
+    """
+    用order_id查詢一筆訂單
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: order_id
+        in: path
+        type: integer
+        required: true
+        description: Order ID
+    responses:
+      200:
+        description: Order details
+      404:
+        description: Fail to get order by orderid
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -96,6 +143,25 @@ def get_order_by_order_id(order_id):
 @order_bp.route("/api/order/<string:userid>", methods=["GET"])
 @jwt_required()
 def get_all_orders_by_userid(userid):
+    """
+    用userid查詢一名客戶所有清單
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: userid
+        in: path
+        type: string
+        required: true
+        description: userid
+    responses:
+      200:
+        description: User's orders
+      404:
+        description: Fail to get all orders by userid
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -143,6 +209,25 @@ def get_all_orders_by_userid(userid):
 @order_bp.route("/api/order/phone/<string:phone>", methods=["GET"])
 @jwt_required()
 def get_all_orders_by_phone(phone):
+    """
+    用手機查詢一名客戶所有訂單
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: phone
+        in: path
+        type: string
+        required: true
+        description: 手機號碼
+    responses:
+      200:
+        description: User's orders
+      404:
+        description: Fail to get all orders by phone
+    """
     identity = get_jwt_identity()
     store_id = identity.get('store_id')
 
@@ -188,92 +273,86 @@ def get_all_orders_by_phone(phone):
 
     return jsonify({'message' : 'Fail to get all orders by phone'}), 404
 
-# @order_bp.route("/api/<string:userid>/<int:status>", methods=["GET"])
-# @jwt_required()
-# def get_all_orders_by_userid_and_status(userid, status):
-#     if status == 0:
-#         status = False
-#     elif status == 1:
-#         status = True
-#     else:
-#         return jsonify({'message' : 'Invalid status'}), 404
-    
-#     identity = get_jwt_identity()
-#     store_id = identity.get('store_id')
-    
-#     query = """
-#                 SELECT 
-#                 `Order`.order_id,
-#                 `Order`.userid,
-#                 `Order`.group_buying_id,
-#                 `Order`.quantity,
-#                 `Order`.receive_status,
-#                 Product.product_id, 
-#                 Product.store_id, 
-#                 Product.price, 
-#                 Product.unit, 
-#                 Product.product_describe, 
-#                 Product.supplier_name, 
-#                 Product.product_name,
-#                 Product.product_picture,
-#                 Group_buying_product.purchase_quantity,
-#                 Group_buying_product.launch_date,
-#                 Group_buying_product.statement_date,
-#                 Group_buying_product.arrival_date,
-#                 Group_buying_product.due_days,
-#                 Group_buying_product.inventory,
-#                 Group_buying_product.income,
-#                 Group_buying_product.cost
-#                 FROM `Order`
-#                 INNER JOIN Group_buying_product ON `Order`.group_buying_id = Group_buying_product.group_buying_id
-#                 INNER JOIN Product ON Group_buying_product.product_id = Product.product_id
-#                 WHERE `Order`.userid = %s
-#                 AND Product.store_id = %s
-#                 AND receive_status = %s;
-#             """
-#     orders = execute_query(query, (userid, store_id, status), True)
+# 從商品名稱獲取一項團購商品的所有訂購者的訂單資料
+@order_bp.route("/api/order/productname/<string:product_name>", methods = ["GET"])
+def get_userinfo_by_product_name(product_name):
+    """
+    從商品名稱獲取一項團購商品的所有訂購者
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: product_name
+        in: path
+        type: string
+        required: true
+        description: 產品名稱
+    responses:
+      200:
+        description: User's orders
+      404:
+        description: Fail to get all orders by product_name
+    """
+    identity = get_jwt_identity()
+    store_id = identity.get('store_id')
 
-#     data = []
-#     if orders:
-#         for order in orders:
-#             data.append(
-#                 {
-#                     "order_id": order[0],
-#                     "userid": order[1],
-#                     "group_buying_id": order[2],
-#                     "quantity": order[3],
-#                     "receive_status": order[4],
-#                     "product_id": order[5],
-#                     "store_id": order[6],
-#                     "price": order[7],
-#                     "unit": order[8],
-#                     "product_describe": order[9],
-#                     "supplier_name": order[10],
-#                     "product_name": order[11],
-#                     "product_picture": order[12],
-#                     "purchase_quantity": order[13],
-#                     "launch_date": order[14],
-#                     "statement_date": order[15],
-#                     "arrival_date": order[16],
-#                     "due_days": order[17],
-#                     "inventory": order[18],
-#                     "income": order[19],
-#                     "cost": order[20]
-#                 }
-#             )
-#         return jsonify(data), 200
+    query = '''SELECT c.user_name, o.quantity, g.arrival_date, g.due_days, c.phone, o.receive_status
+                FROM `Order` AS o,`Group_buying_product` AS g,`Product` AS p, `Customer` AS c
+                WHERE o.group_buying_id = g.group_buying_id
+                AND g.product_id = p.product_id
+                AND c.userid = o.userid
+                AND p.store_id = %s
+                AND p.product_name = %s;             
+    '''
+    orders = execute_query(query, (store_id, product_name), True)
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                  "user_name" : order[0],
+                  "quantity" : order[1],
+                  "due_date" : order[2] + datetime.timedelta(days=order[3]),
+                  "phone" : order[4],
+                  "receive_status" : order[5]
+                }
+             )
+        return jsonify(data), 200
 
-#     return jsonify({'message' : 'Fail to get all orders by userid and status'}), 404
+    return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404
 
 #到貨時通知顧客：獲取一項團購商品的所有訂購者
 @order_bp.route("/api/order/notify/<int:group_buying_id>", methods = ["GET"])
 @jwt_required()
 def get_userid_by_group_buying_id(group_buying_id):
+    """
+    一鍵通知該團購所有未取貨的顧客
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: group_buying_id
+        in: path
+        type: integer
+        required: true
+        description: group_buying_id
+    responses:
+      200:
+        description: Send message successfully
+      403:
+        description: 權限不足
+      404:
+        description: Fail to get all userid by group_buying_id
+    """
     claims = get_jwt()
     role = claims['role']
 
     if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 400
+        return jsonify({"message":"權限不足"}), 403
     
     query = """
                 SELECT O.userid, P.product_name, P.price, O.quantity, DATE(GBP.arrival_date) AS arrival_date, GBP.due_days
@@ -287,7 +366,7 @@ def get_userid_by_group_buying_id(group_buying_id):
     results = execute_query(query, (group_buying_id,), True)
 
     if not results:
-        return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404 
+        return jsonify({'message' : 'Fail to get all userid by group_buying_id'}), 404
 
     for result in results:
         userid = result[0]

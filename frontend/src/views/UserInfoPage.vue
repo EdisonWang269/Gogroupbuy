@@ -24,26 +24,24 @@
       <p>{{ status }}</p>
     </div>
   </div>
-  <!-- <nav-bar class="navBar"/> -->
 </template>
 
 <script setup>
   import { ref } from "vue";
   import { useStore } from "vuex";
-  // import NavBar from "@/components/NavBar.vue";
 
   const store = useStore();
   const name = ref("陳以恩");
-  const phoneNum = ref(store.state.userPhone);
+  const phoneNum = ref(store.state.user.userPhone);
   const status = ref("一般會員");
   const userImg = ref("../assets/user.jpg");
 </script>
 
 <style scoped>
-.navBar{
-  position: fixed;
-  bottom: 0;
-}
+  .navBar {
+    position: fixed;
+    bottom: 0;
+  }
   i {
     color: #ef2a39;
   }
