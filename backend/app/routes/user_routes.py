@@ -45,13 +45,13 @@ def login_check():
             identity = {"store_id": store_id, "userid": userid}
             additional_claims = {"role": "merchant"}
             access_token = create_access_token(identity=identity, additional_claims=additional_claims)
-            return jsonify(access_token=access_token)
+            return jsonify(access_token=access_token), 200
  
         elif role_info["role"] == "customer":
             identity = {"store_id": store_id, "userid": userid}
             additional_claims = {"role": "customer"}
             access_token = create_access_token(identity=identity, additional_claims=additional_claims)
-            return jsonify(access_token=access_token)
+            return jsonify(access_token=access_token), 200
 
     else:
         query = "INSERT INTO Customer (userid, store_id) VALUES(%s, %s);"
@@ -60,9 +60,9 @@ def login_check():
             identity = {"store_id": store_id, "userid": userid}
             additional_claims = {"role": "customer"}
             access_token = create_access_token(identity=identity, additional_claims=additional_claims)
-            return jsonify(access_token=access_token, message="Successfully enrolled")
+            return jsonify(access_token=access_token, message="Successfully enrolled"), 201
         
-        return jsonify({"message": "Enroll failed"}), 404
+        return jsonify({"message": "Enroll failed"}), 500
 
 # 更改用戶名字和電話
 @user_bp.route("/api/user", methods=["PUT"])
@@ -80,14 +80,14 @@ def update_user_info():
     role = claims['role']
     
     if role == "merchant":
-        return jsonify({"message": "Merchant don't have phone"}), 404
+        return jsonify({"message": "Merchant don't have phone"}), 400
 
     query = "UPDATE Customer SET user_name = %s, phone = %s WHERE userid = %s AND store_id = %s"
     result = execute_query(query, (user_name, phone, userid, store_id))
     if result:
         return jsonify({"message": "Update user info successfully"}), 200
     
-    return jsonify({"message": "Fail to update user info"}), 200
+    return jsonify({"message": "Fail to update user info"}), 500
 
 # 修改用戶blacklist
 @user_bp.route("/api/user/<string:operation>", methods=["PUT"])
@@ -102,7 +102,7 @@ def update_user_blacklist(operation):
     claims = get_jwt()
     role = claims['role']
     if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 400
+        return jsonify({"message":"權限不足"}), 403
 
 
     role_info = check_role(store_id, userid)
@@ -110,7 +110,7 @@ def update_user_blacklist(operation):
         return jsonify({"message": "User not found"}), 404
     
     if role_info["role"] == "merchant":
-        return jsonify({"message": "Merchant don't have blacklist"}), 404
+        return jsonify({"message": "Merchant don't have blacklist"}), 400
     
     blacklist = role_info["info"][4]
     if operation == "0":
@@ -120,14 +120,14 @@ def update_user_blacklist(operation):
     elif operation == "-1":
         blacklist -= 1
     else:
-        return jsonify({"message": "Invalid operation"}), 404
+        return jsonify({"message": "Invalid operation"}), 400
 
     query = "UPDATE Customer SET blacklist = %s WHERE userid = %s AND store_id = %s"
     result = execute_query(query, (blacklist, userid, store_id))
     if result:
         return jsonify({"message": "Update user blacklist successfully"}), 200
     
-    return jsonify({"message": "Fail to update user blacklist"}), 200
+    return jsonify({"message": "Fail to update user blacklist"}), 500
 
 
 

@@ -150,7 +150,7 @@ def create_product():
     role = claims['role']
 
     if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 400
+        return jsonify({"message":"權限不足"}), 403
 
     query = """
                 INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
@@ -159,7 +159,7 @@ def create_product():
     result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture))
     
     if result:
-        return jsonify({'message': 'Pruduct created successfully'}), 200
+        return jsonify({'message': 'Pruduct created successfully'}), 201
     
     return jsonify({'error': 'Failed to create product'}), 500
 
@@ -179,7 +179,7 @@ def create_group_buying_product():
     role = claims['role']
 
     if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 400
+        return jsonify({"message":"權限不足"}), 403
     
     query = 'SELECT store_id FROM Product WHERE product_id = %s'
     sid = execute_query(query, (product_id,))
@@ -187,10 +187,10 @@ def create_group_buying_product():
         query = 'INSERT INTO `Group_buying_product`(launch_date, statement_date, product_id) VALUES(%s, %s, %s);'
         result = execute_query(query, (launch_date, statement_date, product_id,))
         if result:
-            return jsonify({'message': 'group_buying_product created successfully'}), 200
+            return jsonify({'message': 'group_buying_product created successfully'}), 201
         return jsonify({'error': 'Failed to create group_buying_product'}), 500
     
-    return jsonify({'error': 'this product not in this store'}), 500
+    return jsonify({'error': 'this product not in this store'}), 404
 
 #結單時管理者進貨，更新團購商品：inventory/purchase_quantity/cost
 @product_bp.route("/api/product/<int:group_buying_id>", methods = ['PUT'])
@@ -204,7 +204,7 @@ def update_purchase_quantity(group_buying_id):
     role = claims['role']
 
     if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 400
+        return jsonify({"message":"權限不足"}), 403
       
     query = """
                 UPDATE `Group_buying_product`
@@ -214,7 +214,7 @@ def update_purchase_quantity(group_buying_id):
     result = execute_query(query,(purchase_quantity,cost,purchase_quantity,group_buying_id, ))
     if result:
         return jsonify({'message': 'group_buying_product purchase_quantity updated successfully'}), 200
-    return jsonify({'error': 'Failed to update group_buying_product purchase_quantityt'}), 400
+    return jsonify({'error': 'Failed to update group_buying_product purchase_quantityt'}), 500
 
 #到貨時(更新團購商品：到貨日期arrival_date/領取截止日due_days)
 @product_bp.route("/api/product/<int:group_buying_id>/arrival", methods = ['PUT'])
@@ -228,7 +228,7 @@ def update_arrival_date(group_buying_id):
     role = claims['role']
 
     if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 400
+        return jsonify({"message":"權限不足"}), 403
     
     query = """
                 UPDATE `Group_buying_product`
