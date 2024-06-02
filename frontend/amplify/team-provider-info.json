@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-gogroupbuy-dev-9e4fc-authRole",
+      "UnauthRoleArn": "arn:aws:iam::992382677388:role/amplify-gogroupbuy-dev-9e4fc-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::992382677388:role/amplify-gogroupbuy-dev-9e4fc-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-gogroupbuy-dev-9e4fc-deployment",
+      "UnauthRoleName": "amplify-gogroupbuy-dev-9e4fc-unauthRole",
+      "StackName": "amplify-gogroupbuy-dev-9e4fc",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:992382677388:stack/amplify-gogroupbuy-dev-9e4fc/66da6000-2098-11ef-af38-06bf8a5567ab",
+      "AmplifyAppId": "d2ay0ctsz4ubfk"
+    }
+  }
+}
