@@ -75,6 +75,7 @@ def get_order_by_order_id(order_id):
         type: integer
         required: true
         description: Order ID
+        default: 1
     responses:
       200:
         description: Order details
