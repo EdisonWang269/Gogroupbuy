@@ -1,6 +1,7 @@
 <template>
   <div class="all">
-    <side-bar class="sideBar" />
+    <start-group-buy v-show="started" @isClosed = "closed" :items = "items"/>
+    <side-bar class="sideBar" @start = "show"/>
 
     <div class="content">
       <store-nav class="nav" :action="firstStep" :item="secondStep" />
@@ -11,27 +12,50 @@
   </div>
 </template>
 
-<script>
+<script setup>
   import { ref } from "vue";
+  import StartGroupBuy from "@/components/StartGroupBuy.vue";
   import SideBar from "../components/SideBar.vue";
   import StoreNav from "../components/StoreNav.vue";
 
-  export default {
-    components: {
-      SideBar,
-      StoreNav,
-    },
-    setup() {
       // 要透過 Vuex 綁定他現在是在哪個步驟
-      const firstStep = ref("商品管理");
-      const secondStep = ref("香帥芋泥蛋糕");
+    const firstStep = ref("商品管理");
+    const secondStep = ref("香帥芋泥蛋糕");
+    const started = ref(false);
 
-      return {
-        firstStep,
-        secondStep,
-      };
-    },
-  };
+    const show = () => {
+      started.value = true;
+    }
+
+    const closed = (value) => {
+      started.value = value;
+    }
+
+    // 綁要開啟團購的值
+    const items = ref([
+      {
+        id: 1,
+        itemName: "香帥芋泥蛋糕",
+        status:false,
+      },
+      {
+        id: 2,
+        itemName: "香帥芋泥蛋糕",
+        status:false,
+      },
+      {
+        id: 3,
+        itemName: "香帥芋泥蛋糕",
+        status:false,
+      },
+      {
+        id: 4,
+        itemName: "香帥芋泥蛋糕",
+        status:true,
+      }
+    ]);
+
+
 </script>
 
 <style scoped>
