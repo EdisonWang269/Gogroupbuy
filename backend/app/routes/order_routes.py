@@ -30,11 +30,11 @@ def create_order():
             group_buying_id:
               type: integer
               description: group_buying_id
-              default: 1
+              example: 1
             quantity:
               type: integer
               description: 購買數量
-              default: 3
+              example: 3
     responses:
       201:
         description: Order created successfully
