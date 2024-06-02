@@ -30,14 +30,18 @@ def create_order():
             group_buying_id:
               type: integer
               description: group_buying_id
+              default: 1
             quantity:
               type: integer
               description: 購買數量
+              default: 3
     responses:
       201:
         description: Order created successfully
+        example: {'message': 'Order created successfully'}
       500:
         description: Failed to create order
+        example: {'error': 'Failed to create order'}
     """
     data = request.json
     group_buying_id = data.get('group_buying_id')
