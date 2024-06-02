@@ -525,12 +525,12 @@ def get_all_orders_by_phone(phone):
 
 #     return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404
 
-# 給storeid回傳所有Order
+# 給storeID回傳所有Order
 
-@order_bp.route("/api/order<string:storeid>", methods=["GET"])
-def get_order_by_storeid(storeid):
+@order_bp.route("/api/order<string:storeID>", methods=["GET"])
+def get_order_by_storeid(storeID):
     """
-    從storeid獲取所有訂單
+    storeID
     ---
     tags:
       - Order
@@ -603,7 +603,7 @@ def get_order_by_storeid(storeid):
             message: Fail to get all orders by store_id
     """
     identity = get_jwt_identity()
-    store_id = identity.get('store_id')
+    store_id = identity.get('storeID')
 
     claims = get_jwt()
     role = claims['role']

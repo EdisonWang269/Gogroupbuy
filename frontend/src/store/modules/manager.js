@@ -1,5 +1,3 @@
-import { changeDate } from "../utils";
-
 const state = {
   storeID: "store1",
   userID: "manager1",
@@ -30,7 +28,7 @@ const mutations = {
 
 const actions = {
   async fetchItems({ commit, state }) {
-    const response = await fetch(`/api/product`, {
+    const response = await fetch(`/api/order/${state.storeID}`, {
       headers: {
         Authorization: `Bearer ${state.token}`,
       },
