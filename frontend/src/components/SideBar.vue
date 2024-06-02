@@ -42,6 +42,12 @@
               <span>銷售數據</span>
             </template>
           </el-menu-item>
+          <el-menu-item index="5" @click="startGroupBuy">
+            <template #title>
+              <i class="bi bi-star-fill"></i>
+              <span>開啟團購</span>
+            </template>
+          </el-menu-item>
         </el-menu>
       </el-col>
     </el-row>
@@ -72,6 +78,9 @@
       const toUpload = () => {
         router.push("/manager/upLoadItem");
       };
+      const startGroupBuy = () => {
+        emit("start", true);
+      }
       return {
         itemName,
         itemList,
@@ -80,6 +89,7 @@
         toUpload,
         managerName,
         managerMail,
+        startGroupBuy,
       };
     },
   };

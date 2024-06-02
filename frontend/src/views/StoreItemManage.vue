@@ -73,23 +73,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
   import { ref } from "vue";
-  // import { TableColumnCtx, TableInstance } from 'element-plus';
-  // import { computed } from 'vue';
   import StoreButton from "../components/StoreButton.vue";
   import ItemTable from "@/components/ItemTable.vue";
   import ManagerPop from "../components/ManagerPop.vue";
 
-  export default {
-    components: {
-      StoreButton,
-      ItemTable, // 可以也可以在這裡綁資料庫的訂單資料
-      ManagerPop,
-      // DateFilter,
-    },
-
-    setup() {
       const itemName = ref("香帥芋泥蛋糕");
       const uploadDate = ref("2024/05/09");
       const endDate = ref("2024/05/15");
@@ -154,28 +143,7 @@
         popShow.value = true;
       }
 
-      return {
-        itemName,
-        uploadDate,
-        endDate,
-        editDate,
-        topic,
-        popShow,
-        check,
-        type,
-        cancel,
-        setEndDate,
-        notify,
-        customerName,
-        searchInput,
-        addCustomer,
-        checkedNum,
-        uncheckedNum,
-        endOrder,
-        arriveManage,
-      };
-    },
-  };
+      
 </script>
 
 <style scoped>
