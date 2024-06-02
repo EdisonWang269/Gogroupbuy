@@ -5,7 +5,9 @@
 
     <div class="content">
       <store-nav class="nav" :action="firstStep" :item="secondStep" />
-      <div class="con"><router-view></router-view></div>
+      <div class="con">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>

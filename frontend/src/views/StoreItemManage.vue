@@ -16,14 +16,23 @@
         <h1>{{ itemName }}</h1>
         <!-- 從 vuex 抓商品資訊 -->
         <span>上架日期：{{ uploadDate }}</span>
-        <span>結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i></span>
+        <span
+          >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
+        ></span>
       </div>
-      
+
       <div class="buttons">
-        <store-button :action="'結單管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'" @click="endOrder"/>
-        <store-button :action="'到貨管理 '" :icon="'<i class=\'bi bi-pencil\'></i>'" @click="arriveManage"/>
+        <store-button
+          :action="'結單管理 '"
+          :icon="'<i class=\'bi bi-pencil\'></i>'"
+          @click="endOrder"
+        />
+        <store-button
+          :action="'到貨管理 '"
+          :icon="'<i class=\'bi bi-pencil\'></i>'"
+          @click="arriveManage"
+        />
       </div>
-      
     </div>
     <div class="searchBar">
       <el-input v-model="searchInput" id="search" placeholder="搜尋用戶">
@@ -39,7 +48,7 @@
           :icon="'<i class=\'bi bi-plus-lg\'></i>'"
           @click="addCustomer"
         />
-        <!-- <date-filter :opstions = "orderDates"/> -->
+        <!-- <date-filter :options = "orderDates"/> -->
       </div>
       <div class="notify" @click="notify($event)">
         <i class="bi bi-bell"></i>
@@ -127,28 +136,28 @@
         showPop();
       };
 
-      const endOrder = () =>{
+      const endOrder = () => {
         topic.value = "結單管理";
         type.value = "endOrder";
         showPop();
-      }
+      };
 
-      const arriveManage = () =>{
+      const arriveManage = () => {
         topic.value = "到貨管理";
         type.value = "arriveManage";
         showPop();
-      }
+      };
 
-      const showPop = () =>{
+      const showPop = () => {
         popShow.value = true;
-      }
+      };
 
       
 </script>
 
 <style scoped>
-  .pop{
-    transition: transform 
+  .pop {
+    transition: transform;
   }
   .all {
     background-color: #fafafa;
@@ -162,13 +171,13 @@
     align-items: baseline;
     justify-content: space-between;
   }
-  .info{
+  .info {
     display: flex;
-    width:60%;
+    width: 60%;
     align-items: baseline;
-    gap:30px;
+    gap: 30px;
   }
-  .buttons{
+  .buttons {
     display: flex;
     padding-bottom: 10px;
     gap: 10px;
@@ -197,7 +206,7 @@
   i {
     color: black;
   }
-  :deep(.el-input__wrapper){
+  :deep(.el-input__wrapper) {
     padding: 8px 16px;
     border-radius: 10px;
     border: 1px solid #4763e4;

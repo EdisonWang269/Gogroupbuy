@@ -52,16 +52,49 @@ def login_check():
             store_id:
               type: string
               description: store_id
+              example: store1
             userid:
               type: string
               description: userid
+              example: U12e1fe486b4fdc458bdb9ce459c77d4d
     responses:
-        201:
-            description: 註冊成功
-        200:
-            description: 登入成功
-        500:
-            description: 登入失敗
+      201:
+        description: 註冊成功
+        schema:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+            message:
+              type: string
+              example: Successfully enrolled
+        examples:
+          application/json:
+            access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+            message: Successfully enrolled
+      200:
+        description: 登入成功
+        schema:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+        examples:
+          application/json:
+            access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+      500:
+        description: 登入失敗
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Enroll failed
+        examples:
+          application/json:
+            message: Enroll failed
     """
     data = request.json
     store_id = data.get('store_id')
@@ -115,16 +148,45 @@ def update_user_info():
                     phone:
                       type: string
                       description: 用戶電話
+                      example: 1234567890
                     user_name:
                       type: string
                       description: 用戶名字
+                      example: Anal
     responses:
-        200:
-            description: 更改用戶資訊成功
-        400:
-            description: 商家不可更改電話
-        500:
-            description: 更改用戶資訊失敗
+      200:
+        description: 更改用戶資訊成功
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Update user info successfully
+        examples:
+          application/json:
+            message: Update user info successfully
+      400:
+        description: 商家不可更改電話
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Merchant don't have phone
+        examples:
+          application/json:
+            message: Merchant don't have phone
+      500:
+        description: 更改用戶資訊失敗
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Fail to update user info
+        examples:
+          application/json:
+            message: Fail to update user info
     """
     data = request.json
     phone = data.get('phone')
@@ -163,6 +225,7 @@ def update_user_blacklist(operation):
         in: path
         type: string
         description: 0:黑名單歸零, 1:黑名單加一, -1:黑名單減一
+        default: 1
       - name: body
         in: body
         schema:
@@ -173,17 +236,63 @@ def update_user_blacklist(operation):
                 userid:
                   type: string
                   description: userid
+                  example: U12e1fe486b4fdc458bdb9ce459c77d4d
     responses:
-        200:
-            description: 更新用戶黑名單成功
-        400:
-            description: 商家無黑名單或operation不合法
-        403:
-            description: 權限不足
-        404:
-            description: 用戶不存在
-        500:
-            description: 更新用戶黑名單失敗
+      200:
+        description: 更新用戶黑名單成功
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Update user blacklist successfully
+        examples:
+          application/json:
+            message: Update user blacklist successfully
+      400:
+        description: 商家無黑名單或operation不合法
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Merchant don't have blacklist
+        examples:
+          application/json:
+            message: Merchant don't have blacklist
+      403:
+        description: 權限不足
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 權限不足
+        examples:
+          application/json:
+            message: 權限不足
+      404:
+        description: 用戶不存在
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: User not found
+        examples:
+          application/json:
+            message: User not found
+      500:
+        description: 更新用戶黑名單失敗
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Fail to update user blacklist
+        examples:
+          application/json:
+            message: Fail to update user blacklist
     """
     data = request.json
     userid = data.get('userid')

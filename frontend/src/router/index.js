@@ -31,11 +31,6 @@ const router = createRouter({
       name: "navbar",
       component: () => import("../components/NavBar.vue"),
     },
-    // {
-    //   path: "/",
-    //   name: "homePage",
-    //   component: () => import("../views/UserHomePage.vue"),
-    // },
     {
       path: "/home/item/:itemID",
       name: "userItemDetail",
@@ -51,16 +46,6 @@ const router = createRouter({
       name: "confirmPage",
       component: () => import("../views/UserConfirmPage.vue"),
     },
-    // {
-    //   path: "/history",
-    //   name: "historyPage",
-    //   component: () => import("../views/UserHistoryPage.vue"),
-    // },
-    // {
-    //   path: "/userInfo",
-    //   name: "userInfo",
-    //   component: () => import("../views/UserInfoPage.vue"),
-    // },
     {
       path: "/storeLogIn",
       name: "storeLogIn",
@@ -70,7 +55,7 @@ const router = createRouter({
       path: "/manager",
       name: "storeManage",
       redirect: "/manager/itemManager",
-      component: () => import("../views/StoreManage.vue"),
+      component: () => import("../views/StoreManageAll.vue"),
       children: [
         {
           path: "itemManager",
