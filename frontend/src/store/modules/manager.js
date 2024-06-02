@@ -1,8 +1,7 @@
 const state = {
   storeID: "store1",
   userID: "manager1",
-  items: [],
-  ordersAll: [],
+  orders: [],
   token: "",
 };
 
@@ -12,22 +11,13 @@ const mutations = {
   setToken(state, token) {
     state.token = token;
   },
-
-  setItems(state, items) {
-    state.items = items;
-  },
-
-  setOrderByProductNames(state, orderByProductNames) {
-    state.orderByProductNames = orderByProductNames;
-  },
-
-  setOrdersAll(state, ordersAll) {
-    state.ordersAll = ordersAll;
+  setOrders(state, orders) {
+    state.orders = orders;
   },
 };
 
 const actions = {
-  async fetchItems({ commit, state }) {
+  async fetchOrders({ commit, state }) {
     const response = await fetch(`/api/order/all/${state.storeID}`, {
       headers: {
         Authorization: `Bearer ${state.token}`,
@@ -55,7 +45,7 @@ const actions = {
   async fetchManagerInit({ dispatch }) {
     try {
       await dispatch("fetchToken");
-      await Promise.all(dispatch("fetchItems"));
+      await Promise.all(dispatch("fetchOrders"));
     } catch (error) {
       console.error("Error in fetchManagerInit:", error);
     }
