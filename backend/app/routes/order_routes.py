@@ -38,10 +38,26 @@ def create_order():
     responses:
       201:
         description: Order created successfully
-        example: {'message': 'Order created successfully'}
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Order created successfully
+          examples:
+            application/json:
+              message: Order created successfully
       500:
         description: Failed to create order
-        example: {'error': 'Failed to create order'}
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: Failed to create order
+          examples:
+            application/json:
+              error: Failed to create order
     """
     data = request.json
     group_buying_id = data.get('group_buying_id')
@@ -628,7 +644,7 @@ def get_order_by_storeid():
 
     return jsonify({'message' : 'Fail to get all order by store_id'}), 404
 
-#到貨時通知顧客：獲取一項團購商品的所有訂購者
+#一鍵通知該團購所有未取貨的顧客
 @order_bp.route("/api/order/notify/<int:group_buying_id>", methods = ["GET"])
 @jwt_required()
 def get_userid_by_group_buying_id(group_buying_id):
@@ -649,10 +665,37 @@ def get_userid_by_group_buying_id(group_buying_id):
     responses:
       200:
         description: Send message successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Send message successfully
+        examples:
+          application/json:
+            message: Send message successfully
       403:
         description: 權限不足
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 權限不足
+        examples:
+          application/json:
+            message: 權限不足
       404:
         description: Fail to get all userid by group_buying_id
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Fail to get all userid by group_buying_id
+        examples:
+          application/json:
+            message: Fail to get all userid by group_buying_id
     """
     claims = get_jwt()
     role = claims['role']
