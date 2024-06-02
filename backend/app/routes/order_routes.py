@@ -534,8 +534,8 @@ def get_all_orders_by_phone(phone):
 # 給storeID回傳所有Order
 
 
-@order_bp.route("/api/order<string:storeID>", methods=["GET"])
-def get_order_by_storeid(storeID):
+@order_bp.route("/api/order/all", methods=["GET"])
+def get_order_by_storeid():
     """
     storeID
     ---
@@ -610,7 +610,7 @@ def get_order_by_storeid(storeID):
             message: Fail to get all orders by store_id
     """
     identity = get_jwt_identity()
-    store_id = identity.get("storeID")
+    store_id = identity.get("store_id")
 
     claims = get_jwt()
     role = claims["role"]

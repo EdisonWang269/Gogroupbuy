@@ -28,7 +28,7 @@ const mutations = {
 
 const actions = {
   async fetchItems({ commit, state }) {
-    const response = await fetch(`/api/order/${state.storeID}`, {
+    const response = await fetch(`/api/order/all/${state.storeID}`, {
       headers: {
         Authorization: `Bearer ${state.token}`,
       },
