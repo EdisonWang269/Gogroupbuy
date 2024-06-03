@@ -10,11 +10,11 @@
     @isChecked="check"
     v-show="popShow"
   />
+
   <div class="all">
     <div class="header">
       <div class="info">
-        <h1>{{ itemName }}</h1>
-        <span>上架日期：{{ uploadDate }}</span>
+        <h1>{{ currItemName }}</h1>
         <span
           >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
         ></span>
@@ -89,13 +89,18 @@
   import ManagerPop from "../components/ManagerPop.vue";
 
   const store = useStore();
-  const itemName = ref("香帥芋泥蛋糕");
-  const uploadDate = ref("2024/05/09");
-  const endDate = ref("2024/05/15");
+
   const searchInput = ref("");
+
   const topic = ref("");
   const popShow = ref(false);
   const type = ref("");
+
+  const currItemName = computed(
+    () => store.state.manager.currItem.product_name
+  );
+  const endDate = computed(() => store.state.manager.currItem.statement_date);
+
   const customerName = computed(() => {
     return store.state.manager.orders
       .filter((order) => {
@@ -105,8 +110,10 @@
         return order.user_name;
       });
   });
-  const checkedNum = ref(0);
-  const uncheckedNum = ref(0);
+
+  const checkedNum = store.getters["manager/getCheckedNum"];
+  const uncheckedNum = store.getters["manager/getUncheckedNum"];
+
   const editDate = () => {
     topic.value = "更改結單日期";
     popShow.value = true;
@@ -167,7 +174,7 @@
     transition: transform;
   }
   .all {
-    background-color: #fafafa;
+    background-color: #fff;
     width: 100%;
     height: 100%;
   }
@@ -180,9 +187,10 @@
   }
   .info {
     display: flex;
-    width: 60%;
+    width: 70%;
     align-items: baseline;
     gap: 30px;
+    background: #fff;
   }
   .buttons {
     display: flex;
@@ -196,7 +204,6 @@
   h1 {
     font-weight: 700;
     font-size: 32px;
-    /* margin-left: 5%; */
     padding-top: 20px;
   }
   .searchBar {

@@ -31,3 +31,8 @@ export function formatOrder(order) {
   order.receive_status = changeStatus(order.receive_status);
   return order;
 }
+
+export function formatItem(item) {
+  item.statement_date = changeDate(item.statement_date);
+  return item;
+}

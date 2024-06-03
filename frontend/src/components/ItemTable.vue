@@ -2,37 +2,33 @@
   <div class="table">
     <el-table :data="tableData" height="250" style="width: 100%">
       <el-table-column prop="user_name" label="顧客姓名" />
+
       <el-table-column prop="quantity" label="數量" />
-      <el-table-column
-        prop="due_date"
-        label="領取期限"
-        :filter-method="filterHandler"
-        :filters="dateFilters"
-      />
+
+      <el-table-column prop="due_date" label="領取期限" />
+
       <el-table-column prop="phone" label="手機號碼" />
+
       <el-table-column prop="receive_status" label="訂單狀況">
         <template #default="scope">
-          <el-tag :type="setType(scope.row.status)" effect="light" round>
-            {{ setLabel(scope.row.status) }}
+          <el-tag
+            :type="setType(scope.row.receive_status)"
+            effect="light"
+            round
+          >
+            {{ scope.row.receive_status }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="checked" label="完成度">
+
+      <el-table-column prop="receive_status" label="完成度">
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              v-model="scope.row.checked"
+              :checked="scope.row.receive_status === '已領取'"
               size="large"
-              @change="handleChange(scope.row)"
+              @change="handleCheckboxChange(scope.row, scope.$index)"
             />
-            <!-- <el-button
-              type="danger"
-              round
-              size="small"
-              v-if="!scope.row.checked"
-              @click="singleNotify(scope.row.name)"
-              >通知</el-button
-            > -->
           </div>
         </template>
       </el-table-column>
@@ -40,73 +36,25 @@
   </div>
 </template>
 
-<script>
-  import { ref } from "vue";
-  // import { TableColumnCtx, TableInstance } from 'element-plus';
+<script setup>
   import { computed } from "vue";
   import { useStore } from "vuex";
 
-  export default {
-    components: {},
+  const store = useStore();
+  const tableData = computed(() => store.state.manager.orders);
 
-    setup(props, { emit }) {
-      const filterDates = ref([]);
-      const singleNotify = (name) => {
-        emit("singleNotify", name);
-      };
+  const setType = (receive_status) => {
+    if (receive_status === "已領取") {
+      return "success";
+    } else {
+      return "danger";
+    }
+  };
 
-      const store = useStore();
-      const tableData = computed(() => store.state.manager.orders);
-
-      const setType = (value) => {
-        if (value) {
-          return "success";
-        } else {
-          return "danger";
-        }
-      };
-      const setLabel = (value) => {
-        if (value) {
-          return "已領取";
-        } else {
-          return "未領取";
-        }
-      };
-      const handleChange = (row) => {
-        row.status = row.checked;
-      };
-      const filterHandler = (value, row, column) => {
-        const property = column.property;
-        return row[property] === value;
-      };
-      const dates = computed(() => {
-        const uniqueDates = [
-          ...new Set(tableData.value.map((item) => item.dueDate)),
-        ];
-        return uniqueDates;
-      });
-      const dateFilters = computed(() => {
-        return dates.value.map((date) => ({
-          text: date,
-          value: date,
-        }));
-      });
-      const addItem = () => {};
-
-      return {
-        // Search
-        tableData,
-        setType,
-        setLabel,
-        handleChange,
-        filterHandler,
-        dates,
-        filterDates,
-        dateFilters,
-        singleNotify,
-        addItem,
-      };
-    },
+  const handleCheckboxChange = (row, index) => {
+    row.checked = !row.checked;
+    store.commit("manager/setOrderStatus", { index, checked: !row.checked });
+    row.receive_status = row.checked ? "已領取" : "未領取";
   };
 </script>
 
@@ -122,8 +70,8 @@
     gap: 20px;
   }
   /* ::v-deep .el-table__header-wrapper, .el-table__body-wrapper, .el-table__row, .cell{
-    background-color: #FAFAFA;
-} */
+      background-color: #FAFAFA;
+  } */
   :deep(.el-tag.el-tag--danger.el-tag--light.is-round) {
     background-color: #fee2e2;
   }

@@ -4,7 +4,13 @@
       <ol class="breadcrumb">
         <li class="breadcrumb-item">{{ action }}</li>
         <!-- 從 vuex 抓sidebar value -->
-        <li class="breadcrumb-item active" aria-current="page">{{ item }}</li>
+        <li
+          class="breadcrumb-item active"
+          aria-current="page"
+          v-if="action === '商品管理'"
+        >
+          {{ item }}
+        </li>
         <!-- 從 vuex 抓商品名稱 -->
       </ol>
     </nav>
