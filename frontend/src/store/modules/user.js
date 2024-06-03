@@ -35,7 +35,7 @@ const getters = {
 
 const mutations = {
   setUserName(state, name) {
-    state.name = name;
+    state.userName = name;
   },
   addWaitingOrder(state, order) {
     state.orders.push(order);
