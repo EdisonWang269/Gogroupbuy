@@ -17,11 +17,10 @@
             </template>
             <el-menu-item
               class="item"
-              v-for="(item, index) in 4"
-              :key="index"
-              :index="`1-${index + 1}`"
-              @click="toItem"
-              >{{ itemName }}</el-menu-item
+              v-for="item in items"
+              :key="item.product_name"
+              @click="toItem(item.product_name)"
+              >{{ item.product_name }}</el-menu-item
             >
           </el-sub-menu>
           <el-menu-item index="2" @click="toOrder">
@@ -52,24 +51,28 @@
       </el-col>
     </el-row>
     <div class="managerName">
-      <img src="../assets/user.jpg">
-      <div><span>{{ managerName }}</span><span>{{ managerMail }}</span></div> 
+      <img src="../assets/user.jpg" />
+      <div>
+        <span>{{ managerName }}</span
+        ><span>{{ managerMail }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import { ref } from "vue";
+  import { useStore } from "vuex";
   import { useRouter } from "vue-router";
   export default {
     setup(props, { emit }) {
+      const store = useStore();
       const managerName = ref("賴巧忍");
       const managerMail = ref("choco@gmail.com");
       const router = useRouter();
-      const itemName = ref("香帥芋泥蛋糕");
-      const itemList = ref([]);
-      const toItem = () => {
-        emit("tellName", itemName.value);
+      const itemList = store.state.manager.items;
+      const toItem = (product_name) => {
+        emit("tellName", product_name);
         router.push("/manager/itemManager");
       };
       const toOrder = () => {
@@ -80,9 +83,8 @@
       };
       const startGroupBuy = () => {
         emit("start", true);
-      }
+      };
       return {
-        itemName,
         itemList,
         toItem,
         toOrder,
@@ -140,14 +142,14 @@
     --active-color: #fff;
   }
 
-  :deep(.el-menu-item){
+  :deep(.el-menu-item) {
     color: white;
     font-weight: 200;
     padding: 0;
     /* height: 35px; */
   }
 
-  :deep(.el-menu-item.is-active){
+  :deep(.el-menu-item.is-active) {
     color: white;
     font-weight: 700;
     background-color: #4256d0;
@@ -163,13 +165,13 @@
     bottom: 32px;
     left: 20px;
   }
-  .managerName img{
+  .managerName img {
     border-radius: 50%;
     width: 40px;
     height: 40px;
   }
-  .managerName div{
-    display:flex;
+  .managerName div {
+    display: flex;
     flex-direction: column;
     color: #fff;
   }

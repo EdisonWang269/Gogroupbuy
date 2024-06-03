@@ -26,7 +26,7 @@
     if (!regex.test(userPhone.value)) {
       alert("請輸入正確的手機號碼，例如：0912-345-678");
     } else {
-      store.commit("setUserPhone", userPhone.value);
+      store.commit("user/setUserPhone", userPhone.value);
       router.push("/home/item/confirm");
     }
   };
@@ -72,6 +72,7 @@
     font-size: 28px;
     text-align: center;
     transition: all 0.3s;
+    margin-bottom: 20px;
   }
   input:hover {
     border: 1px solid #ef2a39;

@@ -1,16 +1,16 @@
 <template>
   <div class="table">
     <el-table :data="tableData" height="250" style="width: 100%">
-      <el-table-column prop="name" label="顧客姓名" />
-      <el-table-column prop="orderNum" label="數量" />
+      <el-table-column prop="user_name" label="顧客姓名" />
+      <el-table-column prop="quantity" label="數量" />
       <el-table-column
-        prop="dueDate"
+        prop="due_date"
         label="領取期限"
         :filter-method="filterHandler"
         :filters="dateFilters"
       />
-      <el-table-column prop="phoneNum" label="手機號碼" />
-      <el-table-column prop="status" label="訂單狀況">
+      <el-table-column prop="phone" label="手機號碼" />
+      <el-table-column prop="receive_status" label="訂單狀況">
         <template #default="scope">
           <el-tag :type="setType(scope.row.status)" effect="light" round>
             {{ setLabel(scope.row.status) }}
@@ -44,6 +44,7 @@
   import { ref } from "vue";
   // import { TableColumnCtx, TableInstance } from 'element-plus';
   import { computed } from "vue";
+  import { useStore } from "vuex";
 
   export default {
     components: {},
@@ -53,32 +54,9 @@
       const singleNotify = (name) => {
         emit("singleNotify", name);
       };
-      const tableData = ref([
-        {
-          name: "Tom",
-          orderNum: 1,
-          dueDate: "2019/05/20",
-          phoneNum: "0912330330",
-          status: true,
-          checked: true,
-        },
-        {
-          name: "Alex",
-          orderNum: 1,
-          dueDate: "2019/05/20",
-          phoneNum: "0912330330",
-          status: false,
-          checked: false,
-        },
-        {
-          name: "Tom",
-          orderNum: 1,
-          dueDate: "2019/07/20",
-          phoneNum: "0912330330",
-          status: true,
-          checked: true,
-        },
-      ]);
+
+      const store = useStore();
+      const tableData = computed(() => store.state.manager.orders);
 
       const setType = (value) => {
         if (value) {
@@ -146,24 +124,24 @@
   /* ::v-deep .el-table__header-wrapper, .el-table__body-wrapper, .el-table__row, .cell{
     background-color: #FAFAFA;
 } */
-  :deep(.el-tag.el-tag--danger.el-tag--light.is-round){
+  :deep(.el-tag.el-tag--danger.el-tag--light.is-round) {
     background-color: #fee2e2;
   }
   :deep(.el-tag.el-tag--danger.el-tag--light.is-round > .el-tag__content) {
     color: #991b1b;
     font-size: 12px;
   }
-  :deep(.el-tag.el-tag--success.el-tag--light.is-round){
+  :deep(.el-tag.el-tag--success.el-tag--light.is-round) {
     background-color: #dcfce7;
   }
-  :deep(.el-tag.el-tag--success.el-tag--light.is-round > .el-tag__content){
+  :deep(.el-tag.el-tag--success.el-tag--light.is-round > .el-tag__content) {
     color: #03543f;
     font-size: 12px;
   }
-  :deep(.el-button.el-button--danger.el-button--small.is-round){
+  :deep(.el-button.el-button--danger.el-button--small.is-round) {
     background-color: #dc2626;
   }
-  :deep(.el-checkbox__input.is-checked > .el-checkbox__inner){
+  :deep(.el-checkbox__input.is-checked > .el-checkbox__inner) {
     background-color: #4318ff;
     border-color: #4318ff;
   }
