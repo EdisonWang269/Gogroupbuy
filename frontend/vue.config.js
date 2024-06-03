@@ -7,7 +7,7 @@ module.exports = {
       },
     },
     allowedHosts: "all",
-    https: true,
+    server: "https",
   },
 
   publicPath: "/Gogroupbuy/",

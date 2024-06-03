@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from "vue";
+  import { ref, computed } from "vue";
   import { useStore } from "vuex";
   import StoreButton from "../components/StoreButton.vue";
   import ItemTable from "@/components/ItemTable.vue";
