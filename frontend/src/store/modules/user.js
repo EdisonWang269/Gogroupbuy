@@ -15,8 +15,6 @@ const state = {
 const getters = {
   filteredItems(state) {
     return state.items.filter((item) => {
-      item.arrival_date = changeDate(item.arrival_date);
-      item.launch_date = changeDate(item.launch_date);
       item.statement_date = changeDate(item.statement_date);
 
       return item.product_name
