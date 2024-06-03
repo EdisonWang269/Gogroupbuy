@@ -59,14 +59,23 @@ def get_all_products_by_storeid():
 
     query = """
                 SELECT 
-                    GBP.statement_date,
                     GBP.group_buying_id,
+                    GBP.purchase_quantity,
+                    GBP.launch_date,
+                    GBP.statement_date,
+                    GBP.arrival_date,
+                    GBP.due_days,
+                    GBP.inventory,
+                    GBP.income,
+                    GBP.cost,
+                    P.product_id,
+                    P.store_id,
                     P.price,
                     P.unit,
+                    P.product_describe,
+                    P.supplier_name,
                     P.product_name,
-                    P.product_picture, 
-                    P.product_id,
-                    P.product_describe
+                    P.product_picture
                 FROM 
                     Group_buying_product GBP
                 INNER JOIN 
@@ -82,14 +91,23 @@ def get_all_products_by_storeid():
         for product in products:
             data.append(
                 {
-                    "statement_date": product[0],
-                    "group_buying_id": product[1],
-                    "price": product[2],
-                    "unit": product[3],
-                    "product_name": product[4],
-                    "product_picture": product[5],
-                    "product_id": product[6],
-                    "product_describe": product[7],
+                    "group_buying_id": product[0],
+                    "purchase_quantity": product[1],
+                    "launch_date": product[2],
+                    "statement_date": product[3],
+                    "arrival_date": product[4],
+                    "due_days": product[5],
+                    "inventory": product[6],
+                    "income": product[7],
+                    "cost": product[8],
+                    "product_id": product[9],
+                    "store_id": product[10],
+                    "price": product[11],
+                    "unit": product[12],
+                    "product_describe": product[13],
+                    "supplier_name": product[14],
+                    "product_name": product[15],
+                    "product_picture": product[16],
                 }
             )
         return jsonify(data), 200
