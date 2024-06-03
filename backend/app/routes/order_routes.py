@@ -151,8 +151,9 @@ def get_all_orders_by_userid(userid):
 
     claims = get_jwt()
     role = claims['role']
-    if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 403
+    
+    # if role != 'merchant':
+    #     return jsonify({"message":"權限不足"}), 403
 
     query = """
                 SELECT 
