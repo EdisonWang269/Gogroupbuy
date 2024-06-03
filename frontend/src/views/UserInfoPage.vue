@@ -8,7 +8,11 @@
   <div class="wrap">
     <div class="infoBar">
       <span>姓名</span>
-      <input type="text" v-model="name" />
+      <input
+        type="text"
+        v-model="name"
+        @input="store.commit('setUserName', $event.target.value)"
+      />
     </div>
     <div class="infoBar">
       <span>手機</span>
@@ -31,7 +35,7 @@
   import { useStore } from "vuex";
 
   const store = useStore();
-  const name = ref("陳以恩");
+  const name = ref(store.state.user.userName);
   const phoneNum = ref(store.state.user.userPhone);
   const status = ref("一般會員");
   const userImg = ref("../assets/user.jpg");

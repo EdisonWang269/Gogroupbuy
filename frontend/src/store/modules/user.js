@@ -7,6 +7,7 @@ const state = {
   userID: "customer1",
   currItemID: "",
   currItemNum: 0,
+  userName: "",
   userPhone: "",
   keyword: "",
   token: "",
@@ -33,6 +34,9 @@ const getters = {
 };
 
 const mutations = {
+  setUserName(state, name) {
+    state.name = name;
+  },
   addWaitingOrder(state, order) {
     state.orders.push(order);
   },
