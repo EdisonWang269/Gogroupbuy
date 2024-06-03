@@ -1,12 +1,15 @@
 module.exports = {
   devServer: {
+    allowedHosts:'all',
+    https: true,
     proxy: {
       "/api": {
         target: "https://wangpython.pythonanywhere.com/",
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
+    
   },
 
-  publicPath: "/Gogroupbuy/"
+  // publicPath: "/Gogroupbuy/"
 };
