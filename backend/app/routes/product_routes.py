@@ -83,12 +83,12 @@ def get_all_products_by_storeid():
             data.append(
                 {
                     "statement_date": product[0],
-                    "price": product[1],
-                    "unit": product[2],
-                    "product_name": product[3],
-                    "product_picture": product[4],
-                    "product_id": product[5],
-                    "group_buying_id": product[6],
+                    "group_buying_id": product[1],
+                    "price": product[2],
+                    "unit": product[3],
+                    "product_name": product[4],
+                    "product_picture": product[5],
+                    "product_id": product[6],
                     "product_describe": product[7],
                 }
             )
