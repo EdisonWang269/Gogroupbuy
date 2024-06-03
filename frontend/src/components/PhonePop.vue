@@ -2,6 +2,7 @@
   <div class="all">
     <div class="card">
       <h1>請輸入手機號碼</h1>
+      <h3>僅需輸入一次即可通知領貨</h3>
       <div class="content">
         <input type="text" v-model="userPhone" />
       </div>
@@ -43,7 +44,7 @@
   .card {
     display: flex;
     flex-direction: column;
-    /* gap: 24px; */
+    text-align: center;
     justify-content: space-around;
     padding: auto, 0;
     margin: auto auto;
@@ -55,9 +56,13 @@
   h1 {
     margin: 0 auto;
     margin-top: 10%;
+    margin-bottom: 10px;
     color: #3c2f2f;
     font-weight: 700;
-    font-size: 32px;
+    font-size: 40px;
+  }
+  h3 {
+    font-size: 20px;
   }
   .content {
     font-size: 16px;
@@ -74,10 +79,6 @@
     transition: all 0.3s;
     margin-bottom: 20px;
   }
-  input:hover {
-    border: 1px solid #ef2a39;
-    box-shadow: 0 0 5px #ef2a39;
-  }
   .buttonArea {
     text-align: center;
     margin-bottom: 10%;
@@ -90,6 +91,7 @@
     width: 38%;
     height: 48px;
     transition: all 0.3s;
+    margin-top: 1%;
   }
   button:hover {
     cursor: pointer;
