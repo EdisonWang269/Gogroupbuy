@@ -54,6 +54,8 @@
   const handleCheckboxChange = (row, index) => {
     const newStatus = row.receive_status === "已領取" ? "未領取" : "已領取";
     store.commit("manager/setOrderStatus", { index, status: newStatus });
+    store.commit("manager/setCheckedNum");
+    store.commit("manager/setUncheckedNum");
   };
 </script>
 

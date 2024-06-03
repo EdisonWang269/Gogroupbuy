@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-  import { ref, computed } from "vue";
+  import { ref, computed, onMounted } from "vue";
   import { useStore } from "vuex";
   import StoreButton from "../components/StoreButton.vue";
   import ItemTable from "@/components/ItemTable.vue";
@@ -111,8 +111,8 @@
       });
   });
 
-  const checkedNum = store.getters["manager/getCheckedNum"];
-  const uncheckedNum = store.getters["manager/getUncheckedNum"];
+  const checkedNum = computed(() => store.state.manager.checkedNum);
+  const uncheckedNum = computed(() => store.state.manager.uncheckedNum);
 
   const editDate = () => {
     topic.value = "更改結單日期";

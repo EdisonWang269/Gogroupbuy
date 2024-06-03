@@ -16,28 +16,12 @@ const getters = {
   getItems: (state) => {
     return state.items.map((item) => formatItem(item));
   },
-  getCheckedNum: (state) => {
-    return state.checkedNum;
-  },
-  getUncheckedNum: (state) => {
-    return state.uncheckedNum;
-  },
 };
 
 const mutations = {
   setOrderStatus(state, payload) {
     const { index, status } = payload;
     state.orders[index].receive_status = status;
-  },
-  setCheckedNum(state) {
-    state.checkedNum = state.orders.filter((order) => {
-      return order.receive_status === "已領取";
-    }).length;
-  },
-  setUncheckedNum(state) {
-    state.uncheckedNum = state.orders.filter((order) => {
-      return order.receive_status === "待領取";
-    }).length;
   },
   setStep(state, step) {
     state.step = step;
@@ -51,6 +35,18 @@ const mutations = {
   setOrders(state, orders) {
     orders = orders.map((order) => formatOrder(order));
     state.orders = orders;
+  },
+  setCheckedNum(state) {
+    const checkedNum = state.orders.filter(
+      (order) => order.receive_status === "已領取"
+    ).length;
+    state.checkedNum = checkedNum;
+  },
+  setUncheckedNum(state) {
+    const uncheckedNum = state.orders.filter(
+      (order) => order.receive_status !== "已領取"
+    ).length;
+    state.uncheckedNum = uncheckedNum;
   },
   setItems(state, items) {
     state.items = items;
