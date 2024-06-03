@@ -62,7 +62,7 @@ const actions = {
   async fetchManagerInit({ dispatch }) {
     try {
       await dispatch("fetchToken");
-      await Promise.all(dispatch("fetchOrders"), dispatch("fetchItems"));
+      await Promise.all([dispatch("fetchOrders"), dispatch("fetchItems")]);
     } catch (error) {
       console.error("Error in fetchManagerInit:", error);
     }
