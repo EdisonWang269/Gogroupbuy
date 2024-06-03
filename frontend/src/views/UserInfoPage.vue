@@ -11,7 +11,7 @@
       <input
         type="text"
         v-model="name"
-        @input="store.commit('setUserName', $event.target.value)"
+        @input="store.commit('user/setUserName', $event.target.value)"
       />
     </div>
     <div class="infoBar">
@@ -19,7 +19,7 @@
       <input
         type="text"
         v-model="phoneNum"
-        @input="store.commit('setUserPhone', $event.target.value)"
+        @input="store.commit('user/setUserPhone', $event.target.value)"
         placeholder="請輸入手機號碼"
       />
     </div>
