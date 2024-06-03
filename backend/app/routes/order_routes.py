@@ -628,7 +628,7 @@ def get_order_by_storeid():
                     c.store_id = %s;
             """      
 
-    orders = execute_query(query, (store_id), True)
+    orders = execute_query(query, (store_id,), True)
     data = []
     if orders:
         for order in orders:
