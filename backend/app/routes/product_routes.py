@@ -66,7 +66,7 @@ def get_all_products_by_storeid():
                     P.product_name,
                     P.product_picture, 
                     P.product_id,
-                    P.product_describe,
+                    P.product_describe
                 FROM 
                     Group_buying_product GBP
                 INNER JOIN 
