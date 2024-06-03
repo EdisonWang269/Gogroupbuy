@@ -525,6 +525,7 @@ def get_all_orders_by_phone(phone):
 
 # 給storeid回傳所有Order
 @order_bp.route("/api/order", methods = ["GET"])
+@jwt_required()
 def get_order_by_storeid():
     """
     從storeid獲取所有訂單
