@@ -524,7 +524,7 @@ def get_all_orders_by_phone(phone):
 #     return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404
 
 # 給storeid回傳所有Order
-@order_bp.route("/api/order/storeid", methods = ["GET"])
+@order_bp.route("/api/order/storeid/<string:storeid>", methods = ["GET"])
 def get_order_by_storeid():
     """
     從storeid獲取所有訂單
