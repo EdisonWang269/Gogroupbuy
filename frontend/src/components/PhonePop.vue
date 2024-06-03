@@ -59,10 +59,10 @@
     margin-bottom: 10px;
     color: #3c2f2f;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 30px;
   }
   h3 {
-    font-size: 20px;
+    font-size: 15px;
   }
   .content {
     font-size: 16px;
