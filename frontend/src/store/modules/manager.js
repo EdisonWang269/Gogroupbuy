@@ -26,13 +26,8 @@ const getters = {
 
 const mutations = {
   setOrderStatus(state, payload) {
-    const { index, checked } = payload;
-
-    if (checked) {
-      state.orders[index].receive_status = "已領取";
-    } else {
-      state.orders[index].receive_status = "待領取";
-    }
+    const { index, status } = payload;
+    state.orders[index].receive_status = status;
   },
   setCheckedNum(state) {
     state.checkedNum = state.orders.filter((order) => {

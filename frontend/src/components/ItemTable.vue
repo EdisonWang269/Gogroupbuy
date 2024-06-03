@@ -52,9 +52,8 @@
   };
 
   const handleCheckboxChange = (row, index) => {
-    row.checked = !row.checked;
-    store.commit("manager/setOrderStatus", { index, checked: !row.checked });
-    row.receive_status = row.checked ? "已領取" : "未領取";
+    const newStatus = row.receive_status === "已領取" ? "未領取" : "已領取";
+    store.commit("manager/setOrderStatus", { index, status: newStatus });
   };
 </script>
 
