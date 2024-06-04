@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <el-table :data="tableData" height="550" style="width: 100%">
+    <el-table :data="filteredTableData" height="550" style="width: 100%">
       <el-table-column prop="user_name" label="顧客姓名" />
 
       <el-table-column prop="quantity" label="數量" />
@@ -25,7 +25,7 @@
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              :checked="controlChecked(scope.row.receive_status)"
+              :checked="scope.row.receive_status === '已領取'"
               size="large"
               @change="handleCheckboxChange(scope.row, scope.$index)"
             />
@@ -42,19 +42,13 @@
 
   const store = useStore();
 
-  const controlChecked = (status) => {
-    if (status === "已領取") {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  const tableData = computed(() => store.state.manager.orders);
 
-  const tableData = computed(() =>
-    store.state.manager.orders.filter((order) => {
+  const filteredTableData = computed(() => {
+    return tableData.value.filter((order) => {
       return order.product_name === store.state.manager.currItem.product_name;
-    })
-  );
+    });
+  });
 
   const setType = (receive_status) => {
     if (receive_status === "已領取") {
@@ -65,7 +59,7 @@
   };
 
   const handleCheckboxChange = (row, index) => {
-    const newStatus = row.receive_status === "已領取" ? "未領取" : "已領取";
+    const newStatus = row.receive_status === "已領取" ? "待領取" : "已領取";
     store.commit("manager/setOrderStatus", { index, status: newStatus });
     store.commit("manager/setCheckedNum");
     store.commit("manager/setUncheckedNum");
