@@ -190,8 +190,6 @@ def get_user_all_order_by_userid(store_id, userid):
 
     return jsonify({'message' : 'Fail to get user all order by userid'}), 404 
     
-#顧客領取
-
 #增加現場購買客人（更新團購商品庫存量）
 @app.route("/api/<string:store_id>/Product/<int:group_buying_id>/instore_shopping", methods = ["PUT"])
 def update_inventory(store_id, group_buying_id):
@@ -211,7 +209,6 @@ def update_inventory(store_id, group_buying_id):
          return jsonify({'message': 'inventory updated successfully'}), 200
     return jsonify({'error': 'Failed to update inventory'}), 500                      
 
-#更改結單日期
 #下架商品時(更新團購商品：income)
 @app.route("/api/<string:store_id>/Product/<int:group_buying_id>/income", methods = ["PUT"])
 def calculate_income(store_id,group_buying_id):
@@ -229,6 +226,39 @@ def calculate_income(store_id,group_buying_id):
     if result:
          return jsonify({'message': 'income updated successfully'}), 200 
     return jsonify({'error': 'Failed to update income'}), 500       
-        
+#顧客領取 傳給我group_buying_id/userid，找出quantity更新inventory
+@app.route("/api/Order/receive", methods = ["PUT"])
+def customer_receive():
+    data = request.json
+    group_buying_id = data.get('group_buying_id')
+    userid = data.get('userid') 
+    
+    query = '''UPDATE Group_buying_product
+                SET inventory = inventory - (SELECT quantity
+				    FROM `Order`
+				    WHERE userid = %s
+				    AND group_buying_id = %s) <0 
+                WHERE group_buying_id = %s'''
+    result = execute_query(query, (userid,group_buying_id,group_buying_id,))
+    
+    if result:
+         return jsonify({'message': 'inventory updated successfully'}), 200 
+    return jsonify({'error': 'Failed to update inventory'}), 500
+
+#更改結單日期（傳group_buying_id，新結單時間，更新statement_date)
+@app.route("/api/Product/<int:group_buying_id>/changedate", methods = ["PUT"])
+def update_statement_date(group_buying_id):
+    data = request.json
+    new_statement_date = data.get("new_statement_date")
+    
+    query = '''UPDATE Group_buying_product
+                SET statement_date = %s
+                WHERE group_buying_id = %s'''
+    result = execute_query(query, (new_statement_date, group_buying_id))
+    
+    if result:
+         return jsonify({'message': 'statement_date updated successfully'}), 200 
+    return jsonify({'error': 'Failed to update statement_date'}), 500
+      
 if __name__ == "__main__":
     app.run()
