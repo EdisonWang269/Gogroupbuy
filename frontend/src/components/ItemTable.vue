@@ -25,7 +25,7 @@
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              :checked="controlChecked(scope.row.receive_status === '已領取')"
+              :checked="controlChecked(scope.row.receive_status)"
               size="large"
               @change="handleCheckboxChange(scope.row, scope.$index)"
             />

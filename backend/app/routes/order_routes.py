@@ -424,8 +424,8 @@ def get_order_by_storeid():
                     g.arrival_date, 
                     g.due_days, 
                     c.phone, 
+                    p.product_name
                     o.receive_status,
-                    p.product_name,
                 FROM 
                     Customer c
                 JOIN 
@@ -448,8 +448,8 @@ def get_order_by_storeid():
                     "quantity": order[1],
                     "due_date": order[2] + datetime.timedelta(days=order[3]),
                     "phone": order[4],
-                    "receive_status": order[5],
-                    "product_name": order[6],
+                    "product_name": order[5],
+                    "receive_status": order[6],
                 }
             )
         return jsonify(data), 200
