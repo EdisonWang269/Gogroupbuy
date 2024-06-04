@@ -231,10 +231,10 @@
     flex-direction: column;
     gap: 8px;
   }
-  .addCus {
-    /* display: grid;
+  /* .addCus {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-row-gap: 16px; */
-  }
+    grid-row-gap: 16px;
+  } */
 </style>
