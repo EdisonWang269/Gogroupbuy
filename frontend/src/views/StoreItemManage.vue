@@ -45,7 +45,7 @@
     <div class="buttonList">
       <div class="function">
         <store-button
-          :action="'增加現場購買顧客  '"
+          :action="'增加現場購買顧客'"
           :icon="'<i class=\'bi bi-plus-lg\'></i>'"
           @click="addCustomer"
         />

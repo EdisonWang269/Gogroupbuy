@@ -425,7 +425,7 @@ def get_order_by_storeid():
                     g.due_days, 
                     c.phone, 
                     o.receive_status,
-                    p.product_name,
+                    p.product_name
                 FROM 
                     Customer c
                 JOIN 

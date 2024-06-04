@@ -37,10 +37,11 @@
 </template>
 
 <script setup>
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
+  // const checked = ref(true);
   const tableData = computed(() =>
     store.state.manager.orders.filter((order) => {
       return order.product_name === store.state.manager.currItem.product_name;
