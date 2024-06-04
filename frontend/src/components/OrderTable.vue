@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <el-table :data="sortedTableData" height="600px" style="width: 100%">
+    <el-table :data="filteredTableData" height="600px" style="width: 100%">
       <el-table-column prop="user_name" label="顧客姓名" />
       <el-table-column prop="product_name" label="訂購商品" />
       <el-table-column prop="quantity" label="數量" />
@@ -33,14 +33,34 @@
 </template>
 
 <script setup>
-  import { computed } from "vue";
+  import { computed, defineProps } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
   const tableData = computed(() => store.state.manager.orders);
 
-  const sortedTableData = computed(() => {
-    return [...tableData.value].sort(customSort);
+  const props = defineProps({
+    searchInput: String,
+  });
+
+  const filteredTableData = computed(() => {
+    const keyword = props.searchInput.toLowerCase();
+    if (!keyword) {
+      return tableData.value;
+    } else {
+      return tableData.value.filter((item) => {
+        const user_name = item.user_name ? item.user_name.toLowerCase() : "";
+        const product_name = item.product_name
+          ? item.product_name.toLowerCase()
+          : "";
+        const phone = item.phone ? item.phone.toLowerCase() : "";
+        return (
+          user_name.includes(keyword) ||
+          product_name.includes(keyword) ||
+          phone.includes(keyword)
+        );
+      });
+    }
   });
 
   const setType = (receive_status) => {
@@ -56,11 +76,6 @@
     store.commit("manager/setOrderStatus", { order_id, status: newStatus });
     store.commit("manager/setCheckedNum");
     store.commit("manager/setUncheckedNum");
-  };
-
-  const customSort = (a, b) => {
-    // 自定義排序邏輯
-    // ...
   };
 </script>
 

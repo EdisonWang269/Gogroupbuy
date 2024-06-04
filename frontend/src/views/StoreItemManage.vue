@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <item-table @singleNotify="notify($event)" />
+    <item-table @singleNotify="notify($event)" searchInput="searchInput" />
 
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">

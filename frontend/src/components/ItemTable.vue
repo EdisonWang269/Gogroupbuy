@@ -37,17 +37,30 @@
 </template>
 
 <script setup>
-  import { computed } from "vue";
+  import { computed, defineProps } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
+  const props = defineProps({
+    searchInput: String,
+  });
 
   const tableData = computed(() => store.state.manager.orders);
 
   const filteredTableData = computed(() => {
-    return tableData.value.filter((order) => {
-      return order.product_name === store.state.manager.currItem.product_name;
-    });
+    const keyword = props.searchInput.toLowerCase();
+    if (!keyword) {
+      return tableData.value.filter((order) => {
+        return order.product_name === store.state.manager.currItem.product_name;
+      });
+    } else {
+      return tableData.value.filter((item) => {
+        return (
+          item.user_name.toLowerCase().includes(keyword) &&
+          item.product_name === store.state.manager.currItem.product_name
+        );
+      });
+    }
   });
 
   const setType = (receive_status) => {
