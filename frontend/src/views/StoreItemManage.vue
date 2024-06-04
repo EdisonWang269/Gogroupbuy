@@ -33,6 +33,7 @@
         />
       </div>
     </div>
+
     <div class="searchBar">
       <el-input v-model="searchInput" id="search" placeholder="搜尋用戶">
         <template #prefix>
@@ -40,6 +41,7 @@
         </template>
       </el-input>
     </div>
+
     <div class="buttonList">
       <div class="function">
         <store-button
@@ -47,19 +49,22 @@
           :icon="'<i class=\'bi bi-plus-lg\'></i>'"
           @click="addCustomer"
         />
-        <!-- <date-filter :options = "orderDates"/> -->
       </div>
+
       <div class="notify" @click="notify($event)">
         <i class="bi bi-bell"></i>
         <button class="noti">一鍵通知</button>
       </div>
     </div>
+
     <item-table @singleNotify="notify($event)" />
+
     <div class="num">
       <span>已領取： {{ checkedNum }}</span>
       <span>未領取： {{ uncheckedNum }}</span>
     </div>
-    <div class="pages">
+
+    <!-- <div class="pages">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item">
@@ -77,7 +82,7 @@
           </li>
         </ul>
       </nav>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -131,9 +136,7 @@
       type.value = "notify";
     }
   };
-  // const notifyCustomerName = () =>{
 
-  // }
   const cancel = (value) => {
     popShow.value = value;
   };
@@ -170,6 +173,10 @@
 </script>
 
 <style scoped>
+  item-table {
+    height: 1000px;
+  }
+
   .pop {
     transition: transform;
   }
