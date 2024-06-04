@@ -25,7 +25,7 @@
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              :checked="scope.row.receive_status === '已領取'"
+              :checked="controlChecked(scope.row.receive_status === '已領取')"
               size="large"
               @change="handleCheckboxChange(scope.row, scope.$index)"
             />
@@ -41,7 +41,15 @@
   import { useStore } from "vuex";
 
   const store = useStore();
-  // const checked = ref(true);
+
+  const controlChecked = (status) => {
+    if (status === "已領取") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const tableData = computed(() =>
     store.state.manager.orders.filter((order) => {
       return order.product_name === store.state.manager.currItem.product_name;
