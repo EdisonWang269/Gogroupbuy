@@ -7,15 +7,15 @@ const state = {
   userID: "customer1",
   currItemID: "",
   currItemNum: 0,
-  userPhone: "09123456789",
+  userName: "",
+  userPhone: "",
   keyword: "",
+  token: "",
 };
 
 const getters = {
   filteredItems(state) {
     return state.items.filter((item) => {
-      item.arrival_date = changeDate(item.arrival_date);
-      item.launch_date = changeDate(item.launch_date);
       item.statement_date = changeDate(item.statement_date);
 
       return item.product_name
@@ -34,6 +34,9 @@ const getters = {
 };
 
 const mutations = {
+  setUserName(state, name) {
+    state.userName = name;
+  },
   addWaitingOrder(state, order) {
     state.orders.push(order);
   },
@@ -42,6 +45,9 @@ const mutations = {
   },
   setStoreID(state, storeID) {
     state.storeID = storeID;
+  },
+  setToken(state, token) {
+    state.token = token;
   },
   setOrders(state, orders) {
     state.orders = orders;
@@ -64,24 +70,49 @@ const mutations = {
 };
 
 const actions = {
-  async fetchItems({ commit, rootState }) {
+  async fetchItems({ commit, state }) {
     const response = await fetch(`/api/product`, {
       headers: {
-        Authorization: `Bearer ${rootState.token}`,
+        Authorization: `Bearer ${state.token}`,
       },
     });
     const data = await response.json();
     commit("setItems", data);
   },
 
-  async fetchOrders({ commit, rootState }) {
+  async fetchOrders({ commit, state }) {
     const response = await fetch(`/api/order/${state.userID}`, {
       headers: {
-        Authorization: `Bearer ${rootState.token}`,
+        Authorization: `Bearer ${state.token}`,
       },
     });
     const data = await response.json();
     commit("setOrders", data);
+  },
+
+  async fetchToken({ commit, state }) {
+    const response = await fetch(`/api/user`, {
+      method: "POST",
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userid: state.userID,
+        store_id: state.storeID,
+      }),
+    });
+    const data = await response.json();
+    commit("setToken", data.access_token);
+  },
+
+  async fetchUserInit({ dispatch }) {
+    try {
+      await dispatch("fetchToken");
+      await Promise.all([dispatch("fetchItems"), dispatch("fetchOrders")]);
+    } catch (error) {
+      console.error("Error in fetchUserInit:", error);
+    }
   },
 };
 

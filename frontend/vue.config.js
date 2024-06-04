@@ -3,10 +3,12 @@ module.exports = {
     proxy: {
       "/api": {
         target: "https://wangpython.pythonanywhere.com/",
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
+    allowedHosts: "all",
+    server: "https",
   },
 
-  publicPath: "/Gogroupbuy/"
+  publicPath: "/Gogroupbuy/",
 };

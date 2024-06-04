@@ -28,7 +28,8 @@
 <style scoped>
   .card {
     margin: 3px;
-    width: 80%;
+    width: 90%;
+    height: auto;
     border-radius: 20px;
     border: none;
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);

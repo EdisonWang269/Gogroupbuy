@@ -95,6 +95,7 @@
     margin-bottom: 10%;
   }
   button {
+    margin-top: 10px;
     border: none;
     border-radius: 12px;
     font-size: 16px;

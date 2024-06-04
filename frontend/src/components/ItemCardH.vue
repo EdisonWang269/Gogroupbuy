@@ -43,7 +43,7 @@
   }
 
   img {
-    width: 40%;
+    width: 50%;
     height: auto;
   }
 </style>

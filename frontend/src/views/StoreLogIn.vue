@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  //TODO: 驗證
   import { ref } from "vue";
   import { useRouter } from "vue-router";
   import StoreButton from "@/components/StoreButton.vue";
