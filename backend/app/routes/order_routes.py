@@ -449,6 +449,7 @@ def get_order_by_storeid():
                     "due_date": order[2] + datetime.timedelta(days=order[3]),
                     "phone": order[4],
                     "receive_status": order[5],
+                    "product_name": order[6],
                 }
             )
         return jsonify(data), 200
