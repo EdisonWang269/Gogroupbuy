@@ -15,7 +15,7 @@ export const initializeLiff = async () => {
               console.log(profile.userId);
             })
         }
-    }); // 替换成你的 LIFF ID
+    }); 
     console.log('LIFF initialized');
   } catch (error) {
     console.error('LIFF initialization failed', error);
