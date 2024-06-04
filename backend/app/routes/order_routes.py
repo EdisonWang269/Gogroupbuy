@@ -448,8 +448,7 @@ def get_order_by_storeid():
                     "quantity": order[1],
                     "due_date": order[2] + datetime.timedelta(days=order[3]),
                     "phone": order[4],
-                    "product_name": order[5],
-                    "receive_status": order[6],
+                    "receive_status": order[5],
                 }
             )
         return jsonify(data), 200
@@ -543,3 +542,96 @@ def get_userid_by_group_buying_id(group_buying_id):
         send_message(userid, message)
 
     return jsonify({"message": "Send message successfully"}), 200
+
+
+# 顧客領取 傳給我group_buying_id/userid，找出quantity更新inventory
+@order_bp.route("/api/Order/receive", methods=["PUT"])
+@jwt_required()
+def customer_receive():
+    """
+    顧客領取訂單
+    ---
+    tags:
+      - Order
+    security:
+      - APIKeyHeader: []
+    parameters:
+      - name: body
+        in: body
+        schema:
+          type: object
+          required:
+            - group_buying_id
+            - userid
+          properties:
+            group_buying_id:
+              type: integer
+              description: group_buying_id
+              example: 1
+            userid:
+              type: string
+              description: userid
+              example: "cus001"
+    responses:
+      200:
+        description: inventory updated successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: inventory updated successfully
+        examples:
+          application/json:
+            message: inventory updated successfully
+      403:
+        description: 權限不足
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 權限不足
+        examples:
+          application/json:
+            message: 權限不足
+      500:
+        description: Failed to update inventory
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Failed to update inventory
+        examples:
+          application/json:
+            message: Failed to update inventory
+    """
+    claims = get_jwt()
+    role = claims["role"]
+
+    if role != "merchant":
+        return jsonify({"message": "權限不足"}), 403
+
+    data = request.json
+    group_buying_id = data.get("group_buying_id")
+    userid = data.get("userid")
+
+    query = """UPDATE Group_buying_product
+                SET inventory = inventory - (SELECT quantity
+				    FROM `Order`
+				    WHERE userid = %s
+				    AND group_buying_id = %s) <0 
+                WHERE group_buying_id = %s"""
+    result = execute_query(
+        query,
+        (
+            userid,
+            group_buying_id,
+            group_buying_id,
+        ),
+    )
+
+    if result:
+        return jsonify({"message": "inventory updated successfully"}), 200
+    return jsonify({"error": "Failed to update inventory"}), 500
