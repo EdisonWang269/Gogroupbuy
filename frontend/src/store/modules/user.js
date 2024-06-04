@@ -11,6 +11,8 @@ const state = {
   userPhone: "",
   keyword: "",
   token: "",
+  userName: "",
+  userImg: "",
 };
 
 const getters = {
@@ -42,6 +44,12 @@ const mutations = {
   },
   setUserID(state, userID) {
     state.userID = userID;
+  },
+  setUserName(state, userName) {
+    state.userName = userName;
+  },
+  setUserImg(state, userImg) {
+    state.userImg = userImg;
   },
   setStoreID(state, storeID) {
     state.storeID = storeID;
