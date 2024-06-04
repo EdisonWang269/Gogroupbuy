@@ -424,18 +424,18 @@ def get_order_by_storeid():
                     g.arrival_date, 
                     g.due_days, 
                     c.phone, 
-                    p.product_name
                     o.receive_status,
+                    p.product_name
                 FROM 
-                    Customer c
+                    `Order` o
                 JOIN 
-                    `Order` o ON c.userid = o.userid
+                    Customer c ON o.userid = c.userid
                 JOIN 
                     Group_buying_product g ON o.group_buying_id = g.group_buying_id
                 JOIN 
                     Product p ON g.product_id = p.product_id
                 WHERE 
-                    c.store_id = %s;
+                    p.store_id = %s;
             """
 
     orders = execute_query(query, (store_id,), True)

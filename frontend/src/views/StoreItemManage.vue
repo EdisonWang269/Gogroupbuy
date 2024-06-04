@@ -107,13 +107,11 @@
   const endDate = computed(() => store.state.manager.currItem.statement_date);
 
   const customerName = computed(() => {
-    return store.state.manager.orders
-      .filter((order) => {
-        return order.receive_status === "待領取";
-      })
-      .map((order) => {
-        return order.user_name;
-      });
+    const names = new Set();
+    store.state.manager.orders
+      .filter((order) => order.receive_status === "待領取")
+      .forEach((order) => names.add(order.user_name));
+    return Array.from(names);
   });
 
   const checkedNum = computed(() => store.state.manager.checkedNum);
