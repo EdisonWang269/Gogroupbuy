@@ -99,7 +99,15 @@
   const currItemName = computed(
     () => store.state.manager.currItem.product_name
   );
-  const endDate = computed(() => store.state.manager.currItem.statement_date);
+
+  
+  const formateDate = () =>{
+    const receive = computed(() => store.state.manager.currItem.statement_date);
+    const unformattedDate = new Date(receive);
+    const formatted = String(unformattedDate.value);
+    return formatted;
+  }
+  const endDate = formateDate();
 
   const customerName = computed(() => {
     const names = new Set();

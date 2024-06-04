@@ -11,22 +11,10 @@
         </div>
         <div>
           <span>照片檔案</span>
-          <el-upload
-            v-model:file-list="fileList"
-            class="upload-demo"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            multiple
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :limit="3"
-            :on-exceed="handleExceed"
-          >
-            <el-button>Click to upload</el-button>
-            <template #tip>
-              <div class="el-upload__tip">從電腦選擇檔案</div>
-            </template>
-          </el-upload>
+          <div>
+            <input type="file" class="upload" @change="onfile">
+          </div>
+          
         </div>
         <div>
           <span>商品供應商</span>
@@ -51,7 +39,7 @@
           <textarea v-model="content"></textarea>
         </div>
         <div class="buttons">
-          <store-button :action="'確認上架'" class="button" />
+          <store-button :action="'確認上架'" class="button" @click="submit"/>
           <button class="button" id="delete" @click="deleteAll">全部刪除</button>
         </div>
       </div>
@@ -67,11 +55,21 @@ import StoreButton from '../components/StoreButton.vue';
 const name = ref("");
 const price = ref("");
 const supplier = ref("");
-const fileList = ref([]);
+const file = ref();
+const encodeFile = ref("");
 const content = ref("");
 const endDate = ref("");
 const formVisible = ref(true);
 
+const onfile = (event) =>{
+  file.value = event.target.files[0];
+  const fileReader = new FileReader();
+  fileReader.readAsDataURL(file.value);
+  fileReader.addEventListener("load",()=>{
+      encodeFile.value=fileReader.result;
+      console.log("encode: "+encodeFile.value);
+   })
+};
 const deleteAll = () => {
   formVisible.value = false; 
 
@@ -79,7 +77,7 @@ const deleteAll = () => {
     name.value = "";
     price.value = "";
     supplier.value = "";
-    fileList.value = [];
+    file.value = "";
     content.value = "";
     endDate.value = "";
 
@@ -90,6 +88,12 @@ const deleteAll = () => {
 const handleBeforeLeave = (el) => {
   el.style.opacity = 1;
 };
+
+const submit = () =>{
+  console.log(encodeFile);
+};
+
+
 </script>
 
 
@@ -150,5 +154,14 @@ textarea {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+::-webkit-file-upload-button{
+  border: 1px solid lightgrey;
+  border-radius: 5px; 
+  padding: 5px 10px;
+  background-color: white;
+  cursor: pointer;
+}
+
 </style>
 
