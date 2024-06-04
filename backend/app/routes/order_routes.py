@@ -442,6 +442,7 @@ def get_order_by_storeid():
                     Product p ON g.product_id = p.product_id
                 WHERE 
                     p.store_id = %s;
+                    
             """
 
     orders = execute_query(query, (store_id,), True)
