@@ -333,7 +333,7 @@ def get_all_orders_by_phone(phone):
 
 
 # 給storeid回傳所有Order
-@order_bp.route("/api/order", methods=["GET"])
+@order_bp.route("/api/order", methods = ["GET"])
 @jwt_required()
 def get_order_by_storeid():
     """
@@ -371,6 +371,9 @@ def get_order_by_storeid():
               receive_status:
                 type: integer
                 example: 1
+              product_name:
+                type: string
+                example: T-shirt
         examples:
           application/json:
             - user_name: John Doe
@@ -379,12 +382,14 @@ def get_order_by_storeid():
               due_date: 2021-06-15
               phone: 1234567890
               receive_status: 1
+              product_name: T-shirt
             - user_name: Jane Smith
               quantity: 2
               arrival_date: 2021-06-02
               due_date: 2021-06-20
               phone: 0987654321
               receive_status: 0
+              product_name: Jeans
       403:
           description: 權限不足
           schema:
@@ -410,12 +415,12 @@ def get_order_by_storeid():
             message: Fail to get all orders by store_id
     """
     identity = get_jwt_identity()
-    store_id = identity.get("store_id")
+    store_id = identity.get('store_id')
 
     claims = get_jwt()
-    role = claims["role"]
-    if role != "merchant":
-        return jsonify({"message": "權限不足"}), 403
+    role = claims['role']
+    if role != 'merchant':
+        return jsonify({"message":"權限不足"}), 403
 
     query = """
                 SELECT 
@@ -424,19 +429,19 @@ def get_order_by_storeid():
                     g.arrival_date, 
                     g.due_days, 
                     c.phone, 
-                    p.product_name
                     o.receive_status,
+                    p.product_name
                 FROM 
-                    Customer c
+                    `Order` o
                 JOIN 
-                    `Order` o ON c.userid = o.userid
+                    Customer c ON o.userid = c.userid
                 JOIN 
                     Group_buying_product g ON o.group_buying_id = g.group_buying_id
                 JOIN 
                     Product p ON g.product_id = p.product_id
                 WHERE 
-                    c.store_id = %s;
-            """
+                    p.store_id = %s;
+            """      
 
     orders = execute_query(query, (store_id,), True)
     data = []
@@ -444,17 +449,17 @@ def get_order_by_storeid():
         for order in orders:
             data.append(
                 {
-                    "user_name": order[0],
-                    "quantity": order[1],
-                    "due_date": order[2] + datetime.timedelta(days=order[3]),
-                    "phone": order[4],
-                    "product_name": order[5],
-                    "receive_status": order[6],
+                  "user_name" : order[0],
+                  "quantity" : order[1],
+                  "due_date" : order[2] + datetime.timedelta(days=order[3]),
+                  "phone" : order[4],
+                  "receive_status" : order[5],
+                  "product_name" : order[6]
                 }
-            )
+             )
         return jsonify(data), 200
 
-    return jsonify({"message": "Fail to get all order by store_id"}), 404
+    return jsonify({'message' : 'Fail to get all order by store_id'}), 404
 
 
 # 一鍵通知該團購所有未取貨的顧客
