@@ -32,3 +32,7 @@ export function formatOrder(order) {
   return order;
 }
 
+export function formatItem(item) {
+  item.statement_date = changeDate(item.statement_date);
+  return item;
+}

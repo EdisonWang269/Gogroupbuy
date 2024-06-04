@@ -1,7 +1,7 @@
 <template>
   <div class="all">
-    <start-group-buy v-show="started" @isClosed = "closed" :items = "items"/>
-    <side-bar class="sideBar" @start = "show"/>
+    <start-group-buy v-show="started" @isClosed="closed" :items="items" />
+    <side-bar class="sideBar" @start="show" />
 
     <div class="content">
       <store-nav class="nav" :action="firstStep" :item="secondStep" />
@@ -13,49 +13,32 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
+  import { useStore } from "vuex";
   import StartGroupBuy from "@/components/StartGroupBuy.vue";
   import SideBar from "../components/SideBar.vue";
   import StoreNav from "../components/StoreNav.vue";
 
-      // 要透過 Vuex 綁定他現在是在哪個步驟
-    const firstStep = ref("商品管理");
-    const secondStep = ref("香帥芋泥蛋糕");
-    const started = ref(false);
+  // 要透過 Vuex 綁定他現在是在哪個步驟
+  const firstStep = computed(() => {
+    return store.state.manager.step;
+  });
+  const secondStep = computed(() => {
+    return store.state.manager.currItem.product_name;
+  });
+  const started = ref(false);
+  const store = useStore();
 
-    const show = () => {
-      started.value = true;
-    }
+  const show = () => {
+    started.value = true;
+  };
 
-    const closed = (value) => {
-      started.value = value;
-    }
+  const closed = (value) => {
+    started.value = value;
+  };
 
-    // 綁要開啟團購的值
-    const items = ref([
-      {
-        id: 1,
-        itemName: "香帥芋泥蛋糕",
-        status:false,
-      },
-      {
-        id: 2,
-        itemName: "香帥芋泥蛋糕",
-        status:false,
-      },
-      {
-        id: 3,
-        itemName: "香帥芋泥蛋糕",
-        status:false,
-      },
-      {
-        id: 4,
-        itemName: "香帥芋泥蛋糕",
-        status:true,
-      }
-    ]);
-
-
+  // 綁要開啟團購的值
+  const items = store.state.manager.items;
 </script>
 
 <style scoped>

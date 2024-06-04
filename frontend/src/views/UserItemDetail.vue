@@ -224,7 +224,7 @@
   }
   .hover-button:hover {
     background-color: #ef2a39;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
   .content {

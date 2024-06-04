@@ -7,6 +7,7 @@ const state = {
   userID: "customer1",
   currItemID: "",
   currItemNum: 0,
+  userName: "",
   userPhone: "",
   keyword: "",
   token: "",
@@ -17,8 +18,6 @@ const state = {
 const getters = {
   filteredItems(state) {
     return state.items.filter((item) => {
-      item.arrival_date = changeDate(item.arrival_date);
-      item.launch_date = changeDate(item.launch_date);
       item.statement_date = changeDate(item.statement_date);
 
       return item.product_name
@@ -37,6 +36,9 @@ const getters = {
 };
 
 const mutations = {
+  setUserName(state, name) {
+    state.userName = name;
+  },
   addWaitingOrder(state, order) {
     state.orders.push(order);
   },
@@ -100,6 +102,7 @@ const actions = {
     const response = await fetch(`/api/user`, {
       method: "POST",
       headers: {
+        "ngrok-skip-browser-warning": "69420",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

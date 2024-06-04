@@ -9,7 +9,6 @@
       placeholder="Search"
       aria-describedby="inputGroup-sizing-lg"
       v-model="keyword"
-      @keydown.enter="search"
       @focus="addFocus"
       @blur="removeFocus"
     />
@@ -23,16 +22,12 @@
 
   const keyword = computed({
     get() {
-      return store.state.keyword;
+      return store.state.user.keyword;
     },
     set(value) {
-      store.commit("setKeyword", value);
+      store.commit("user/setKeyword", value);
     },
   });
-
-  const search = () => {
-    store.dispatch("searchProduct");
-  };
 
   const addFocus = (event) => {
     event.target.style.boxShadow = "0 0 20px #9d9d9d";

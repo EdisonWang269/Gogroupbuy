@@ -8,14 +8,18 @@
   <div class="wrap">
     <div class="infoBar">
       <span>姓名</span>
-      <input type="text" v-model="name" />
+      <input
+        type="text"
+        v-model="name"
+        @input="store.commit('user/setUserName', $event.target.value)"
+      />
     </div>
     <div class="infoBar">
       <span>手機</span>
       <input
         type="text"
         v-model="phoneNum"
-        @input="store.commit('setUserPhone', $event.target.value)"
+        @input="store.commit('user/setUserPhone', $event.target.value)"
         placeholder="請輸入手機號碼"
       />
     </div>

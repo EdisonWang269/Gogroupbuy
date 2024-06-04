@@ -26,62 +26,38 @@
     </div>
 
     <order-table @singleNotify="notify()" />
-    <div class="pages">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
+
+    <div class="num">
+      <span>已領取： {{ checkedNum }}</span>
+      <span>未領取： {{ uncheckedNum }}</span>
     </div>
   </div>
 </template>
 
-<script>
-  import { ref } from "vue";
+<script setup>
+  import { ref, computed } from "vue";
+  import { useStore } from "vuex";
   import OrderTable from "@/components/OrderTable.vue";
   import ManagerPop from "../components/ManagerPop.vue";
-  export default {
-    components: {
-      OrderTable, // 可以在這裡綁定訂單資料，回傳到 components 裡面
-      ManagerPop,
-    },
-    setup() {
-      const topic = ref("");
-      const popShow = ref(false);
-      const type = ref("");
-      const searchInput = ref("");
-      const customerName = ref("");
-      const notify = (value) => {
-        topic.value = "通知";
-        popShow.value = true;
-        type.value = "notify";
-        customerName.value = value;
-      };
-      const cancel = (value) => {
-        popShow.value = value;
-      };
-      return {
-        searchInput,
-        notify,
-        topic,
-        popShow,
-        type,
-        cancel,
-        customerName,
-      };
-    },
+
+  const store = useStore();
+  const topic = ref("");
+  const popShow = ref(false);
+  const type = ref("");
+  const searchInput = ref("");
+  const customerName = ref("");
+
+  const checkedNum = computed(() => store.state.manager.checkedNum);
+  const uncheckedNum = computed(() => store.state.manager.uncheckedNum);
+
+  const notify = (value) => {
+    topic.value = "通知";
+    popShow.value = true;
+    type.value = "notify";
+    customerName.value = value;
+  };
+  const cancel = (value) => {
+    popShow.value = value;
   };
 </script>
 
@@ -119,7 +95,7 @@
   i {
     color: black;
   }
-  :deep(.el-input__wrapper){
+  :deep(.el-input__wrapper) {
     padding: 8px 16px;
     border-radius: 10px;
     border: 1px solid #4763e4;
@@ -162,5 +138,14 @@
     /* margin: 0 auto; */
     position: absolute;
     bottom: 0;
+  }
+
+  .num {
+    color: #a1a1aa;
+    margin-top: 20px;
+    display: flex;
+    gap: 50px;
+    width: 100%;
+    justify-content: center;
   }
 </style>

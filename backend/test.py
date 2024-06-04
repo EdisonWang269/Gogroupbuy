@@ -137,7 +137,7 @@ def update_arrival_date(store_id, group_buying_id):
 
 #到貨時通知顧客/搜尋：從商品名稱獲取一項團購商品的所有訂購者的訂單資料
 # （回傳user_name/訂貨數量/領取期限/手機號碼/訂單狀態)
-@app.route("/api/<string:store_id>/Order/<string:product_name>", methods = ["GET"])
+@app.route("/api/<string:store_id>/order/<string:product_name>", methods = ["GET"])
 def get_userinfo_by_product_name(store_id, product_name):
     query = '''SELECT c.user_name, o.quantity, g.arrival_date, g.due_days, c.phone, o.receive_status
                 FROM `Order` AS o,`Group_buying_product` AS g,`Product` AS p, `Customer` AS c
@@ -165,7 +165,7 @@ def get_userinfo_by_product_name(store_id, product_name):
     return jsonify({'message' : 'Fail to get all userinfo by product_name'}), 404  
 
 #取得user的歷史訂單 回傳productid,productname,到貨時間,可領取天數,訂單狀態,圖片
-@app.route("/api/<string:store_id>/Order/<string:userid>/",methods = ["GET"] )
+@app.route("/api/<string:store_id>/order/<string:userid>/",methods = ["GET"] )
 def get_user_all_order_by_userid(store_id, userid):
     query = '''SELECT P.product_id, product_name, arrival_date, due_days, receive_status, product_picture
                 FROM `Order` AS O, Group_buying_product AS G, Product AS P
@@ -190,10 +190,8 @@ def get_user_all_order_by_userid(store_id, userid):
 
     return jsonify({'message' : 'Fail to get user all order by userid'}), 404 
     
-#顧客領取
-
 #增加現場購買客人（更新團購商品庫存量）
-@app.route("/api/<string:store_id>/Product/<int:group_buying_id>/instore_shopping", methods = ["PUT"])
+@app.route("/api/<string:store_id>/product/<int:group_buying_id>/instore_shopping", methods = ["PUT"])
 def update_inventory(store_id, group_buying_id):
     data = request.json
     instore_purchase_quantity = data.get('instore_purchase_quantity')
@@ -211,9 +209,8 @@ def update_inventory(store_id, group_buying_id):
          return jsonify({'message': 'inventory updated successfully'}), 200
     return jsonify({'error': 'Failed to update inventory'}), 500                      
 
-#更改結單日期
 #下架商品時(更新團購商品：income)
-@app.route("/api/<string:store_id>/Product/<int:group_buying_id>/income", methods = ["PUT"])
+@app.route("/api/<string:store_id>/product/<int:group_buying_id>/income", methods = ["PUT"])
 def calculate_income(store_id,group_buying_id):
     query = '''with get_income (income) as
                 (SELECT (g.purchase_quantity - g.inventory) * p.price
@@ -229,6 +226,39 @@ def calculate_income(store_id,group_buying_id):
     if result:
          return jsonify({'message': 'income updated successfully'}), 200 
     return jsonify({'error': 'Failed to update income'}), 500       
-        
+#顧客領取 傳給我group_buying_id/userid，找出quantity更新inventory
+@app.route("/api/order/receive", methods = ["PUT"])
+def customer_receive():
+    data = request.json
+    group_buying_id = data.get('group_buying_id')
+    userid = data.get('userid') 
+    
+    query = '''UPDATE Group_buying_product
+                SET inventory = inventory - (SELECT quantity
+				    FROM `Order`
+				    WHERE userid = %s
+				    AND group_buying_id = %s) <0 
+                WHERE group_buying_id = %s'''
+    result = execute_query(query, (userid,group_buying_id,group_buying_id,))
+    
+    if result:
+         return jsonify({'message': 'inventory updated successfully'}), 200 
+    return jsonify({'error': 'Failed to update inventory'}), 500
+
+#更改結單日期（傳group_buying_id，新結單時間，更新statement_date)
+@app.route("/api/product/changedate/<int:group_buying_id>", methods = ["PUT"])
+def update_statement_date(group_buying_id):
+    data = request.json
+    new_statement_date = data.get("new_statement_date")
+    
+    query = '''UPDATE Group_buying_product
+                SET statement_date = %s
+                WHERE group_buying_id = %s'''
+    result = execute_query(query, (new_statement_date, group_buying_id))
+    
+    if result:
+         return jsonify({'message': 'statement_date updated successfully'}), 200 
+    return jsonify({'error': 'Failed to update statement_date'}), 500
+      
 if __name__ == "__main__":
     app.run()

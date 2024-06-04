@@ -10,12 +10,11 @@
     @isChecked="check"
     v-show="popShow"
   />
+
   <div class="all">
     <div class="header">
       <div class="info">
-        <h1>{{ itemName }}</h1>
-        <!-- 從 vuex 抓商品資訊 -->
-        <span>上架日期：{{ uploadDate }}</span>
+        <h1>{{ currItemName }}</h1>
         <span
           >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
         ></span>
@@ -34,6 +33,7 @@
         />
       </div>
     </div>
+
     <div class="searchBar">
       <el-input v-model="searchInput" id="search" placeholder="搜尋用戶">
         <template #prefix>
@@ -41,26 +41,25 @@
         </template>
       </el-input>
     </div>
+
     <div class="buttonList">
       <div class="function">
         <store-button
-          :action="'增加現場購買顧客  '"
+          :action="'增加現場購買顧客'"
           :icon="'<i class=\'bi bi-plus-lg\'></i>'"
           @click="addCustomer"
         />
-        <!-- <date-filter :options = "orderDates"/> -->
       </div>
+
       <div class="notify" @click="notify($event)">
         <i class="bi bi-bell"></i>
         <button class="noti">一鍵通知</button>
       </div>
     </div>
+
     <item-table @singleNotify="notify($event)" />
-    <div class="num">
-      <span>已領取： {{ checkedNum }}</span>
-      <span>未領取： {{ uncheckedNum }}</span>
-    </div>
-    <div class="pages">
+
+    <!-- <div class="pages">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
           <li class="page-item">
@@ -78,89 +77,101 @@
           </li>
         </ul>
       </nav>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
+  import { useStore } from "vuex";
   import StoreButton from "../components/StoreButton.vue";
   import ItemTable from "@/components/ItemTable.vue";
   import ManagerPop from "../components/ManagerPop.vue";
 
-      const itemName = ref("香帥芋泥蛋糕");
-      const uploadDate = ref("2024/05/09");
-      const endDate = ref("2024/05/15");
-      const searchInput = ref("");
-      const topic = ref("");
-      const popShow = ref(false);
-      const type = ref("");
-      const customerName = ref("Tom,Alex,Sammy"); //要通知的顧客名字
-      const checkedNum = ref(0);
-      const uncheckedNum = ref(0);
-      const editDate = () => {
-        topic.value = "更改結單日期";
-        popShow.value = true;
-        type.value = "editDate";
-      };
-      const notify = (value) => {
-        if (typeof value === "string") {
-          topic.value = "通知";
-          popShow.value = true;
-          type.value = "notify";
-          customerName.value = value;
-        } else {
-          topic.value = "通知所有未領取顧客";
-          popShow.value = true;
-          type.value = "notify";
-        }
-      };
-      // const notifyCustomerName = () =>{
+  const store = useStore();
 
-      // }
-      const cancel = (value) => {
-        popShow.value = value;
-      };
-      const check = (value) => {
-        popShow.value = value;
-      };
-      const setEndDate = (date) => {
-        console.log(date);
-        if (date != "") {
-          endDate.value = date;
-        }
-      };
-      const addCustomer = () => {
-        topic.value = "增加現場購買顧客";
-        type.value = "addCus";
-        showPop();
-      };
+  const searchInput = ref("");
 
-      const endOrder = () => {
-        topic.value = "結單管理";
-        type.value = "endOrder";
-        showPop();
-      };
+  const topic = ref("");
+  const popShow = ref(false);
+  const type = ref("");
 
-      const arriveManage = () => {
-        topic.value = "到貨管理";
-        type.value = "arriveManage";
-        showPop();
-      };
+  const currItemName = computed(
+    () => store.state.manager.currItem.product_name
+  );
+  const endDate = computed(() => store.state.manager.currItem.statement_date);
 
-      const showPop = () => {
-        popShow.value = true;
-      };
+  const customerName = computed(() => {
+    const names = new Set();
+    store.state.manager.orders
+      .filter((order) => order.receive_status === "待領取")
+      .forEach((order) => names.add(order.user_name));
+    return Array.from(names);
+  });
 
-      
+  const editDate = () => {
+    topic.value = "更改結單日期";
+    popShow.value = true;
+    type.value = "editDate";
+  };
+  const notify = (value) => {
+    if (typeof value === "string") {
+      topic.value = "通知";
+      popShow.value = true;
+      type.value = "notify";
+      customerName.value = value;
+    } else {
+      topic.value = "通知所有未領取顧客";
+      popShow.value = true;
+      type.value = "notify";
+    }
+  };
+
+  const cancel = (value) => {
+    popShow.value = value;
+  };
+  const check = (value) => {
+    popShow.value = value;
+  };
+  const setEndDate = (date) => {
+    console.log(date);
+    if (date != "") {
+      endDate.value = date;
+    }
+  };
+  const addCustomer = () => {
+    topic.value = "增加現場購買顧客";
+    type.value = "addCus";
+    showPop();
+  };
+
+  const endOrder = () => {
+    topic.value = "結單管理";
+    type.value = "endOrder";
+    showPop();
+  };
+
+  const arriveManage = () => {
+    topic.value = "到貨管理";
+    type.value = "arriveManage";
+    showPop();
+  };
+
+  const showPop = () => {
+    popShow.value = true;
+  };
 </script>
 
 <style scoped>
+  item-table {
+    height: 1000px;
+  }
+
   .pop {
     transition: transform;
   }
   .all {
-    background-color: #fafafa;
+    background-color: #fff;
     width: 100%;
     height: 100%;
   }
@@ -173,9 +184,10 @@
   }
   .info {
     display: flex;
-    width: 60%;
+    width: 70%;
     align-items: baseline;
     gap: 30px;
+    background: #fff;
   }
   .buttons {
     display: flex;
@@ -189,7 +201,6 @@
   h1 {
     font-weight: 700;
     font-size: 32px;
-    /* margin-left: 5%; */
     padding-top: 20px;
   }
   .searchBar {

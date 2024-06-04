@@ -10,6 +10,6 @@ module.exports = {
     },
     
   },
-
-  // publicPath: "/Gogroupbuy/"
+   
+  publicPath: "/Gogroupbuy/",
 };
