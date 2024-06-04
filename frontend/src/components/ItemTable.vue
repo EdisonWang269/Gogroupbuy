@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <el-table :data="tableData" height="250" style="width: 100%">
+    <el-table :data="tableData" height="550" style="width: 100%">
       <el-table-column prop="user_name" label="顧客姓名" />
 
       <el-table-column prop="quantity" label="數量" />
@@ -25,7 +25,7 @@
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              :checked="scope.row.receive_status === '已領取'"
+              :checked="controlChecked(scope.row.receive_status)"
               size="large"
               @change="handleCheckboxChange(scope.row, scope.$index)"
             />
@@ -37,11 +37,24 @@
 </template>
 
 <script setup>
-  import { computed } from "vue";
+  import { computed, ref } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
-  const tableData = computed(() => store.state.manager.orders);
+
+  const controlChecked = (status) => {
+    if (status === "已領取") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const tableData = computed(() =>
+    store.state.manager.orders.filter((order) => {
+      return order.product_name === store.state.manager.currItem.product_name;
+    })
+  );
 
   const setType = (receive_status) => {
     if (receive_status === "已領取") {
