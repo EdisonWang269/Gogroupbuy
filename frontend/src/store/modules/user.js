@@ -7,7 +7,6 @@ const state = {
   userID: "customer1",
   currItemID: "",
   currItemNum: 0,
-  userName: "",
   userPhone: "",
   keyword: "",
   token: "",
@@ -44,9 +43,6 @@ const mutations = {
   },
   setUserID(state, userID) {
     state.userID = userID;
-  },
-  setUserName(state, userName) {
-    state.userName = userName;
   },
   setUserImg(state, userImg) {
     state.userImg = userImg;
