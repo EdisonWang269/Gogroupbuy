@@ -20,7 +20,10 @@ const getters = {
 
 const mutations = {
   setOrderStatus(state, payload) {
-    const { index, status } = payload;
+    const { order_id, status } = payload;
+    const index = state.orders.findIndex(
+      (order) => order.order_id === order_id
+    );
     state.orders[index].receive_status = status;
   },
   setStep(state, step) {

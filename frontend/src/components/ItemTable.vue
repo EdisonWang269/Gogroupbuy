@@ -25,9 +25,9 @@
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              :checked="scope.row.receive_status === '已領取'"
+              :checked="isChecked(scope.row.receive_status)"
               size="large"
-              @change="handleCheckboxChange(scope.row, scope.$index)"
+              @change="handleCheckboxChange(scope.row, scope.row.order_id)"
             />
           </div>
         </template>
@@ -58,9 +58,13 @@
     }
   };
 
-  const handleCheckboxChange = (row, index) => {
+  const isChecked = (receive_status) => {
+    return receive_status === "已領取";
+  };
+
+  const handleCheckboxChange = (row, order_id) => {
     const newStatus = row.receive_status === "已領取" ? "待領取" : "已領取";
-    store.commit("manager/setOrderStatus", { index, status: newStatus });
+    store.commit("manager/setOrderStatus", { order_id, status: newStatus });
     store.commit("manager/setCheckedNum");
     store.commit("manager/setUncheckedNum");
   };
@@ -71,15 +75,16 @@
     width: 90%;
     margin: 0 auto;
     margin-top: 3%;
+    overflow-x: hidden;
+  }
+  :deep(.el-scrollbar__bar.is-horizontal) {
+    height: 0 !important;
   }
   .checkBox {
     display: flex;
     align-items: center;
     gap: 20px;
   }
-  /* ::v-deep .el-table__header-wrapper, .el-table__body-wrapper, .el-table__row, .cell{
-      background-color: #FAFAFA;
-  } */
   :deep(.el-tag.el-tag--danger.el-tag--light.is-round) {
     background-color: #fee2e2;
   }

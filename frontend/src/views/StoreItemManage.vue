@@ -59,11 +59,6 @@
 
     <item-table @singleNotify="notify($event)" />
 
-    <div class="num">
-      <span>已領取： {{ checkedNum }}</span>
-      <span>未領取： {{ uncheckedNum }}</span>
-    </div>
-
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">
         <ul class="pagination">
@@ -113,9 +108,6 @@
       .forEach((order) => names.add(order.user_name));
     return Array.from(names);
   });
-
-  const checkedNum = computed(() => store.state.manager.checkedNum);
-  const uncheckedNum = computed(() => store.state.manager.uncheckedNum);
 
   const editDate = () => {
     topic.value = "更改結單日期";

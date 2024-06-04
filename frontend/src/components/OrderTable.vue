@@ -1,6 +1,6 @@
 <template>
   <div class="table">
-    <el-table :data="sortedTableData" height="650px" style="width: 100%">
+    <el-table :data="sortedTableData" height="600px" style="width: 100%">
       <el-table-column prop="user_name" label="顧客姓名" />
       <el-table-column prop="product_name" label="訂購商品" />
       <el-table-column prop="quantity" label="數量" />
@@ -23,7 +23,7 @@
             <el-checkbox
               :checked="scope.row.receive_status === '已領取'"
               size="large"
-              @change="handleCheckboxChange(scope.row, scope.$index)"
+              @change="handleCheckboxChange(scope.row, scope.row.order_id)"
             />
           </div>
         </template>
@@ -51,9 +51,9 @@
     }
   };
 
-  const handleCheckboxChange = (row, index) => {
+  const handleCheckboxChange = (row, order_id) => {
     const newStatus = row.receive_status === "已領取" ? "待領取" : "已領取";
-    store.commit("manager/setOrderStatus", { index, status: newStatus });
+    store.commit("manager/setOrderStatus", { order_id, status: newStatus });
     store.commit("manager/setCheckedNum");
     store.commit("manager/setUncheckedNum");
   };
@@ -69,15 +69,16 @@
     width: 90%;
     margin: 0 auto;
     margin-top: 48px;
+    overflow-x: hidden;
   }
   .checkBox {
     display: flex;
     align-items: center;
     gap: 20px;
   }
-  /* ::v-deep .el-table__header-wrapper, .el-table__body-wrapper, .el-table__row, .cell{
-      background-color: #FAFAFA;
-  } */
+  :deep(.el-scrollbar__bar.is-horizontal) {
+    height: 0 !important;
+  }
   :deep(.el-tag.el-tag--danger.el-tag--light.is-round) {
     background-color: #fee2e2;
   }
