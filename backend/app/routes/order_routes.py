@@ -371,9 +371,6 @@ def get_order_by_storeid():
               receive_status:
                 type: integer
                 example: 1
-              product_name:
-                type: string
-                example: T-shirt
         examples:
           application/json:
             - user_name: John Doe
@@ -382,14 +379,12 @@ def get_order_by_storeid():
               due_date: 2021-06-15
               phone: 1234567890
               receive_status: 1
-              product_name: T-shirt
             - user_name: Jane Smith
               quantity: 2
               arrival_date: 2021-06-02
               due_date: 2021-06-20
               phone: 0987654321
               receive_status: 0
-              product_name: Jeans
       403:
           description: 權限不足
           schema:
@@ -456,8 +451,6 @@ def get_order_by_storeid():
                     "due_date": order[2] + datetime.timedelta(days=order[3]),
                     "phone": order[4],
                     "receive_status": order[5],
-                    "product_name": order[6],
-                    "order_id": order[7],
                 }
             )
         return jsonify(data), 200
@@ -554,7 +547,7 @@ def get_userid_by_group_buying_id(group_buying_id):
 
 
 # 顧客領取 傳給我group_buying_id/userid，找出quantity更新inventory
-@order_bp.route("/api/Order/receive", methods=["PUT"])
+@order_bp.route("/api/order/receive", methods=["PUT"])
 @jwt_required()
 def customer_receive():
     """

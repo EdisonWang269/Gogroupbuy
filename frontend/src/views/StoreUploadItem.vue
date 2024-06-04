@@ -10,7 +10,7 @@
           <el-input class="input" v-model="name"></el-input>
         </div>
         <div>
-          <span>照片檔案</span>
+          <span>照片檔案</span> 
           <el-upload
             v-model:file-list="fileList"
             class="upload-demo"
