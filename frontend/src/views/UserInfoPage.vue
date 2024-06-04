@@ -31,7 +31,7 @@
   import { useStore } from "vuex";
 
   const store = useStore();
-  const name = ref("陳以恩");
+  const name = ref(store.state.user.userName);
   const phoneNum = ref(store.state.user.userPhone);
   const status = ref("一般會員");
   const userImg = ref("../assets/user.jpg");

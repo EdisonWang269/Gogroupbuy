@@ -5,19 +5,24 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
-import liff from "@line/liff";
+import { initializeLiff } from './liff';
 import store from "./store";
 
-liff
-  .init({ liffId: "2004368945-ZXAjYNkb" })
-  .then(() => {
-    //TODO: get userid (要怎麼登入?)
-  })
-  .catch((err) => {
-    console.error("LIFF 初始化失敗", err);
-  });
+initializeLiff().then(() => {
+  // Create Vue app after LIFF initialization
+  const app = createApp(App);
 
-const app = createApp(App).use(store);
-app.use(ElementPlus);
-app.use(router);
-app.mount("#app");
+  // Use plugins
+  app.use(store);
+  app.use(router);
+  app.use(ElementPlus);
+  // Mount the app
+  app.mount("#app");
+}).catch(error => {
+  console.error('Failed to initialize LIFF', error);
+});
+
+// const app = createApp(App).use(store);
+// app.use(ElementPlus);
+// app.use(router);
+// app.mount("#app");
