@@ -2,6 +2,7 @@
   <div class="overlay">
     <div class="card">
       <h4>{{ usage }}</h4>
+
       <div class="editDate" v-if="type === 'editDate'">
         <div>
           <span>原來結單日期</span>
@@ -17,6 +18,7 @@
           <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
         </div>
       </div>
+
       <div class="notify" v-else-if="type === 'notify'">
         <div>
           <span>顧客名單</span>
@@ -34,6 +36,7 @@
           ></textarea>
         </div>
       </div>
+
       <div class="addCus" v-else-if="type === 'addCus'">
         <div>
           <span>訂購數量</span>
@@ -44,10 +47,15 @@
           />
         </div>
       </div>
+
       <div class="editDate" v-if="type === 'endOrder'">
         <div>
           <span>此次團購訂購商品數量</span>
-          <el-input v-model="totalNum" style="width: 95%" placeholder="Please input"/>
+          <el-input
+            v-model="totalNum"
+            style="width: 95%"
+            placeholder="Please input"
+          />
         </div>
         <div>
           <span>此次訂購花費成本</span>
@@ -58,10 +66,11 @@
           />
         </div>
       </div>
+
       <div class="editDate" v-if="type === 'arriveManage'">
         <div>
           <span>到貨日期</span>
-          <el-input :value="arriveDate" style="width: 95%" disabled/>
+          <el-input :value="arriveDate" style="width: 95%" disabled />
         </div>
         <div>
           <span>截止領取天數</span>
@@ -70,9 +79,9 @@
             style="width: 95%"
             placeholder="Please input"
           />
-
         </div>
       </div>
+
       <div class="buttons">
         <store-button :action="'確認'" class="button" @click="check" />
         <button class="buttonCancel" @click="cancel">取消</button>
@@ -85,7 +94,7 @@
   import { ref } from "vue";
   import StoreButton from "./StoreButton.vue";
   export default {
-    props: ["usage", "original", "type", "customerName", ""],
+    props: ["usage", "original", "type", "customerName"],
     components: {
       StoreButton,
     },
