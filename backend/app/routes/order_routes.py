@@ -189,8 +189,13 @@ def get_all_orders_by_userid(userid):
                 due_days = order[2]
                 due_date = arrival_date + datetime.timedelta(days=due_days)
 
-                if orders[4]:
-                    product_picture_base64 = base64.b64encode(orders[4]).decode("utf-8")
+                if order[4]:
+                    product_picture_bytes = order[4]
+                    product_picture_base64 = base64.b64encode(
+                        product_picture_bytes
+                    ).decode("utf-8")
+                else:
+                    product_picture_base64 = None
 
                 data.append(
                     {
