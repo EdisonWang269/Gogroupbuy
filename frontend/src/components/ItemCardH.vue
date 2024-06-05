@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <p class="card-title">{{ name }}</p>
+      <p class="card-title"><span>{{ name }}</span></p>
       <p class="card-text">
         取貨期限：
         <br /><b>{{ dueDate }} </b> <br />訂單狀態：<br /><b>{{ status }}</b>
@@ -31,7 +31,7 @@
     gap: 14px;
     border: none;
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);
-    max-height: 200px;
+    /* max-height: 200px; */
   }
   .card-body {
     flex: 1;
@@ -40,10 +40,33 @@
   .card-title {
     font-size: 24px;
     color: #ac503c;
+    width: 80%;
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
   }
 
   img {
     width: 50%;
     height: auto;
+  }
+
+  .card-title span {
+    display: inline-block;
+    animation: scroll 5s linear infinite;
+    animation-delay: 0.5s;
+  }
+
+  .scrollAnimation{
+    
+  }
+
+  @keyframes scroll{
+    0%{
+      transform: translateX(0);
+    }
+    100%{
+      transform: translateX(-100%);
+    }
   }
 </style>

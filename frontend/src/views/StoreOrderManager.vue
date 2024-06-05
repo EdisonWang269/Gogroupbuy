@@ -39,7 +39,7 @@
   .all {
     background-color: #fafafa;
     width: 100%;
-    height: 100%;
+    height: 80%;
   }
   .header {
     display: flex;
@@ -95,5 +95,14 @@
     gap: 50px;
     width: 100%;
     justify-content: center;
+  }
+
+  .table {
+    max-height: 55%;
+  }
+
+  .table::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 </style>
