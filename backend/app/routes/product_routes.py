@@ -856,67 +856,67 @@ def calculate_income(group_buying_id):
 @product_bp.route("/api/product/changedate/<int:group_buying_id>", methods = ["PUT"])
 @jwt_required()
 def update_statement_date(group_buying_id):
-  '''
-    更改結單日期
-    ---
-    tags:
-      - Product
-    security:
-      - APIKeyHeader: []
-    parameters:
-          - name: group_buying_id
-            in: path
-            type: integer
-            required: true
-            description: group_buying_id
-            default: 1
-          - name: body
-            in: body
-            schema:
-              type: object
-              required:
-                - new_statement_date
-              properties:
-                new_statement_date:
-                type: string
-                format: date
-                description: 結單日期
-                example: 2021-06-01
-    responses:
-        200:
-            description: statement_date updated successfully
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: statement_date updated successfully
-            examples:
-              application/json:
-                message: statement_date updated successfully
-        403:
-            description: 權限不足
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: 權限不足
-            examples:
-              application/json:
-                message: 權限不足
-        500:
-            description: Failed to update statement_date
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: Failed to update statement_date
-            examples:
-              application/json:
-                error: Failed to update statement_date
-  '''
+  # '''
+  #   更改結單日期
+  #   ---
+  #   tags:
+  #     - Product
+  #   security:
+  #     - APIKeyHeader: []
+  #   parameters:
+  #         - name: group_buying_id
+  #           in: path
+  #           type: integer
+  #           required: true
+  #           description: group_buying_id
+  #           default: 1
+  #         - name: body
+  #           in: body
+  #           schema:
+  #             type: object
+  #             required:
+  #               - new_statement_date
+  #             properties:
+  #               new_statement_date:
+  #               type: string
+  #               format: date
+  #               description: 結單日期
+  #               example: 2021-06-01
+  #   responses:
+  #       200:
+  #           description: statement_date updated successfully
+  #           schema:
+  #             type: object
+  #             properties:
+  #               message:
+  #                 type: string
+  #                 example: statement_date updated successfully
+  #           examples:
+  #             application/json:
+  #               message: statement_date updated successfully
+  #       403:
+  #           description: 權限不足
+  #           schema:
+  #             type: object
+  #             properties:
+  #               message:
+  #                 type: string
+  #                 example: 權限不足
+  #           examples:
+  #             application/json:
+  #               message: 權限不足
+  #       500:
+  #           description: Failed to update statement_date
+  #           schema:
+  #             type: object
+  #             properties:
+  #               error:
+  #                 type: string
+  #                 example: Failed to update statement_date
+  #           examples:
+  #             application/json:
+  #               error: Failed to update statement_date
+  # '''
   claims = get_jwt()
   role = claims["role"]
   if role != "merchant":
