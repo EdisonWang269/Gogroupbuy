@@ -107,7 +107,7 @@ def get_all_products_by_storeid():
                         "product_describe": product[5],
                         "product_name": product[6],
                         "product_picture": (
-                            product[7].decode("utf-8") if product[7] else None
+                            product[7].decode("base64") if product[7] else None
                         ),
                     }
                 )
