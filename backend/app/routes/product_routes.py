@@ -1,3 +1,4 @@
+import base64
 from flask import Blueprint, jsonify, request
 from ..database import execute_query
 
@@ -332,13 +333,17 @@ def create_product():
               application/json:
                 error: Failed to create product
     """
-    data = request.json
-    price = data.get("price")
-    unit = data.get("unit")
-    product_describe = data.get("product_describe")
-    supplier_name = data.get("supplier_name")
-    product_name = data.get("product_name")
-    product_picture = data.get("product_picture")
+    if 'photo' not in request.files:
+        return jsonify({'error': 'No photo uploaded'}), 400
+
+    product_picture_file = request.files['photo']  # 取得圖片檔案
+    product_picture_binary = base64.b64encode(product_picture_file.read())  # 把圖片轉成二進位
+
+    price = request.form.get('price')
+    unit = request.form.get('unit')
+    product_describe = request.form.get('product_describe')
+    supplier_name = request.form.get('supplier_name')
+    product_name = request.form.get('product_name')
 
     identity = get_jwt_identity()
     store_id = identity.get("store_id")
@@ -362,7 +367,7 @@ def create_product():
             product_describe,
             supplier_name,
             product_name,
-            product_picture,
+            product_picture_binary,
         ),
     )
 
