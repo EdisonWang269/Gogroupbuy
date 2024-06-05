@@ -152,56 +152,57 @@ def get_all_orders_by_userid(userid):
           application/json:
             message: Fail to get all orders by userid
     """
-    identity = get_jwt_identity()
-    store_id = identity.get("store_id")
+    try:
+        identity = get_jwt_identity()
+        store_id = identity.get("store_id")
 
-    claims = get_jwt()
-    role = claims["role"]
+        # claims = get_jwt()
+        # role = claims["role"]
+        # if role != 'merchant':
+        #     return jsonify({"message":"權限不足"}), 403
 
-    # if role != 'merchant':
-    #     return jsonify({"message":"權限不足"}), 403
+        query = """
+                  SELECT 
+                      p.product_name, 
+                      gbp.arrival_date, 
+                      gbp.due_days, 
+                      o.receive_status,
+                      p.product_picture
+                  FROM 
+                      `Order` o
+                  JOIN 
+                      Group_buying_product gbp ON o.group_buying_id = gbp.group_buying_id
+                  JOIN 
+                      Product p ON gbp.product_id = p.product_id
+                  JOIN 
+                      Customer c ON o.userid = c.userid AND c.store_id = p.store_id
+                  WHERE 
+                      p.store_id = %s AND 
+                      c.userid = %s;
+              """
+        orders = execute_query(query, (store_id, userid), True)
 
-    query = """
-                SELECT 
-                    p.product_name, 
-                    gbp.arrival_date, 
-                    gbp.due_days, 
-                    o.receive_status,
-                    p.product_picture
-                FROM 
-                    `Order` o
-                JOIN 
-                    Group_buying_product gbp ON o.group_buying_id = gbp.group_buying_id
-                JOIN 
-                    Product p ON gbp.product_id = p.product_id
-                JOIN 
-                    Customer c ON o.userid = c.userid AND c.store_id = p.store_id
-                WHERE 
-                    p.store_id = %s AND 
-                    c.userid = %s;
-            """
-    orders = execute_query(query, (store_id, userid), True)
+        data = []
+        if orders:
+            for order in orders:
+                arrival_date = order[1]
+                due_days = order[2]
+                due_date = arrival_date + datetime.timedelta(days=due_days)
 
-    data = []
-    if orders:
-        for order in orders:
-            arrival_date = order[1]
-            due_days = order[2]
-            due_date = arrival_date + datetime.timedelta(days=due_days)
-            product_picture_base64 = (
-                base64.b64encode(order[4]).decode("utf-8") if order[4] else None
-            )
-            data.append(
-                {
-                    "product_name": order[0],
-                    "due_date": due_date,
-                    "receive_status": order[3],
-                    "product_picture": product_picture_base64,
-                }
-            )
-        return jsonify(data), 200
+                if orders[4]:
+                    product_picture_base64 = base64.b64encode(orders[4]).decode("utf-8")
 
-    return jsonify({"message": "Fail to get all orders by userid"}), 404
+                data.append(
+                    {
+                        "product_name": order[0],
+                        "due_date": due_date,
+                        "receive_status": order[3],
+                        "product_picture": product_picture_base64,
+                    }
+                )
+            return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"message": str(e)}), 404
 
 
 # 用手機查詢一名客戶所有清單
@@ -419,57 +420,56 @@ def get_order_by_storeid():
           application/json:
             message: Fail to get all orders by store_id
     """
-    try:
-        identity = get_jwt_identity()
-        store_id = identity.get("store_id")
+    identity = get_jwt_identity()
+    store_id = identity.get("store_id")
 
-        claims = get_jwt()
-        role = claims["role"]
-        if role != "merchant":
-            return jsonify({"message": "權限不足"}), 403
+    claims = get_jwt()
+    role = claims["role"]
+    if role != "merchant":
+        return jsonify({"message": "權限不足"}), 403
 
-        query = """
-                  SELECT 
-                      c.user_name, 
-                      o.quantity, 
-                      -- g.arrival_date, 
-                      -- g.due_days, 
-                      c.phone, 
-                      o.receive_status,
-                      p.product_name, 
-                      o.order_id
-          o.order_id
-                  FROM 
-                      `Order` o
-                  JOIN 
-                      Customer c ON o.userid = c.userid
-                  JOIN 
-                      Group_buying_product g ON o.group_buying_id = g.group_buying_id
-                  JOIN 
-                      Product p ON g.product_id = p.product_id
-                  WHERE 
-                      p.store_id = %s;
-              """
+    query = """
+                SELECT 
+                    c.user_name, 
+                    o.quantity, 
+                    -- 先註解掉，加入完整資訊的測試資料以後再打開 g.arrival_date, 
+                    -- g.due_days, 
+                    c.phone, 
+                    o.receive_status,
+                    p.product_name, 
+                    o.order_id
+		    o.order_id
+                FROM 
+                    `Order` o
+                JOIN 
+                    Customer c ON o.userid = c.userid
+                JOIN 
+                    Group_buying_product g ON o.group_buying_id = g.group_buying_id
+                JOIN 
+                    Product p ON g.product_id = p.product_id
+                WHERE 
+                    p.store_id = %s;
+            """
 
-        orders = execute_query(query, (store_id,), True)
-        data = []
-        if orders:
-            for order in orders:
-                data.append(
-                    {
-                        "user_name": order[0],
-                        "quantity": order[1],
-                        # 這裡報錯是因為新增商品時沒有輸入due_days，所以是null，需要再修改
-                        # "due_date" : order[2] + datetime.timedelta(days=order[3]),
-                        "phone": order[2],
-                        "receive_status": order[3],
-                        "product_name": order[4],
-                        "order_id": order[5],
-                    }
-                )
-            return jsonify(data), 200
-    except Exception as e:
-        return jsonify({"message": f"{e}"}), 404
+    orders = execute_query(query, (store_id,), True)
+    data = []
+    if orders:
+        for order in orders:
+            data.append(
+                {
+                    "user_name": order[0],
+                    "quantity": order[1],
+                    # 這裡報錯是因為新增商品時沒有輸入due_days，所以是null，需要再修改
+                    # "due_date" : order[2] + datetime.timedelta(days=order[3]),
+                    "phone": order[2],
+                    "receive_status": order[3],
+                    "product_name": order[4],
+                    "order_id": order[5],
+                }
+            )
+        return jsonify(data), 200
+
+    return jsonify({"message": "Fail to get all order by store_id"}), 404
 
 
 # 一鍵通知該團購所有未取貨的顧客
