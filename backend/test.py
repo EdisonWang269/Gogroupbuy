@@ -69,17 +69,21 @@ def add_pic_test():
 #新增一項商品
 @app.route("/api/<string:store_id>/product", methods=["POST"])
 def create_product(store_id):
+    if 'photo' not in request.files:
+        return jsonify({'error': 'No photo uploaded'}), 400
+    product_picture_file = request.files['photo'] #取得圖片檔案
+    product_picture_binary = base64.b64encode(product_picture_file.read()) #把圖片轉成二進位
+    
     data = request.json     
     price = data.get('price')
     unit = data.get('unit')
     product_describe = data.get('product_describe')
     supplier_name = data.get('supplier_name')
     product_name = data.get('product_name')
-    product_picture = data.get('product_picture')
 
     query = """INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
                 VALUES (%s, %s, %s, %s, %s, %s, %s);"""
-    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture))
+    result = execute_query(query,(store_id, price, unit, product_describe, supplier_name, product_name, product_picture_binary))
     
     if result:
         return jsonify({'message': 'Pruduct created successfully'}), 200
