@@ -345,7 +345,6 @@ def get_all_orders_by_phone(phone):
     return jsonify({"message": "Fail to get all orders by phone"}), 404
 
 
-# FIXME: 還是500但我先處理圖片
 # 給storeid回傳所有Order
 @order_bp.route("/api/order", methods=["GET"])
 @jwt_required()
@@ -447,7 +446,6 @@ def get_order_by_storeid():
                       o.receive_status,
                       p.product_name, 
                       o.order_id
-          o.order_id
                   FROM 
                       `Order` o
                   JOIN 

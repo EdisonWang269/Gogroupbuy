@@ -3,7 +3,6 @@
     <i class="bi bi-person"></i>
     個人資訊
   </h1>
-  <!-- <img :src="userImg" class="userImg" /> -->
   <img :src="userImg" class="userImg" />
   <div class="wrap">
     <div class="infoBar">
