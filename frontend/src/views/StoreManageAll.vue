@@ -38,7 +38,7 @@
   };
 
   // 綁要開啟團購的值
-  const items = store.getters["manager/getItems"];
+  const items = computed(() => store.getters["manager/getItems"]);
 </script>
 
 <style scoped>

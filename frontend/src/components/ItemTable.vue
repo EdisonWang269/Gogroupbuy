@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-  import { computed, defineProps } from "vue";
+  import { computed, defineProps, watchEffect } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
@@ -81,6 +81,18 @@
     store.commit("manager/setCheckedNum");
     store.commit("manager/setUncheckedNum");
   };
+
+  const uncheckAllCheckboxes = () => {
+    filteredTableData.value.forEach((item) => {
+      if (item.receive_status === "已領取") {
+        handleCheckboxChange(item, item.order_id);
+      }
+    });
+  };
+
+  watchEffect(() => {
+    uncheckAllCheckboxes();
+  });
 </script>
 
 <style scoped>

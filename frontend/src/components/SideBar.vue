@@ -79,7 +79,7 @@
 
   const managerName = ref("賴巧忍");
   const managerMail = ref("choco@gmail.com");
-  const items = computed(() => store.state.manager.items);
+  const items = computed(() => store.getters["manager/getItems"]);
 
   const toItem = (item) => {
     isSubMenuOn.value = true;
@@ -98,7 +98,6 @@
     router.push("/manager/upLoadItem");
   };
 
-  //TODO: 隨便放一張圖片
   const toChart = () => {
     isSubMenuOn.value = false;
     store.commit("manager/setStep", "銷售數據");
@@ -162,7 +161,7 @@
     background-color: var(--bg-color);
   }
 
-  :deep(.el-menu.el-menu--inline){
+  :deep(.el-menu.el-menu--inline) {
     height: 128px;
     overflow: scroll;
     overflow-x: hidden;
