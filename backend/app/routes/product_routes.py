@@ -85,8 +85,9 @@ def get_all_products_by_storeid():
             # 將LONGBLOB數據轉換為Base64字符串
             # product_picture_base64 = base64.b64encode(product[7]).decode('utf-8') if product[7] else None
             if product[7]:
-              product_picture_base64 = base64.b64encode(product[7])
-              product_picture_base64 = product_picture_base64.decode('utf-8')
+              # product_picture_base64 = base64.b64encode(product[7])
+              # product_picture_base64 = product_picture_base64.decode('utf-8')
+              product_picture_base64 = product[7].decode('utf-8')
             else:
               product_picture_base64 = None
             data.append(
