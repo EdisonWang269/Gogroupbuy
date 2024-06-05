@@ -140,7 +140,7 @@
     background-color: #0e1b6b;
   }
 
-  ::v-deep .el-icon.el-sub-menu__icon-arrow {
+  :deep(.el-icon.el-sub-menu__icon-arrow) {
     color: white;
     font-weight: 900;
     font-size: 15px;
@@ -160,6 +160,16 @@
     color: white;
     font-weight: 700;
     background-color: var(--bg-color);
+  }
+
+  :deep(.el-menu.el-menu--inline){
+    height: 128px;
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+  :deep(.el-menu.el-menu--inline)::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
   .managerName {
     width: 100%;

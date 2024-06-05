@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <item-table @singleNotify="notify($event)" />
+    <item-table @singleNotify="notify($event)" class="table"/>
 
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">
@@ -99,7 +99,15 @@
   const currItemName = computed(
     () => store.state.manager.currItem.product_name
   );
-  const endDate = computed(() => store.state.manager.currItem.statement_date);
+
+  
+  const formateDate = () =>{
+    const receive = computed(() => store.state.manager.currItem.statement_date);
+    const unformattedDate = new Date(receive);
+    const formatted = String(unformattedDate.value);
+    return formatted;
+  }
+  const endDate = formateDate();
 
   const customerName = computed(() => {
     const names = new Set();
@@ -268,5 +276,14 @@
     gap: 50px;
     width: 100%;
     justify-content: center;
+  }
+
+  .table{
+    max-height: 55%;
+  }
+
+  .table::-webkit-scrollbar{
+    width: 0;
+    height: 0;
   }
 </style>
