@@ -434,6 +434,7 @@ def get_order_by_storeid():
                     c.phone, 
                     o.receive_status,
                     p.product_name, 
+                    o.order_id
 		    o.order_id
                 FROM 
                     `Order` o
@@ -459,7 +460,7 @@ def get_order_by_storeid():
                   "phone" : order[4],
                   "receive_status" : order[5],
                   "product_name" : order[6], 
-		  "order_id": order[7],
+		              "order_id": order[7]
                 }
              )
         return jsonify(data), 200
