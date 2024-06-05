@@ -91,9 +91,9 @@ def get_all_products_by_storeid():
 
                 # 王:
                 if product[7]:
-                    # product_picture_base64 = base64.b64encode(product[7])
+                    product_picture_base64 = base64.b64encode(product[7])
                     # product_picture_base64 = product_picture_base64.decode('utf-8')
-                    product_picture_base64 = product[7].decode("utf-8")
+                    # product_picture_base64 = product[7].decode("utf-8")
                 else:
                     product_picture_base64 = None
 
