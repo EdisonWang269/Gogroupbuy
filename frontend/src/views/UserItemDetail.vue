@@ -10,7 +10,7 @@
     @mouseleave="leaveImg"
   /> -->
   <img
-    src="../assets/user.jpg"
+    :src="item.product_picture"
     class="item-img"
     @mouseenter="hoverImg"
     @mouseleave="leaveImg"

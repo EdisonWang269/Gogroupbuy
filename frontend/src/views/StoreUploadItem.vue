@@ -69,6 +69,7 @@ const form= new FormData();
 const onfile = (event) =>{
   file.value = event.target.files[0];
   form.append('photo', file.value);  // return form;
+  
 };
 
 const uploadProduct = async () => {
@@ -87,6 +88,7 @@ const uploadProduct = async () => {
     const response = await fetch(`/api/product`, {
       method: "POST",
       headers: {
+        // 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${store.state.manager.token}`,
       },
       body:form,
