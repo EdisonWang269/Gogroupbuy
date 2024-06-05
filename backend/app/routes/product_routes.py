@@ -123,7 +123,7 @@ def get_all_products_by_storeid():
             return jsonify(data), 200
 
     except Exception as e:
-        return jsonify({"message": "Fail to get all products by store_id"}), 404
+        return jsonify({"message": f"{e}"}), 404
 
 
 # 以store_id獲取商家的所有團購商品列表
