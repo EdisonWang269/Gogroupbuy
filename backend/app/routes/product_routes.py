@@ -355,7 +355,7 @@ def create_product():
         return jsonify({"message": "權限不足"}), 403
 
     query = """
-                INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture_binary)
+                INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
                 VALUES (%s, %s, %s, %s, %s, %s, %s);
             """
     result = execute_query(
