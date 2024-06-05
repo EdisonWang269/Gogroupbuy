@@ -257,7 +257,7 @@ def create_product():
         return jsonify({'error': 'No photo uploaded'}), 400
 
     product_picture_file = request.files['photo']  
-    product_picture_binary = base64.b64encode(product_picture_file.read()) 
+    product_picture_binary = product_picture_file.read()
 
     price = request.form.get('price')
     unit = request.form.get('unit')
