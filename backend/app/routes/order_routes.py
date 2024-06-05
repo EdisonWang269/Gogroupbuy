@@ -188,6 +188,7 @@ def get_all_orders_by_userid(userid):
                 arrival_date = order[1]
                 due_days = order[2]
 
+                # 測試資料欄未填寫不完整
                 if due_days is not None:
                     due_date = arrival_date + datetime.timedelta(days=due_days)
                 else:
