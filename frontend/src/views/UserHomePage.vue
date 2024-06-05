@@ -5,6 +5,7 @@
     <p>歡迎大家加入我的團購</p>
   </div>
   <search-bar />
+  <!-- <img :src="testImg"> -->
   <div class="items">
     <item-card
       class="card"
@@ -27,11 +28,29 @@
   const store = useStore();
   const router = useRouter();
   const items = computed(() => store.getters["user/filteredItems"]);
+  // const testImg = ref(base64ToBlob());
 
   const checkDetail = (itemID) => {
     store.commit("user/setCurrItemID", itemID);
     router.push(`/home/item/${itemID}`);
   };
+
+  // const getURL = (blob) =>{
+  //   if(blob){
+  //     return URL.createObjectURL(blob);
+  //   }
+  //   return null;
+  // }
+
+//   const base64ToBlob = (base64, mime) => {
+//   const byteCharacters = atob(base64);
+//   const byteNumbers = new Array(byteCharacters.length);
+//   for (let i = 0; i < byteCharacters.length; i++) {
+//     byteNumbers[i] = byteCharacters.charCodeAt(i);
+//   }
+//   const byteArray = new Uint8Array(byteNumbers);
+//   return new Blob([byteArray], { type: mime });
+// }
 </script>
 
 <style scoped>

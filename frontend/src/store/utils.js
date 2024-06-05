@@ -47,3 +47,10 @@ export function base64ToBlob(base64, mime) {
   return new Blob([byteArray], { type: mime });
 }
 
+export function getImgURL(blob){
+  if(blob){
+    return URL.createObjectURL(blob);
+  }
+  return null;
+}
+
