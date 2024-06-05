@@ -60,14 +60,13 @@ const mutations = {
     state.userPhone = userPhone;
   },
   setItems(state, items) {
-    let encodedStr =
-      "LzlqLzRBQVFTa1pKUmdBQkFRQUFBUUFCQUFELzJ3Q0VBQWtHQndjTkJ3Y05DQWdIQndnSEJ3MEhDQWdIQnhzSUNRY05JQjBXSWlBUkV4OGtLRFFzSkJve...";
-    let decodedStr = atob(encodedStr);
     items.forEach((item) => {
-      item.product_picture = decodedStr;
+      let base64Image = "data:image/png;base64," + item.product_picture;
+      item.product_picture = base64Image;
     });
     state.items = items;
   },
+
   setCurrItemID(state, itemID) {
     state.currItemID = itemID;
   },
@@ -119,7 +118,7 @@ const actions = {
   async fetchUserInit({ dispatch }) {
     try {
       await dispatch("fetchToken");
-      await Promise.all([dispatch("fetchItems"), dispatch("fetchOrders")]);
+      await Promise.all([dispatch("fetchItems")]); //, dispatch("fetchOrders")]);
     } catch (error) {
       console.error("Error in fetchUserInit:", error);
     }

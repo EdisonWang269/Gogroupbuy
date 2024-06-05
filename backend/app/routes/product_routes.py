@@ -62,6 +62,7 @@ def get_all_products_by_storeid():
         store_id = identity.get("store_id")
 
         query = """
+                DELETE FROM Product WHERE product_id=19;
                 SELECT 
                     GBP.group_buying_id,
                     GBP.statement_date,
@@ -84,16 +85,8 @@ def get_all_products_by_storeid():
         data = []
         if products:
             for product in products:
-                # 將LONGBLOB數據轉換為Base64字符串
-                # product_picture_base64 = (
-                #     base64.b64encode(product[7]) if product[7] else None
-                # )
-
-                # 王:
                 if product[7]:
-                    product_picture_base64 = base64.b64encode(product[7]).decode(
-                        "utf-8"
-                    )
+                    product_picture_base64 = base64.b64encode(product[7])
                     # product_picture_base64 = product_picture_base64.decode('utf-8')
                     # product_picture_base64 = product[7].decode("utf-8")
                 else:
