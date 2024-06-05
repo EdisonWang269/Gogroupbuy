@@ -254,85 +254,85 @@ def get_all_groupbuying_products_by_storeid():
 @product_bp.route("/api/product", methods=["POST"])
 @jwt_required()
 def create_product():
-    """
-    新增一項商品
-    ---
-    tags:
-      - Product
-    security:
-      - APIKeyHeader: []
-    parameters:
-      - name: body
-        in: body
-        schema:
-          type: object
-          required:
-            - price
-            - unit
-            - product_describe
-            - supplier_name
-            - product_name
-            - product_picture
-          properties:
-            price:
-              type: integer
-              description: 商品價格
-              example: 100
-            unit:
-              type: string
-              description: 商品單位
-              example: 件
-            product_describe:
-              type: string
-              description: 商品描述
-              example: 這是一個好商品
-            supplier_name:
-              type: string
-              description: 供應商名稱
-              example: AAA供應商
-            product_name:
-              type: string
-              description: 商品名稱
-              example: 衣服
-            product_picture:
-              type: string
-              description: 商品圖片
-              example: shirt.jpg
-    responses:
-        201:
-            description: Pruduct created successfully
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: Product created successfully
-            examples:
-              application/json:
-                message: Product created successfully
-        403:
-            description: 權限不足
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: 權限不足
-            examples:
-              application/json:
-                message: 權限不足
-        500:
-            description: Failed to create product
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: Failed to create product
-            examples:
-              application/json:
-                error: Failed to create product
-    """
+    # """
+    # 新增一項商品
+    # ---
+    # tags:
+    #   - Product
+    # security:
+    #   - APIKeyHeader: []
+    # parameters:
+    #   - name: body
+    #     in: body
+    #     schema:
+    #       type: object
+    #       required:
+    #         - price
+    #         - unit
+    #         - product_describe
+    #         - supplier_name
+    #         - product_name
+    #         - product_picture
+    #       properties:
+    #         price:
+    #           type: integer
+    #           description: 商品價格
+    #           example: 100
+    #         unit:
+    #           type: string
+    #           description: 商品單位
+    #           example: 件
+    #         product_describe:
+    #           type: string
+    #           description: 商品描述
+    #           example: 這是一個好商品
+    #         supplier_name:
+    #           type: string
+    #           description: 供應商名稱
+    #           example: AAA供應商
+    #         product_name:
+    #           type: string
+    #           description: 商品名稱
+    #           example: 衣服
+    #         product_picture:
+    #           type: string
+    #           description: 商品圖片
+    #           example: shirt.jpg
+    # responses:
+    #     201:
+    #         description: Pruduct created successfully
+    #         schema:
+    #           type: object
+    #           properties:
+    #             message:
+    #               type: string
+    #               example: Product created successfully
+    #         examples:
+    #           application/json:
+    #             message: Product created successfully
+    #     403:
+    #         description: 權限不足
+    #         schema:
+    #           type: object
+    #           properties:
+    #             message:
+    #               type: string
+    #               example: 權限不足
+    #         examples:
+    #           application/json:
+    #             message: 權限不足
+    #     500:
+    #         description: Failed to create product
+    #         schema:
+    #           type: object
+    #           properties:
+    #             error:
+    #               type: string
+    #               example: Failed to create product
+    #         examples:
+    #           application/json:
+    #             error: Failed to create product
+    # """
     if 'photo' not in request.files:
         return jsonify({'error': 'No photo uploaded'}), 400
 
