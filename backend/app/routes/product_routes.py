@@ -851,6 +851,7 @@ def calculate_income(group_buying_id):
         return jsonify({"message": "income updated successfully"}), 200
     return jsonify({"error": "Failed to update income"}), 500
 
+
 #更改結單日期（傳group_buying_id，新結單時間，更新statement_date)
 @product_bp.route("/api/product/changedate/<int:group_buying_id>", methods = ["PUT"])
 @jwt_required()
