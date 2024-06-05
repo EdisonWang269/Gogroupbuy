@@ -549,71 +549,69 @@ def get_userid_by_group_buying_id(group_buying_id):
 
     return jsonify({"message": "Send message successfully"}), 200
 
-
-
 # 顧客領取 傳給我group_buying_id/userid，找出quantity更新inventory
 @order_bp.route("/api/order/receive", methods=["PUT"])
 @jwt_required()
 def customer_receive():
-    """
-    顧客領取訂單
-    ---
-    tags:
-      - Order
-    security:
-      - APIKeyHeader: []
-    parameters:
-      - name: body
-        in: body
-        schema:
-          type: object
-          required:
-            - group_buying_id
-            - userid
-          properties:
-            group_buying_id:
-              type: integer
-              description: group_buying_id
-              example: 1
-            userid:
-              type: string
-              description: userid
-              example: "cus001"
-    responses:
-      200:
-        description: inventory updated successfully
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-              example: inventory updated successfully
-        examples:
-          application/json:
-            message: inventory updated successfully
-      403:
-        description: 權限不足
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-              example: 權限不足
-        examples:
-          application/json:
-            message: 權限不足
-      500:
-        description: Failed to update inventory
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-              example: Failed to update inventory
-        examples:
-          application/json:
-            message: Failed to update inventory
-    """
+    # """
+    # 顧客領取訂單
+    # ---
+    # tags:
+    #   - Order
+    # security:
+    #   - APIKeyHeader: []
+    # parameters:
+    #   - name: body
+    #     in: body
+    #     schema:
+    #       type: object
+    #       required:
+    #         - group_buying_id
+    #         - userid
+    #       properties:
+    #         group_buying_id:
+    #           type: integer
+    #           description: group_buying_id
+    #           example: 1
+    #         userid:
+    #           type: string
+    #           description: userid
+    #           example: "cus001"
+    # responses:
+    #   200:
+    #     description: inventory updated successfully
+    #     schema:
+    #       type: object
+    #       properties:
+    #         message:
+    #           type: string
+    #           example: inventory updated successfully
+    #     examples:
+    #       application/json:
+    #         message: inventory updated successfully
+    #   403:
+    #     description: 權限不足
+    #     schema:
+    #       type: object
+    #       properties:
+    #         message:
+    #           type: string
+    #           example: 權限不足
+    #     examples:
+    #       application/json:
+    #         message: 權限不足
+    #   500:
+    #     description: Failed to update inventory
+    #     schema:
+    #       type: object
+    #       properties:
+    #         message:
+    #           type: string
+    #           example: Failed to update inventory
+    #     examples:
+    #       application/json:
+    #         message: Failed to update inventory
+    # """
     claims = get_jwt()
     role = claims["role"]
 
