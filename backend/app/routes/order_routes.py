@@ -187,7 +187,11 @@ def get_all_orders_by_userid(userid):
             for order in orders:
                 arrival_date = order[1]
                 due_days = order[2]
-                due_date = arrival_date + datetime.timedelta(days=due_days)
+
+                if due_days is not None:
+                    due_date = arrival_date + datetime.timedelta(days=due_days)
+                else:
+                    due_date = None
 
                 if order[4]:
                     product_picture_bytes = order[4]
