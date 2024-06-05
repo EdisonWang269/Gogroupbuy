@@ -61,7 +61,7 @@ def get_all_products_by_storeid():
 
     query = """
                 SELECT 
-                    --GBP.group_buying_id,
+                    GBP.group_buying_id,
                     GBP.statement_date,
                     P.product_id,
                     P.price,
