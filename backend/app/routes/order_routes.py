@@ -188,7 +188,7 @@ def get_all_orders_by_userid(userid):
                 arrival_date = order[1]
                 due_days = order[2]
 
-                # 測試資料欄未填寫不完整
+                # TODO: 測試資料欄位填寫不完整
                 if due_days is not None:
                     due_date = arrival_date + datetime.timedelta(days=due_days)
                 else:
@@ -442,8 +442,8 @@ def get_order_by_storeid():
                 SELECT 
                     c.user_name, 
                     o.quantity, 
-                    -- 先註解掉，加入完整資訊的測試資料以後再打開 g.arrival_date, 
-                    -- g.due_days, 
+                    g.arrival_date, 
+                    g.due_days, 
                     c.phone, 
                     o.receive_status,
                     p.product_name, 
@@ -465,16 +465,24 @@ def get_order_by_storeid():
     data = []
     if orders:
         for order in orders:
+            arrival_date = order[2]
+            due_days = order[3]
+
+            # TODO: 測試資料欄位填寫不完整
+            if due_days is not None:
+                due_date = arrival_date + datetime.timedelta(days=due_days)
+            else:
+                due_date = None
+
             data.append(
                 {
                     "user_name": order[0],
                     "quantity": order[1],
-                    # 這裡報錯是因為新增商品時沒有輸入due_days，所以是null，需要再修改
-                    # "due_date" : order[2] + datetime.timedelta(days=order[3]),
-                    "phone": order[2],
-                    "receive_status": order[3],
-                    "product_name": order[4],
-                    "order_id": order[5],
+                    "due_date": due_date,
+                    "phone": order[4],
+                    "receive_status": order[5],
+                    "product_name": order[6],
+                    "order_id": order[7],
                 }
             )
         return jsonify(data), 200
