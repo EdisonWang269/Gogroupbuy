@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
+
 from ..database import execute_query
 
-from flask_jwt_extended import get_jwt, get_jwt_identity, jwt_required
+import base64
 
 product_bp = Blueprint("product", __name__)
 
@@ -80,6 +82,10 @@ def get_all_products_by_storeid():
     data = []
     if products:
         for product in products:
+            # 將LONGBLOB數據轉換為Base64字符串
+            product_picture_base64 = base64.b64encode(product[7])
+            product_picture_base64 = product_picture_base64.decode("utf-8")
+            
             data.append(
                 {
                     "group_buying_id": product[0],
@@ -89,7 +95,7 @@ def get_all_products_by_storeid():
                     "unit": product[4],
                     "product_describe": product[5],
                     "product_name": product[6],
-                    "product_picture": product[7],
+                    "product_picture": product_picture_base64,
                 }
             )
         return jsonify(data), 200
@@ -166,89 +172,6 @@ def get_all_groupbuying_products_by_storeid():
         return jsonify(data), 200
     return jsonify({"message": "Fail to get all groupbuying products by store_id"}), 404
 
-
-# # 獲取一筆團購訂單
-# @product_bp.route("/api/product/<int:group_buying_id>", methods=["GET"])
-# @jwt_required()
-# def get_product_by_group_buying_id(group_buying_id):
-#     """
-#     獲取一筆團購訂單
-#     ---
-#     tags:
-#         - Product
-#     security:
-#       - APIKeyHeader: []
-#     parameters:
-#       - name: group_buying_id
-#         in: path
-#         type: integer
-#         required: true
-#         description: group_buying_id
-#     responses:
-#         200:
-#             description: Get product by groupbuying id successfully
-#         404:
-#             description: Fail to get product by groupbuying id
-#     """
-#     identity = get_jwt_identity()
-#     store_id = identity.get('store_id')
-
-#     query = """
-#                 SELECT
-#                     GBP.group_buying_id,
-#                     GBP.purchase_quantity,
-#                     GBP.launch_date,
-#                     GBP.statement_date,
-#                     GBP.arrival_date,
-#                     GBP.due_days,
-#                     GBP.inventory,
-#                     GBP.income,
-#                     GBP.cost,
-#                     P.product_id,
-#                     P.store_id,
-#                     P.price,
-#                     p.unit,
-#                     P.product_describe,
-#                     P.supplier_name,
-#                     P.product_name,
-#                     P.product_picture
-#                 FROM
-#                     Group_buying_product GBP
-#                 INNER JOIN
-#                     Product P ON GBP.product_id = P.product_id
-#                 WHERE
-#                     P.store_id = %s
-#                 AND
-#                     GBP.group_buying_id = %s;
-#             """
-
-#     product = execute_query(query, (store_id, group_buying_id))
-
-#     if product:
-#         product_dict =  {
-#                     "group_buying_id": product[0],
-#                     "purchase_quantity": product[1],
-#                     "launch_date": product[2],
-#                     "statement_date": product[3],
-#                     "arrival_date": product[4],
-#                     "due_days": product[5],
-#                     "inventory": product[6],
-#                     "income": product[7],
-#                     "cost": product[8],
-#                     "product_id": product[9],
-#                     "store_id": product[10],
-#                     "price": product[11],
-#                     "unit": product[12],
-#                     "product_describe": product[13],
-#                     "supplier_name": product[14],
-#                     "product_name": product[15],
-#                     "product_picture": product[16]
-#                 }
-#         return jsonify(product_dict), 200
-
-#     return jsonify({"message": "Fail to get product by groupbuying id"}), 404
-
-
 # 新增一項商品
 @product_bp.route("/api/product", methods=["POST"])
 @jwt_required()
@@ -296,7 +219,7 @@ def create_product():
             product_picture:
               type: string
               description: 商品圖片
-              example: shirt.jpg
+              example: jfsioji256209fsfjqoi
     responses:
         201:
             description: Pruduct created successfully
@@ -332,13 +255,17 @@ def create_product():
               application/json:
                 error: Failed to create product
     """
-    data = request.json
-    price = data.get("price")
-    unit = data.get("unit")
-    product_describe = data.get("product_describe")
-    supplier_name = data.get("supplier_name")
-    product_name = data.get("product_name")
-    product_picture = data.get("product_picture")
+    if 'photo' not in request.files:
+        return jsonify({'error': 'No photo uploaded'}), 400
+
+    product_picture_file = request.files['photo']  
+    product_picture_binary = base64.b64encode(product_picture_file.read()) 
+
+    price = request.form.get('price')
+    unit = request.form.get('unit')
+    product_describe = request.form.get('product_describe')
+    supplier_name = request.form.get('supplier_name')
+    product_name = request.form.get('product_name')
 
     identity = get_jwt_identity()
     store_id = identity.get("store_id")
@@ -350,7 +277,7 @@ def create_product():
         return jsonify({"message": "權限不足"}), 403
 
     query = """
-                INSERT INTO `PRODUCT` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
+                INSERT INTO `Product` (store_id, price, unit, product_describe, supplier_name, product_name, product_picture)
                 VALUES (%s, %s, %s, %s, %s, %s, %s);
             """
     result = execute_query(
@@ -362,7 +289,7 @@ def create_product():
             product_describe,
             supplier_name,
             product_name,
-            product_picture,
+            product_picture_binary,
         ),
     )
 
@@ -777,7 +704,6 @@ def update_inventory(group_buying_id):
         return jsonify({"message": "inventory updated successfully"}), 200
     return jsonify({"error": "Failed to update inventory"}), 500
 
-
 # 下架商品時(更新團購商品：income)
 @product_bp.route("/api/product/income/<int:group_buying_id>", methods=["PUT"])
 @jwt_required()
@@ -850,7 +776,6 @@ def calculate_income(group_buying_id):
     if result:
         return jsonify({"message": "income updated successfully"}), 200
     return jsonify({"error": "Failed to update income"}), 500
-
 
 # 更改結單日期（傳group_buying_id，新結單時間，更新statement_date)
 @product_bp.route("/api/product/changedate/<int:group_buying_id>", methods=["PUT"])
