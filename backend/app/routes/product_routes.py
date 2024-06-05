@@ -83,9 +83,9 @@ def get_all_products_by_storeid():
     if products:
         for product in products:
             # 將LONGBLOB數據轉換為Base64字符串
-            # product_picture_base64 = (
-            #     base64.b64encode(product[7]) if product[7] else None
-            # )
+            product_picture_base64 = (
+                base64.b64encode(product[7]) if product[7] else None
+            )
 
             # 王:
             # if product[7]:
@@ -97,14 +97,14 @@ def get_all_products_by_storeid():
 
             data.append(
                 {
-                    # "group_buying_id": product[0],
-                    "statement_date": product[0],
-                    "product_id": product[1],
-                    "price": product[2],
-                    "unit": product[3],
-                    "product_describe": product[4],
-                    "product_name": product[5],
-                    "product_picture": product[6],  # product_picture_base64
+                    "group_buying_id": product[0],
+                    "statement_date": product[1],
+                    "product_id": product[2],
+                    "price": product[3],
+                    "unit": product[4],
+                    "product_describe": product[5],
+                    "product_name": product[6],
+                    "product_picture": product_picture_base64,
                 }
             )
         return jsonify(data), 200
