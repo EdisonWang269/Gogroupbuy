@@ -58,7 +58,7 @@
       </div>
     </div>
 
-    <item-table @singleNotify="notify($event)" searchInput="searchInput" />
+    <item-table @singleNotify="notify($event)" :searchInput="searchInput" />
 
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">
@@ -110,11 +110,11 @@
     return Array.from(names);
   });
 
-  const editDate = () => {
-    topic.value = "更改結單日期";
-    popShow.value = true;
-    type.value = "editDate";
-  };
+  // const editDate = () => {
+  //   topic.value = "更改結單日期";
+  //   popShow.value = true;
+  //   type.value = "editDate";
+  // };
   const notify = (value) => {
     if (typeof value === "string") {
       topic.value = "通知";

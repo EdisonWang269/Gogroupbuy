@@ -3,8 +3,8 @@
     <div class="card">
       <h3>選擇團購商品</h3>
       <div class="products">
-        <div v-for="item in props.items" :key="item.id">
-          <span>{{ item }}</span>
+        <div v-for="item in props.items" :key="item.order_id">
+          <span>{{ item.product_name }}</span>
           <el-checkbox checked="checked" size="large" class="checkbox" />
         </div>
       </div>
