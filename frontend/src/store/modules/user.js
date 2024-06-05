@@ -59,14 +59,25 @@ const mutations = {
   setUserPhone(state, userPhone) {
     state.userPhone = userPhone;
   },
+  // setItems(state, items) {
+  //   items.forEach((item) => {
+  //     let base64Image = "data:image/jpg;base64," + item.product_picture;
+  //     item.product_picture = base64Image;
+  //   });
+  //   state.items = items;
+  // },
   setItems(state, items) {
     items.forEach((item) => {
-      let base64Image = "data:image/png;base64," + item.product_picture;
-      item.product_picture = base64Image;
+      try {
+        let decodedImage = atob(item.product_picture);
+        let base64Image = "data:image/jpeg;base64," + decodedImage;
+        item.product_picture = base64Image;
+      } catch (e) {
+        console.error("Error decoding base64 string: ", e);
+      }
     });
     state.items = items;
   },
-
   setCurrItemID(state, itemID) {
     state.currItemID = itemID;
   },
