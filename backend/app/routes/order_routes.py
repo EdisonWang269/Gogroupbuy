@@ -65,18 +65,14 @@ def create_order():
     data = request.json
     group_buying_id = data.get("group_buying_id")
     quantity = data.get("quantity")
-    product_picture_base64 = data.get("product_picture")
-
-    # FIXME: 要確定product_picture 的資料型態是longblob
-    product_picture_blob = base64.b64decode(product_picture_base64)
 
     identity = get_jwt_identity()
     userid = identity.get("userid")
 
-    query = "INSERT INTO `Order` (userid, group_buying_id, quantity, product_picture) VALUES (%s, %s, %s, %s)"
-    result = execute_query(
-        query, (userid, group_buying_id, quantity, product_picture_blob)
+    query = (
+        "INSERT INTO `Order` (userid, group_buying_id, quantity) VALUES (%s, %s, %s)"
     )
+    result = execute_query(query, (userid, group_buying_id, quantity))
 
     if result:
         return jsonify({"message": "Order created successfully"}), 201

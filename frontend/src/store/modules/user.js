@@ -26,6 +26,15 @@ const getters = {
   },
 
   getOrders(state) {
+    state.orders.forEach((item) => {
+      try {
+        let decodedImage = atob(item.product_picture);
+        let base64Image = "data:image/jpeg;base64," + decodedImage;
+        item.product_picture = base64Image;
+      } catch (e) {
+        console.error("Error decoding base64 string: ", e);
+      }
+    });
     return state.orders.map((order) => formatOrder(order));
   },
 
@@ -54,15 +63,6 @@ const mutations = {
     state.token = token;
   },
   setOrders(state, orders) {
-    orders.forEach((item) => {
-      try {
-        let decodedImage = atob(item.product_picture);
-        let base64Image = "data:image/jpeg;base64," + decodedImage;
-        item.product_picture = base64Image;
-      } catch (e) {
-        console.error("Error decoding base64 string: ", e);
-      }
-    });
     state.orders = orders;
   },
   setUserPhone(state, userPhone) {

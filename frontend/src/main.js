@@ -16,8 +16,8 @@ app.use(ElementPlus);
 app.use(Base64);
 app.mount("#app");
 
-initializeLiff()
-  .then(() => {})
-  .catch((error) => {
-    console.error("Failed to initialize LIFF", error);
-  });
+// initializeLiff()
+//   .then(() => {})
+//   .catch((error) => {
+//     console.error("Failed to initialize LIFF", error);
+//   });
