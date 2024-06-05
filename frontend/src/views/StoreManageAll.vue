@@ -38,9 +38,7 @@
   };
 
   // 綁要開啟團購的值
-  const items = store.state.manager.items.map((item) => {
-    return item;
-  });
+  const items = store.getters["manager/getItems"];
 </script>
 
 <style scoped>

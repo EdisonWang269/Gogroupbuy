@@ -17,8 +17,8 @@
     <div class="subOverlay" v-show="checked">
       <div class="subCard">
         <h3>團購確認</h3>
-        <span>開啟團購</span>
-        <div>{{ products }}</div>
+        <span>已開啟團購</span>
+        <!-- <div>{{ products }}</div> -->
 
         <div class="buttons">
           <store-button :action="'確認'" class="button" @click="confirm" />
