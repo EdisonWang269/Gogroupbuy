@@ -131,7 +131,7 @@ const actions = {
   async fetchUserInit({ dispatch }) {
     try {
       await dispatch("fetchToken");
-      await Promise.all([dispatch("fetchItems")]); //, dispatch("fetchOrders")]);
+      await Promise.all([dispatch("fetchItems"), dispatch("fetchOrders")]);
     } catch (error) {
       console.error("Error in fetchUserInit:", error);
     }

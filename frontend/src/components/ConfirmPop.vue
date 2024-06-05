@@ -40,45 +40,20 @@
       receive_status: "未到貨",
     };
     store.commit("user/addWaitingOrder", newOrder);
-    sendOrder();
-  };
-
-  // 將 base64 字符串轉換成 Blob
-  async function sendOrder() {
-    function base64ToBlob(base64, contentType) {
-      const byteCharacters = atob(base64);
-      const byteArrays = [];
-
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-
-      return new Blob(byteArrays, { type: contentType });
-    }
-
-    const productPictureBase64 = item.value.product_picture.split(",")[1]; // 去掉前綴
-    const productPictureBlob = base64ToBlob(productPictureBase64, "image/jpeg");
-
-    // 使用 FormData 將 Blob 與其他數據一起發送
-    const formData = new FormData();
-    formData.append("group_buying_id", item.value.group_buying_id);
-    formData.append("quantity", orderNum.value);
-    formData.append("product_picture", productPictureBlob);
 
     fetch("/api/order", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${store.state.user.token}`,
       },
-      body: formData,
+      body: JSON.stringify({
+        group_buying_id: item.value.group_buying_id,
+        quantity: orderNum.value,
+        product_picture: item.value.product_picture,
+      }),
     });
-  }
+  };
 </script>
 
 <style scoped>
