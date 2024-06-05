@@ -59,69 +59,71 @@ def get_all_products_by_storeid():
     identity = get_jwt_identity()
     store_id = identity.get("store_id")
 
-    query = """
-                SELECT 
-                    P.product_id,
-                    P.price,
-                    P.unit,
-                    P.product_describe,
-                    P.product_name,
-                    P.product_picture
-                FROM 
-                    Product P
-                WHERE
-                    P.store_id = %s;
-            """
+    try:
+        query = """
+                  SELECT 
+                      P.product_id,
+                      P.price,
+                      P.unit,
+                      P.product_describe,
+                      P.product_name,
+                      P.product_picture
+                  FROM 
+                      Product P
+                  WHERE
+                      P.store_id = %s;
+              """
 
-    # SELECT
-    #         GBP.group_buying_id,
-    #         GBP.statement_date,
-    #         P.product_id,
-    #         P.price,
-    #         P.unit,
-    #         P.product_describe,
-    #         P.product_name,
-    #         P.product_picture
-    #     FROM
-    #         Group_buying_product GBP
-    #     INNER JOIN
-    #         Product P ON GBP.product_id = P.product_id
-    #     WHERE
-    #         P.store_id = %s;
+        # SELECT
+        #         GBP.group_buying_id,
+        #         GBP.statement_date,
+        #         P.product_id,
+        #         P.price,
+        #         P.unit,
+        #         P.product_describe,
+        #         P.product_name,
+        #         P.product_picture
+        #     FROM
+        #         Group_buying_product GBP
+        #     INNER JOIN
+        #         Product P ON GBP.product_id = P.product_id
+        #     WHERE
+        #         P.store_id = %s;
 
-    products = execute_query(query, (store_id,), True)
+        products = execute_query(query, (store_id,), True)
 
-    data = []
-    if products:
-        for product in products:
-            # 將LONGBLOB數據轉換為Base64字符串
-            # product_picture_base64 = (
-            #     base64.b64encode(product[7]) if product[7] else None
-            # )
+        data = []
+        if products:
+            for product in products:
+                # 將LONGBLOB數據轉換為Base64字符串
+                # product_picture_base64 = (
+                #     base64.b64encode(product[7]) if product[7] else None
+                # )
 
-            # 王:
-            # if product[7]:
-            #   # product_picture_base64 = base64.b64encode(product[7])
-            #   # product_picture_base64 = product_picture_base64.decode('utf-8')
-            #   product_picture_base64 = product[7].decode('utf-8')
-            # else:
-            #     product_picture_base64 = None
+                # 王:
+                # if product[7]:
+                #   # product_picture_base64 = base64.b64encode(product[7])
+                #   # product_picture_base64 = product_picture_base64.decode('utf-8')
+                #   product_picture_base64 = product[7].decode('utf-8')
+                # else:
+                #     product_picture_base64 = None
 
-            data.append(
-                {
-                    # "group_buying_id": product[0],
-                    # "statement_date": product[1],
-                    "product_id": product[0],
-                    "price": product[1],
-                    "unit": product[2],
-                    "product_describe": product[3],
-                    "product_name": product[4],
-                    "product_picture": product[5],
-                }
-            )
-        return jsonify(data), 200
+                data.append(
+                    {
+                        # "group_buying_id": product[0],
+                        # "statement_date": product[1],
+                        "product_id": product[0],
+                        "price": product[1],
+                        "unit": product[2],
+                        "product_describe": product[3],
+                        "product_name": product[4],
+                        "product_picture": product[5],
+                    }
+                )
+            return jsonify(data), 200
 
-    return jsonify({"message": "Fail to get all products by store_id"}), 404
+    except Exception as e:
+        return jsonify({"message": "Fail to get all products by store_id"}), 404
 
 
 # 以store_id獲取商家的所有團購商品列表
