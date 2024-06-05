@@ -16,8 +16,9 @@
       <div class="info">
         <h1>{{ currItemName }}</h1>
         <span
-          >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
-        ></span>
+          >結單日期：{{ endDate }}
+          <!-- <i class="bi bi-pencil" @click="editDate"></i> -->
+        </span>
       </div>
 
       <div class="buttons">
@@ -57,7 +58,7 @@
       </div>
     </div>
 
-    <item-table @singleNotify="notify($event)" />
+    <item-table @singleNotify="notify($event)" :searchInput="searchInput" />
 
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">
@@ -109,11 +110,11 @@
     return Array.from(names);
   });
 
-  const editDate = () => {
-    topic.value = "更改結單日期";
-    popShow.value = true;
-    type.value = "editDate";
-  };
+  // const editDate = () => {
+  //   topic.value = "更改結單日期";
+  //   popShow.value = true;
+  //   type.value = "editDate";
+  // };
   const notify = (value) => {
     if (typeof value === "string") {
       topic.value = "通知";

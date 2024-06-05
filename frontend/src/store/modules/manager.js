@@ -36,7 +36,9 @@ const mutations = {
     state.token = token;
   },
   setOrders(state, orders) {
-    orders = orders.map((order) => formatOrder(order));
+    orders = orders
+      .filter((order) => order.user_name)
+      .map((order) => formatOrder(order));
     state.orders = orders;
   },
   setCheckedNum(state) {

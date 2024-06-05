@@ -68,10 +68,10 @@
       </div>
 
       <div class="editDate" v-if="type === 'arriveManage'">
-        <div>
+        <!-- <div>
           <span>到貨日期</span>
           <el-input :value="arriveDate" style="width: 95%" disabled />
-        </div>
+        </div> -->
         <div>
           <span>截止領取天數</span>
           <el-input
@@ -92,6 +92,7 @@
 
 <script>
   import { ref } from "vue";
+  import { useStore } from "vuex";
   import StoreButton from "./StoreButton.vue";
   export default {
     props: ["usage", "original", "type", "customerName"],
@@ -107,6 +108,8 @@
       const alertShow = ref(false);
       const notifyMessage = ref("");
       const addNum = ref();
+      const store = useStore();
+
       const alert = () => {
         if (updated.value == "") {
           alertShow.value = true;
@@ -119,6 +122,9 @@
       };
       const check = () => {
         alert();
+        notify();
+
+        emit("isChecked", false);
         if (!alertShow.value) {
           emit("isChecked", false);
           if (props.type === "editDate") {
@@ -130,6 +136,20 @@
           emit("check", false);
         }
       };
+
+      const notify = () => {
+        fetch(
+          `/api/order/notify/${store.state.manager.currItem.group_buying_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${store.state.manager.token}`,
+            },
+          }
+        );
+      };
+
       return {
         updated,
         cancel,
