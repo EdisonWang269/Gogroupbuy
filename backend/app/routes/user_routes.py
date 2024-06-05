@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
-from ..database import execute_query
 
 from flask_jwt_extended import create_access_token, get_jwt
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
+
+from ..database import execute_query
 
 user_bp = Blueprint('user', __name__)
 
