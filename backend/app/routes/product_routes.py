@@ -83,13 +83,18 @@ def get_all_products_by_storeid():
     if products:
         for product in products:
             # 將LONGBLOB數據轉換為Base64字符串
-            # product_picture_base64 = base64.b64encode(product[7]).decode('utf-8') if product[7] else None
-            if product[7]:
-              # product_picture_base64 = base64.b64encode(product[7])
-              # product_picture_base64 = product_picture_base64.decode('utf-8')
-              product_picture_base64 = product[7].decode('utf-8')
-            else:
-              product_picture_base64 = None
+            product_picture_base64 = (
+                base64.b64encode(product[7]) if product[7] else None
+            )
+
+            # 王:
+            # if product[7]:
+            #   # product_picture_base64 = base64.b64encode(product[7])
+            #   # product_picture_base64 = product_picture_base64.decode('utf-8')
+            #   product_picture_base64 = product[7].decode('utf-8')
+            # else:
+            #     product_picture_base64 = None
+
             data.append(
                 {
                     "group_buying_id": product[0],
@@ -176,6 +181,7 @@ def get_all_groupbuying_products_by_storeid():
         return jsonify(data), 200
     return jsonify({"message": "Fail to get all groupbuying products by store_id"}), 404
 
+
 # 新增一項商品
 @product_bp.route("/api/product", methods=["POST"])
 @jwt_required()
@@ -259,17 +265,17 @@ def create_product():
               application/json:
                 error: Failed to create product
     """
-    if 'photo' not in request.files:
-        return jsonify({'error': 'No photo uploaded'}), 400
+    if "photo" not in request.files:
+        return jsonify({"error": "No photo uploaded"}), 400
 
-    product_picture_file = request.files['photo']  
+    product_picture_file = request.files["photo"]
     product_picture_binary = product_picture_file.read()
 
-    price = request.form.get('price')
-    unit = request.form.get('unit')
-    product_describe = request.form.get('product_describe')
-    supplier_name = request.form.get('supplier_name')
-    product_name = request.form.get('product_name')
+    price = request.form.get("price")
+    unit = request.form.get("unit")
+    product_describe = request.form.get("product_describe")
+    supplier_name = request.form.get("supplier_name")
+    product_name = request.form.get("product_name")
 
     identity = get_jwt_identity()
     store_id = identity.get("store_id")
@@ -708,6 +714,7 @@ def update_inventory(group_buying_id):
         return jsonify({"message": "inventory updated successfully"}), 200
     return jsonify({"error": "Failed to update inventory"}), 500
 
+
 # 下架商品時(更新團購商品：income)
 @product_bp.route("/api/product/income/<int:group_buying_id>", methods=["PUT"])
 @jwt_required()
@@ -781,6 +788,7 @@ def calculate_income(group_buying_id):
         return jsonify({"message": "income updated successfully"}), 200
     return jsonify({"error": "Failed to update income"}), 500
 
+
 # 更改結單日期（傳group_buying_id，新結單時間，更新statement_date)
 @product_bp.route("/api/product/changedate/<int:group_buying_id>", methods=["PUT"])
 @jwt_required()
@@ -853,12 +861,12 @@ def update_statement_date(group_buying_id):
 
     data = request.json
     new_statement_date = data.get("new_statement_date")
-    
-    query = '''UPDATE Group_buying_product
+
+    query = """UPDATE Group_buying_product
                SET statement_date = %s
-               WHERE group_buying_id = %s'''
+               WHERE group_buying_id = %s"""
     result = execute_query(query, (new_statement_date, group_buying_id))
-    
+
     if result:
-        return jsonify({'message': 'statement_date updated successfully'}), 200 
-    return jsonify({'error': 'Failed to update statement_date'}), 500
+        return jsonify({"message": "statement_date updated successfully"}), 200
+    return jsonify({"error": "Failed to update statement_date"}), 500

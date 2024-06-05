@@ -188,7 +188,9 @@ def get_all_orders_by_userid(userid):
             arrival_date = order[1]
             due_days = order[2]
             due_date = arrival_date + datetime.timedelta(days=due_days)
-            product_picture_base64 = base64.b64encode(order[4]).decode('utf-8') if order[4] else None
+            product_picture_base64 = (
+                base64.b64encode(order[4]).decode("utf-8") if order[4] else None
+            )
             data.append(
                 {
                     "product_name": order[0],
@@ -336,7 +338,7 @@ def get_all_orders_by_phone(phone):
 
 
 # 給storeid回傳所有Order
-@order_bp.route("/api/order", methods = ["GET"])
+@order_bp.route("/api/order", methods=["GET"])
 @jwt_required()
 def get_order_by_storeid():
     """
@@ -418,22 +420,23 @@ def get_order_by_storeid():
             message: Fail to get all orders by store_id
     """
     identity = get_jwt_identity()
-    store_id = identity.get('store_id')
+    store_id = identity.get("store_id")
 
     claims = get_jwt()
-    role = claims['role']
-    if role != 'merchant':
-        return jsonify({"message":"權限不足"}), 403
+    role = claims["role"]
+    if role != "merchant":
+        return jsonify({"message": "權限不足"}), 403
 
     query = """
                 SELECT 
                     c.user_name, 
                     o.quantity, 
-                    g.arrival_date, 
-                    g.due_days, 
+                    -- 先註解掉，加入完整資訊的測試資料以後再打開 g.arrival_date, 
+                    -- g.due_days, 
                     c.phone, 
                     o.receive_status,
                     p.product_name, 
+                    o.order_id
 		    o.order_id
                 FROM 
                     `Order` o
@@ -445,7 +448,7 @@ def get_order_by_storeid():
                     Product p ON g.product_id = p.product_id
                 WHERE 
                     p.store_id = %s;
-            """      
+            """
 
     orders = execute_query(query, (store_id,), True)
     data = []
@@ -453,18 +456,19 @@ def get_order_by_storeid():
         for order in orders:
             data.append(
                 {
-                  "user_name" : order[0],
-                  "quantity" : order[1],
-                  "due_date" : order[2] + datetime.timedelta(days=order[3]),
-                  "phone" : order[4],
-                  "receive_status" : order[5],
-                  "product_name" : order[6], 
-		  "order_id": order[7],
+                    "user_name": order[0],
+                    "quantity": order[1],
+                    # 這裡報錯是因為新增商品時沒有輸入due_days，所以是null，需要再修改
+                    # "due_date" : order[2] + datetime.timedelta(days=order[3]),
+                    "phone": order[2],
+                    "receive_status": order[3],
+                    "product_name": order[4],
+                    "order_id": order[5],
                 }
-             )
+            )
         return jsonify(data), 200
 
-    return jsonify({'message' : 'Fail to get all order by store_id'}), 404
+    return jsonify({"message": "Fail to get all order by store_id"}), 404
 
 
 # 一鍵通知該團購所有未取貨的顧客
@@ -553,6 +557,7 @@ def get_userid_by_group_buying_id(group_buying_id):
         send_message(userid, message)
 
     return jsonify({"message": "Send message successfully"}), 200
+
 
 # 顧客領取 傳給我group_buying_id/userid，找出quantity更新inventory
 @order_bp.route("/api/order/receive", methods=["PUT"])
