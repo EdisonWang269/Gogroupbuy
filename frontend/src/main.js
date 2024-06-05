@@ -5,13 +5,13 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
-import { initializeLiff } from './liff';
+import { initializeLiff } from "./liff";
 import store from "./store";
 import {Base64} from 'js-base64'
 
-initializeLiff().then(() => {
-  // Create Vue app after LIFF initialization
-  const app = createApp(App);
+// initializeLiff().then(() => {
+//   // Create Vue app after LIFF initialization
+//   const app = createApp(App);
 
   // Use plugins
   app.use(store);
@@ -24,8 +24,3 @@ initializeLiff().then(() => {
 }).catch(error => {
   console.error('Failed to initialize LIFF', error);
 });
-
-// const app = createApp(App).use(store);
-// app.use(ElementPlus);
-// app.use(router);
-// app.mount("#app");

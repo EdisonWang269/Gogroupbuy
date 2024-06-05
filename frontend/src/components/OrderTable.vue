@@ -59,8 +59,7 @@
   };
 
   const customSort = (a, b) => {
-    // 自定義排序邏輯
-    // ...
+    console.log(a, b);
   };
 </script>
 
