@@ -68,10 +68,10 @@
       </div>
 
       <div class="editDate" v-if="type === 'arriveManage'">
-        <div>
+        <!-- <div>
           <span>到貨日期</span>
           <el-input :value="arriveDate" style="width: 95%" disabled />
-        </div>
+        </div> -->
         <div>
           <span>截止領取天數</span>
           <el-input
@@ -119,6 +119,7 @@
       };
       const check = () => {
         alert();
+        emit("isChecked", false);
         if (!alertShow.value) {
           emit("isChecked", false);
           if (props.type === "editDate") {
@@ -232,9 +233,9 @@
     gap: 8px;
   }
   .addCus {
-    /* display: grid;
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-row-gap: 16px; */
+    grid-row-gap: 16px;
   }
 </style>

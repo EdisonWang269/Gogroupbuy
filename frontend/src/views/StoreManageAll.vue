@@ -38,7 +38,9 @@
   };
 
   // 綁要開啟團購的值
-  const items = store.state.manager.items;
+  const items = store.state.manager.items.map((item) => {
+    return item.product_name;
+  });
 </script>
 
 <style scoped>

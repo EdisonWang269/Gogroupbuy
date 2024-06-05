@@ -16,8 +16,9 @@
       <div class="info">
         <h1>{{ currItemName }}</h1>
         <span
-          >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
-        ></span>
+          >結單日期：{{ endDate }}
+          <!-- <i class="bi bi-pencil" @click="editDate"></i> -->
+        </span>
       </div>
 
       <div class="buttons">
