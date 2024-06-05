@@ -16,7 +16,7 @@ export const initializeLiff = async () => {
               console.log(profile.userId);
               console.log(profile.pictureUrl);
               store.commit("user/setUserImg",profile.pictureUrl);
-              store.commit("user/setUserId",profile.userId);
+              store.commit("user/setUserID",profile.userId);
               store.commit("user/setUserName",profile.displayName);
             })
         }

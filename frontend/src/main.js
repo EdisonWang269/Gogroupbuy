@@ -9,9 +9,9 @@ import { initializeLiff } from "./liff";
 import store from "./store";
 import {Base64} from 'js-base64'
 
-// initializeLiff().then(() => {
-//   // Create Vue app after LIFF initialization
-//   const app = createApp(App);
+initializeLiff().then(() => {
+  // Create Vue app after LIFF initialization
+  const app = createApp(App);
 
   // Use plugins
   app.use(store);

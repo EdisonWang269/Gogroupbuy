@@ -1,5 +1,5 @@
 import { formatOrder, changeDate } from "../utils";
-
+import { base64ToBlob } from "../utils";
 const state = {
   items: [],
   orders: [],
@@ -60,6 +60,9 @@ const mutations = {
     state.userPhone = userPhone;
   },
   setItems(state, items) {
+    items.forEach(item => {
+      item.product_picture = base64ToBlob(item.product_picture, "image/png");
+    });
     state.items = items;
   },
   setCurrItemID(state, itemID) {

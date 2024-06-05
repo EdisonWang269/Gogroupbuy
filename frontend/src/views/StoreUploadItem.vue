@@ -39,7 +39,7 @@
           <textarea v-model="content"></textarea>
         </div>
         <div class="buttons">
-          <store-button :action="'確認上架'" class="button" @click="submit"/>
+          <store-button :action="'確認上架'" class="button" @click="uploadProduct()"/>
           <button class="button" id="delete" @click="deleteAll">全部刪除</button>
         </div>
       </div>
@@ -55,24 +55,44 @@ import StoreButton from '../components/StoreButton.vue';
 
 const store = useStore();
 const name = ref("");
+const productPrice = ref("");
 const price = ref("");
 const supplier = ref("");
-const file = ref();
-const encodeFile = ref("");
+const file = ref([]);
+const encodeFile = ref();
 const content = ref("");
 const endDate = ref("");
 const formVisible = ref(true);
+const unit = ref("");
+const form= new FormData();
 
 const onfile = (event) =>{
   file.value = event.target.files[0];
-  const fileReader = new FileReader();
-  fileReader.readAsDataURL(file.value);
-  fileReader.addEventListener("load",()=>{
-      encodeFile.value=fileReader.result;
-      console.log("encode: "+encodeFile.value);
-      // store.commit("setUserImg",encodeFile.value);
-   })
+  form.append('photo', file.value);  // return form;
 };
+
+const uploadProduct = async () => {
+  const part = price.value.split('/');
+  productPrice.value = part[0];
+  unit.value = part[1];
+
+  console.log(form.value);
+
+  form.append('price', productPrice.value);
+  form.append('product_describe', content.value);
+  form.append('product_name', name.value);
+  form.append('supplier_name', supplier.value);
+  form.append('unit', unit.value);
+
+    const response = await fetch(`/api/product`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${store.state.manager.token}`,
+      },
+      body:form,
+    });
+    console.log(response);
+  };
 const deleteAll = () => {
   formVisible.value = false; 
 
@@ -92,11 +112,9 @@ const handleBeforeLeave = (el) => {
   el.style.opacity = 1;
 };
 
-const submit = () =>{
-  console.log(encodeFile);
-};
-
-
+// const submit = () =>{
+//   console.log(encodeFile);
+// };
 </script>
 
 
