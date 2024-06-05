@@ -62,7 +62,7 @@ def get_all_products_by_storeid():
     query = """
                 SELECT 
                     --GBP.group_buying_id,
-                    --GBP.statement_date,
+                    GBP.statement_date,
                     P.product_id,
                     P.price,
                     P.unit,
@@ -98,13 +98,13 @@ def get_all_products_by_storeid():
             data.append(
                 {
                     # "group_buying_id": product[0],
-                    # "statement_date": product[1],
-                    "product_id": product[0],
-                    "price": product[1],
-                    "unit": product[2],
-                    "product_describe": product[3],
-                    "product_name": product[4],
-                    "product_picture": product[5],  # product_picture_base64,
+                    "statement_date": product[0],
+                    "product_id": product[1],
+                    "price": product[2],
+                    "unit": product[3],
+                    "product_describe": product[4],
+                    "product_name": product[5],
+                    "product_picture": product[6],  # product_picture_base64
                 }
             )
         return jsonify(data), 200
