@@ -8,17 +8,16 @@ import "bootstrap";
 import { initializeLiff } from "./liff";
 import store from "./store";
 import { Base64 } from "js-base64";
+const app = createApp(App);
+
+app.use(store);
+app.use(router);
+app.use(ElementPlus);
+app.use(Base64);
+app.mount("#app");
 
 initializeLiff()
-  .then(() => {
-    const app = createApp(App);
-
-    app.use(store);
-    app.use(router);
-    app.use(ElementPlus);
-    app.use(Base64);
-    app.mount("#app");
-  })
+  .then(() => {})
   .catch((error) => {
     console.error("Failed to initialize LIFF", error);
   });

@@ -3,14 +3,8 @@
     <router-link to="/"><i class="bi bi-arrow-left-short"></i></router-link>
     <h1>恩恩的團購</h1>
   </div>
-  <!-- <img
-    :src="item.product_picture"
-    class="item-img"
-    @mouseenter="hoverImg"
-    @mouseleave="leaveImg"
-  /> -->
   <img
-    src="../assets/user.jpg"
+    :src="item.product_picture"
     class="item-img"
     @mouseenter="hoverImg"
     @mouseleave="leaveImg"

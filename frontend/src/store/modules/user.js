@@ -54,18 +54,20 @@ const mutations = {
     state.token = token;
   },
   setOrders(state, orders) {
+    orders.forEach((item) => {
+      try {
+        let decodedImage = atob(item.product_picture);
+        let base64Image = "data:image/jpeg;base64," + decodedImage;
+        item.product_picture = base64Image;
+      } catch (e) {
+        console.error("Error decoding base64 string: ", e);
+      }
+    });
     state.orders = orders;
   },
   setUserPhone(state, userPhone) {
     state.userPhone = userPhone;
   },
-  // setItems(state, items) {
-  //   items.forEach((item) => {
-  //     let base64Image = "data:image/jpg;base64," + item.product_picture;
-  //     item.product_picture = base64Image;
-  //   });
-  //   state.items = items;
-  // },
   setItems(state, items) {
     items.forEach((item) => {
       try {
