@@ -84,8 +84,6 @@ def get_all_products_by_storeid():
         for product in products:
             # 將LONGBLOB數據轉換為Base64字符串
             product_picture_base64 = base64.b64encode(product[7]).decode('utf-8')
-            # 假設圖片是JPEG格式，則可以這樣拼接data URL
-            product_picture_data_url = f"data:image/jpeg;base64,{product_picture_base64}"
             data.append(
                 {
                     "group_buying_id": product[0],
@@ -95,7 +93,7 @@ def get_all_products_by_storeid():
                     "unit": product[4],
                     "product_describe": product[5],
                     "product_name": product[6],
-                    "product_picture": product_picture_data_url,
+                    "product_picture": product_picture_base64,
                 }
             )
         return jsonify(data), 200
