@@ -61,8 +61,6 @@ def get_all_products_by_storeid():
 
     query = """
                 SELECT 
-                    GBP.group_buying_id,
-                    GBP.statement_date,
                     P.product_id,
                     P.price,
                     P.unit,
@@ -70,12 +68,26 @@ def get_all_products_by_storeid():
                     P.product_name,
                     P.product_picture
                 FROM 
-                    Group_buying_product GBP
-                INNER JOIN 
-                    Product P ON GBP.product_id = P.product_id
+                    Product P
                 WHERE
                     P.store_id = %s;
             """
+
+    # SELECT
+    #         GBP.group_buying_id,
+    #         GBP.statement_date,
+    #         P.product_id,
+    #         P.price,
+    #         P.unit,
+    #         P.product_describe,
+    #         P.product_name,
+    #         P.product_picture
+    #     FROM
+    #         Group_buying_product GBP
+    #     INNER JOIN
+    #         Product P ON GBP.product_id = P.product_id
+    #     WHERE
+    #         P.store_id = %s;
 
     products = execute_query(query, (store_id,), True)
 
@@ -97,14 +109,14 @@ def get_all_products_by_storeid():
 
             data.append(
                 {
-                    "group_buying_id": product[0],
-                    "statement_date": product[1],
-                    "product_id": product[2],
-                    "price": product[3],
-                    "unit": product[4],
-                    "product_describe": product[5],
-                    "product_name": product[6],
-                    "product_picture": product_picture_base64,
+                    # "group_buying_id": product[0],
+                    # "statement_date": product[1],
+                    "product_id": product[0],
+                    "price": product[1],
+                    "unit": product[2],
+                    "product_describe": product[3],
+                    "product_name": product[4],
+                    "product_picture": product[5],
                 }
             )
         return jsonify(data), 200
