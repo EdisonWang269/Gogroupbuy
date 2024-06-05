@@ -5,6 +5,7 @@ from ..database import execute_query
 from ..sendmess import send_message
 
 import datetime
+import base64
 
 order_bp = Blueprint("order", __name__)
 
@@ -187,12 +188,13 @@ def get_all_orders_by_userid(userid):
             arrival_date = order[1]
             due_days = order[2]
             due_date = arrival_date + datetime.timedelta(days=due_days)
+            product_picture_base64 = base64.b64encode(order[4]).decode('utf-8') if order[4] else None
             data.append(
                 {
                     "product_name": order[0],
                     "due_date": due_date,
                     "receive_status": order[3],
-                    "product_picture": order[4],
+                    "product_picture": product_picture_base64,
                 }
             )
         return jsonify(data), 200
