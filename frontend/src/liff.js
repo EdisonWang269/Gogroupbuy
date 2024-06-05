@@ -3,6 +3,7 @@ import store from "./store";
 
 export const initializeLiff = async () => {
   try {
+    //TODO: 記得改自己的LIFF ID
     await liff.init({ liffId: "2005547450-kezMVvEn" }).then(() => {
       if (!liff.isLoggedIn()) {
         console.log("not loggedIn");

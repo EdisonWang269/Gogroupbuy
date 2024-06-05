@@ -1,6 +1,11 @@
 <template>
   <div class="table">
-    <el-table :data="filteredTableData" height="550" style="width: 100%">
+    <el-table
+      :data="filteredTableData"
+      height="550"
+      style="width: 100%"
+      ref="dataTable"
+    >
       <el-table-column prop="user_name" label="顧客姓名" />
 
       <el-table-column prop="quantity" label="數量" />
@@ -21,11 +26,12 @@
         </template>
       </el-table-column>
 
+      //FIXME: 切換商品時checkbox狀態不會被更新
       <el-table-column prop="receive_status" label="完成度">
         <template #default="scope">
           <div class="checkBox">
             <el-checkbox
-              :checked="isChecked(scope.row.receive_status)"
+              :checked="scope.row.receive_status === '已領取' ? true : false"
               size="large"
               @change="handleCheckboxChange(scope.row, scope.row.order_id)"
             />
@@ -37,7 +43,7 @@
 </template>
 
 <script setup>
-  import { computed, defineProps, watchEffect } from "vue";
+  import { computed, defineProps } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
@@ -71,28 +77,12 @@
     }
   };
 
-  const isChecked = (receive_status) => {
-    return receive_status === "已領取";
-  };
-
   const handleCheckboxChange = (row, order_id) => {
     const newStatus = row.receive_status === "已領取" ? "待領取" : "已領取";
     store.commit("manager/setOrderStatus", { order_id, status: newStatus });
     store.commit("manager/setCheckedNum");
     store.commit("manager/setUncheckedNum");
   };
-
-  const uncheckAllCheckboxes = () => {
-    filteredTableData.value.forEach((item) => {
-      if (item.receive_status === "已領取") {
-        handleCheckboxChange(item, item.order_id);
-      }
-    });
-  };
-
-  watchEffect(() => {
-    uncheckAllCheckboxes();
-  });
 </script>
 
 <style scoped>
