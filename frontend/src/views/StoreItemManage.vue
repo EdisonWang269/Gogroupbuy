@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <item-table @singleNotify="notify($event)" />
+    <item-table @singleNotify="notify($event)" class="table"/>
 
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">
@@ -276,5 +276,14 @@
     gap: 50px;
     width: 100%;
     justify-content: center;
+  }
+
+  .table{
+    max-height: 55%;
+  }
+
+  .table::-webkit-scrollbar{
+    width: 0;
+    height: 0;
   }
 </style>

@@ -49,9 +49,11 @@
 
 
 <script setup>
+import { useStore } from 'vuex';
 import { ref } from 'vue';
 import StoreButton from '../components/StoreButton.vue';
 
+const store = useStore();
 const name = ref("");
 const price = ref("");
 const supplier = ref("");
@@ -68,6 +70,7 @@ const onfile = (event) =>{
   fileReader.addEventListener("load",()=>{
       encodeFile.value=fileReader.result;
       console.log("encode: "+encodeFile.value);
+      // store.commit("setUserImg",encodeFile.value);
    })
 };
 const deleteAll = () => {

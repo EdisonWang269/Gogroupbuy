@@ -4,13 +4,13 @@
     個人資訊
   </h1>
   <!-- <img :src="userImg" class="userImg" /> -->
-  <img src="../assets/user.jpg" class="userImg" />
+  <img :src="userImg" class="userImg" />
   <div class="wrap">
     <div class="infoBar">
       <span>姓名</span>
       <input
         type="text"
-        v-model="name"
+        :value="name"
         @input="store.commit('user/setUserName', $event.target.value)"
       />
     </div>
@@ -31,14 +31,14 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { computed, ref } from "vue";
   import { useStore } from "vuex";
 
   const store = useStore();
-  const name = ref(store.state.user.userName);
+  const name = computed(() => store.state.user.userName);
   const phoneNum = ref(store.state.user.userPhone);
   const status = ref("一般會員");
-  const userImg = ref("../assets/user.jpg");
+  const userImg = computed(() => store.state.user.userImg);
 </script>
 
 <style scoped>
