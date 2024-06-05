@@ -104,7 +104,7 @@ def get_all_products_by_storeid():
                     "unit": product[4],
                     "product_describe": product[5],
                     "product_name": product[6],
-                    "product_picture": product_picture_base64,
+                    "product_picture": product[7],  # product_picture_base64,
                 }
             )
         return jsonify(data), 200
