@@ -90,12 +90,12 @@ def get_all_products_by_storeid():
                 # )
 
                 # 王:
-                if product[7]:
-                    # product_picture_base64 = base64.b64encode(product[7])
-                    # product_picture_base64 = product_picture_base64.decode('utf-8')
-                    product_picture_base64 = product[7].decode("utf-8")
-                else:
-                    product_picture_base64 = None
+                # if product[7]:
+                #   # product_picture_base64 = base64.b64encode(product[7])
+                #   # product_picture_base64 = product_picture_base64.decode('utf-8')
+                #   product_picture_base64 = product[7].decode('utf-8')
+                # else:
+                #     product_picture_base64 = None
 
                 data.append(
                     {
@@ -106,7 +106,9 @@ def get_all_products_by_storeid():
                         "unit": product[4],
                         "product_describe": product[5],
                         "product_name": product[6],
-                        "product_picture": product_picture_base64,
+                        "product_picture": (
+                            product[7].decode("base64") if product[7] else None
+                        ),
                     }
                 )
             return jsonify(data), 200
