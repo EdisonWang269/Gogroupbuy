@@ -60,6 +60,12 @@ const mutations = {
     state.userPhone = userPhone;
   },
   setItems(state, items) {
+    let encodedStr =
+      "LzlqLzRBQVFTa1pKUmdBQkFRQUFBUUFCQUFELzJ3Q0VBQWtHQndjTkJ3Y05DQWdIQndnSEJ3MEhDQWdIQnhzSUNRY05JQjBXSWlBUkV4OGtLRFFzSkJve...";
+    let decodedStr = atob(encodedStr);
+    items.forEach((item) => {
+      item.product_picture = decodedStr;
+    });
     state.items = items;
   },
   setCurrItemID(state, itemID) {
