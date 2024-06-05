@@ -51,6 +51,7 @@
 <script setup>
 import { useStore } from 'vuex';
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus'
 import StoreButton from '../components/StoreButton.vue';
 
 const store = useStore();
@@ -73,17 +74,24 @@ const onfile = (event) =>{
 };
 
 const uploadProduct = async () => {
-  const part = price.value.split('/');
-  productPrice.value = part[0];
-  unit.value = part[1];
+  if(isNull()){
+    ElMessage({
+      message: '尚未輸入完整上架訊息',
+      type: 'warning',
+    })
+  }
+  else{
+    const part = price.value.split('/');
+    productPrice.value = part[0];
+    unit.value = part[1];
 
-  console.log(form.value);
+    console.log(form.value);
 
-  form.append('price', productPrice.value);
-  form.append('product_describe', content.value);
-  form.append('product_name', name.value);
-  form.append('supplier_name', supplier.value);
-  form.append('unit', unit.value);
+    form.append('price', productPrice.value);
+    form.append('product_describe', content.value);
+    form.append('product_name', name.value);
+    form.append('supplier_name', supplier.value);
+    form.append('unit', unit.value);
 
     const response = await fetch(`/api/product`, {
       method: "POST",
@@ -93,8 +101,25 @@ const uploadProduct = async () => {
       },
       body:form,
     });
+    clearAll();
     console.log(response);
+    ElMessage({
+      message: '已成功新增商品',
+      type: 'success',
+    });  
+    
+  }
+  
   };
+
+  const clearAll = () =>{
+    name.value = "";
+    price.value = "";
+    supplier.value = "";
+    file.value = "";
+    content.value = "";
+    endDate.value = "";
+  }
 const deleteAll = () => {
   formVisible.value = false; 
 
@@ -113,6 +138,15 @@ const deleteAll = () => {
 const handleBeforeLeave = (el) => {
   el.style.opacity = 1;
 };
+
+const isNull = () => {
+  if(name.value == "" || price.value == "" || supplier.value == "" || file.value == [] || content.value == "" || endDate.value == ""){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 
 // const submit = () =>{
 //   console.log(encodeFile);
