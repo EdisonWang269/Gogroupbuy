@@ -62,22 +62,9 @@ def get_all_products_by_storeid():
         store_id = identity.get("store_id")
 
         query = """
-                DELETE FROM Product WHERE product_id=19;
-                SELECT 
-                    GBP.group_buying_id,
-                    GBP.statement_date,
-                    P.product_id,
-                    P.price,
-                    P.unit,
-                    P.product_describe,
-                    P.product_name,
-                    P.product_picture
-                FROM 
-                    Group_buying_product GBP
-                INNER JOIN 
-                    Product P ON GBP.product_id = P.product_id
-                WHERE
-                    P.store_id = %s;
+                DELETE FROM product
+                WHERE product_id = 19;
+
             """
 
         products = execute_query(query, (store_id,), True)
