@@ -867,9 +867,9 @@ def update_statement_date(group_buying_id):
 # 以store_id獲取商家的商品名稱/id（product)
 @product_bp.route("/api/product/product_name", methods=["GET"])
 @jwt_required()
-def get_all_groupbuying_products_by_storeid():
+def get_all_groupbuying_products_by_product_name():
     """
-    以store_id獲取商家的商品名稱/id
+    以product_name獲取商家的商品名稱/id
     ---
     tags:
       - Product
