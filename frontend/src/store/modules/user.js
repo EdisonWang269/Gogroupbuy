@@ -27,6 +27,15 @@ const getters = {
   },
 
   getOrders(state) {
+    state.orders.forEach((item) => {
+      try {
+        let decodedImage = atob(item.product_picture);
+        let base64Image = "data:image/jpeg;base64," + decodedImage;
+        item.product_picture = base64Image;
+      } catch (e) {
+        console.error("Error decoding base64 string: ", e);
+      }
+    });
     return state.orders.map((order) => formatOrder(order));
   },
 
@@ -61,13 +70,15 @@ const mutations = {
     state.userPhone = userPhone;
   },
   setItems(state, items) {
-    items.forEach(item => {
-      // item.product_picture = "data:image/png;base64,"+ item.product_picture;
-      // item.product_picture = "data:application/octet-stream;base64," + item.product_picture;
-      // const blob = base64ToBlob(item.product_picture, "image/png");
-      // item.product_picture = getImgURL(blob);
-      // console.log(item.product_picture);
-      // item.product_picture = "";
+
+    items.forEach((item) => {
+      try {
+        let decodedImage = atob(item.product_picture);
+        let base64Image = "data:image/jpeg;base64," + decodedImage;
+        item.product_picture = base64Image;
+      } catch (e) {
+        console.error("Error decoding base64 string: ", e);
+      }
     });
     state.items = items;
   },

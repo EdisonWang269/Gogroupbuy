@@ -1,5 +1,5 @@
-import liff from '@line/liff';
-import store from './store';
+import liff from "@line/liff";
+import store from "./store";
 
 export const initializeLiff = async () => {
   try {
@@ -22,8 +22,9 @@ export const initializeLiff = async () => {
         }
     }); 
     console.log('LIFF initialized');
+
   } catch (error) {
-    console.error('LIFF initialization failed', error);
+    console.error("LIFF initialization failed", error);
   }
 };
 

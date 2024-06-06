@@ -32,14 +32,12 @@
     width: 100vw;
     border-radius: 20px 20px 0 0;
     background-color: #ef2a39;
-    /* padding: 9px, 46px; */
     position: absolute;
     bottom: 0;
   }
 
   .container {
     display: flex;
-    /* gap: 13%; */
     justify-content: space-between;
   }
 

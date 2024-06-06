@@ -23,7 +23,7 @@
           v-for="item in unshippedList"
           class="item-card"
           :key="item.order_id"
-          :img="item.product_picture"
+          :product_picture="item.product_picture"
           :name="item.product_name"
           :dueDate="item.due_date"
           :status="item.receive_status"
@@ -46,7 +46,7 @@
         <item-card-h
           v-for="item in waitingList"
           :key="item.order_id"
-          :img="item.product_picture"
+          :product_picture="item.product_picture"
           :name="item.product_name"
           :dueDate="item.due_date"
           :status="item.receive_status"
@@ -69,7 +69,7 @@
         <item-card-h
           v-for="item in historyList"
           :key="item.order_id"
-          :img="item.product_picture"
+          :product_picture="item.product_picture"
           :name="item.product_name"
           :dueDate="item.due_date"
           :status="item.receive_status"

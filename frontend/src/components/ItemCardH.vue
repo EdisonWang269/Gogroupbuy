@@ -1,22 +1,22 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <p class="card-title"><span>{{ name }}</span></p>
+      <p class="card-title">
+        <span>{{ name }}</span>
+      </p>
       <p class="card-text">
         取貨期限：
         <br /><b>{{ dueDate }} </b> <br />訂單狀態：<br /><b>{{ status }}</b>
       </p>
     </div>
 
-    <!-- TODO: add real image -->
-    <!-- <img :src="img" class="card-img-top" alt="..." /> -->
-    <img src="../assets/user.jpg" class="card-img-top" alt="..." />
+    <img :src="product_picture" class="card-img-top" alt="image" />
   </div>
 </template>
 
 <script>
   export default {
-    props: ["name", "dueDate", "status", "img"],
+    props: ["name", "dueDate", "status", "product_picture"],
   };
 </script>
 
@@ -57,15 +57,14 @@
     animation-delay: 0.5s;
   }
 
-  .scrollAnimation{
-    
+  .scrollAnimation {
   }
 
-  @keyframes scroll{
-    0%{
+  @keyframes scroll {
+    0% {
       transform: translateX(0);
     }
-    100%{
+    100% {
       transform: translateX(-100%);
     }
   }

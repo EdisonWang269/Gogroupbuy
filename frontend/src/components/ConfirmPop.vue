@@ -50,6 +50,7 @@
       body: JSON.stringify({
         group_buying_id: item.value.group_buying_id,
         quantity: orderNum.value,
+        product_picture: item.value.product_picture,
       }),
     });
   };

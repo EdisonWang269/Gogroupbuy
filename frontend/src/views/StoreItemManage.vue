@@ -16,8 +16,9 @@
       <div class="info">
         <h1>{{ currItemName }}</h1>
         <span
-          >結單日期：{{ endDate }} <i class="bi bi-pencil" @click="editDate"></i
-        ></span>
+          >結單日期：{{ endDate }}
+          <!-- <i class="bi bi-pencil" @click="editDate"></i> -->
+        </span>
       </div>
 
       <div class="buttons">
@@ -57,7 +58,7 @@
       </div>
     </div>
 
-    <item-table @singleNotify="notify($event)" class="table"/>
+    <item-table @singleNotify="notify($event)" :searchInput="searchInput" />
 
     <!-- <div class="pages">
       <nav aria-label="Page navigation example">
@@ -99,9 +100,9 @@
   const currItemName = computed(
     () => store.state.manager.currItem.product_name
   );
-
   
   const formatDate = () =>{
+
     const receive = computed(() => store.state.manager.currItem.statement_date);
     const unformattedDate = new Date(receive.value);
     // const formatted = unformattedDate.value;
@@ -114,7 +115,7 @@
     return formatted;
   }
   const endDate = computed(formatDate);
-
+  
   const customerName = computed(() => {
     const names = new Set();
     store.state.manager.orders
@@ -123,11 +124,11 @@
     return Array.from(names);
   });
 
-  const editDate = () => {
-    topic.value = "更改結單日期";
-    popShow.value = true;
-    type.value = "editDate";
-  };
+  // const editDate = () => {
+  //   topic.value = "更改結單日期";
+  //   popShow.value = true;
+  //   type.value = "editDate";
+  // };
   const notify = (value) => {
     if (typeof value === "string") {
       topic.value = "通知";
@@ -284,11 +285,11 @@
     justify-content: center;
   }
 
-  .table{
+  .table {
     max-height: 55%;
   }
 
-  .table::-webkit-scrollbar{
+  .table::-webkit-scrollbar {
     width: 0;
     height: 0;
   }

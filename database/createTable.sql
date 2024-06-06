@@ -28,7 +28,7 @@ CREATE TABLE Product(
 	product_describe TEXT,
 	supplier_name VARCHAR(255),
 	product_name VARCHAR(255),
-	product_picture BLOB,
+	product_picture LONGBLOB,
 	CONSTRAINT Product_FK FOREIGN KEY(store_id) REFERENCES Group_buying_merchant(store_id)
 );
 
