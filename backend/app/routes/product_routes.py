@@ -863,3 +863,73 @@ def update_statement_date(group_buying_id):
     if result:
         return jsonify({"message": "statement_date updated successfully"}), 200
     return jsonify({"error": "Failed to update statement_date"}), 500
+
+# 以store_id獲取商家的商品名稱/id（product)
+@product_bp.route("/api/product/product_name", methods=["GET"])
+@jwt_required()
+def get_all_groupbuying_products_by_storeid():
+    """
+    以store_id獲取商家的商品名稱/id
+    ---
+    tags:
+      - Product
+    security:
+      - APIKeyHeader: []
+    responses:
+      200:
+        description: Get all groupbuying products by storeid successfully
+        schema:
+          type: object
+          properties:
+            product_name:
+              type: string
+              example: 衣服
+        examples:
+          application/json:
+            product_name: 衣服
+      403:
+        description: 權限不足
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 權限不足
+        examples:
+          application/json:
+            message: 權限不足
+      404:
+        description: Fail to get all groupbuying products by storeid
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Fail to get all groupbuying products by store_id
+    """
+    identity = get_jwt_identity()
+    store_id = identity.get("store_id")
+
+    claims = get_jwt()
+    role = claims["role"]
+    if role != "merchant":
+        return jsonify({"message": "權限不足"}), 403
+
+    query = """
+                SELECT 
+                    p.product_name, p.product_id
+                FROM 
+                    Product p
+                WHERE 
+                    p.store_id = %s;
+            """
+    products = execute_query(query, (store_id,), True)
+    if products:
+        data = []
+        for product in products:
+            data.append({
+              "product_name": product[0],
+              "product_id" : product[1]
+              })
+        return jsonify(data), 200
+    return jsonify({"message": "Fail to get all groupbuying products by store_id"}), 404

@@ -4,6 +4,8 @@ import mysql.connector
 import base64
 import datetime
 import numpy as np
+from werkzeug.utils import secure_filename
+import os
 
 
 app = Flask(__name__)
@@ -51,21 +53,44 @@ def home():
     
     return 'server ok'
 
-#測試加入照片 要把product_picture的資料型態改成longblob
-@app.route("/api/product", methods=["POST"])
+# #測試加入照片 要把product_picture的資料型態改成longblob
+
+# # 設定上傳文件的資料夾
+# UPLOAD_FOLDER = 'uploads/'
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# # 設定允許上傳的文件類型
+# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# def allowed_file(filename):
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           
+@app.route("/api/product/picture", methods=["POST"])
 def add_pic_test():
     if 'photo' not in request.files:
         return jsonify({'error': 'No photo uploaded'}), 400
+
+    file = request.files['photo']
     
-    product_picture_file = request.files['photo'] #取得圖片檔案
-    product_picture_binary = base64.b64encode(product_picture_file.read()) #把圖片轉成二進位
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+
+        # 將相對路徑存入資料庫
+        file_url = f"/{UPLOAD_FOLDER}{filename}"
+
     
     query = "INSERT INTO `PRODUCT`(store_id, product_picture) VALUES('store001', %s)"
-    result = execute_query(query,(product_picture_binary,))
+    result = execute_query(query,(file_url,))
     if result:
-        return jsonify({'message': 'Pruduct created successfully'}), 200
-    return jsonify({'error': 'Failed to create product'}), 500
-    
+        return jsonify({'message': 'Pruduct picture created successfully'}), 200
+    return jsonify({'error': 'Failed to create product picture'}), 500
+
+#取出照片    
+
 #新增一項商品
 @app.route("/api/<string:store_id>/product", methods=["POST"])
 def create_product(store_id):

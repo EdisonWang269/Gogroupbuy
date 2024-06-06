@@ -148,9 +148,7 @@
         else if(props.type === "arriveManage"){
           emit("check", [arriveDate.value, dueDays.value]);
         }
-        else if(props.type === "editDate"){
-          emit("check", updated.value)
-        }
+        
       };
 
       const notify = () => {
