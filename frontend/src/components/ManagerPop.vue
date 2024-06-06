@@ -69,9 +69,14 @@
       </div>
 
       <div class="editDate" v-if="type === 'arriveManage'">
-        <!-- <div>
+        <div>
           <span>到貨日期</span>
-          <el-input :value="arriveDate" style="width: 95%" readonly />
+          <el-date-picker
+            v-model="arriveDate"
+            type="date"
+            placeholder="Select date and time"
+            class="datePicker"
+          />
         </div>
         <div>
           <span>截止領取天數</span>
@@ -88,7 +93,8 @@
         <button class="buttonCancel" @click="cancel">取消</button>
       </div>
     </div>
-  </div>
+  </div> 
+  <!-- </div> -->
 </template>
 
 <script>
@@ -101,7 +107,7 @@
       StoreButton,
     },
     setup(props, { emit }) {
-      const arriveDate = ref("2024/05/20");
+      const arriveDate = ref("");
       const dueDays = ref();
       const cost = ref();
       const totalNum = ref();
@@ -124,17 +130,26 @@
       const check = () => {
         alert();
         notify();
-
         emit("isChecked", false);
-        if (!alertShow.value) {
-          emit("isChecked", false);
-          if (props.type === "editDate") {
-            console.log(props.type);
-            emit("check", updated.value);
-            updated.value = "";
+        if(props.type === "addCus"){
+            emit("check", addNum);
+        }
+        else if (props.type === "editDate") {
+          console.log(props.type);
+          emit("check", updated.value);
+          updated.value = "";
+          if (!alertShow.value) {
+            emit("isChecked", false);
           }
-        } else {
-          emit("check", false);
+        }
+        else if (props.type === "endOrder"){
+          emit("check", [cost.value, totalNum.value]);
+        }
+        else if(props.type === "arriveManage"){
+          emit("check", [arriveDate.value, dueDays.value]);
+        }
+        else if(props.type === "editDate"){
+          emit("check", updated.value)
         }
       };
 

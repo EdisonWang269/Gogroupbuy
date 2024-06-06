@@ -1,6 +1,4 @@
 import { formatOrder, changeDate } from "../utils";
-import { base64ToBlob, getImgURL } from "../utils";
-import { Base64 } from "js-base64";
 const state = {
   items: [],
   orders: [],

@@ -122,8 +122,8 @@
   }
 
   .item-img {
-    width: auto;
-    height: 40vh;
+    width: 360px;
+    height: 360px;
     /* border: 1px solid gray; */
     display: block;
     margin: 0 auto;
@@ -131,6 +131,7 @@
     border-radius: 10px;
     position: relative;
     z-index: 10;
+    object-fit: cover;
   }
 
   .item-img:hover {
