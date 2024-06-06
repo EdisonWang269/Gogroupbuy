@@ -6,14 +6,15 @@
       <div class="editDate" v-if="type === 'editDate'">
         <div>
           <span>原來結單日期</span>
-          <el-input :value="original" style="width: 95%" disabled />
+          <el-input :value="original" style="width: 95%" readonly />
         </div>
         <div>
           <span>更新結單日期</span>
-          <el-input
+          <el-date-picker
             v-model="updated"
-            style="width: 95%"
-            placeholder="Please input"
+            type="date"
+            placeholder="Select date and time"
+            class="datePicker"
           />
           <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
         </div>
@@ -70,8 +71,8 @@
       <div class="editDate" v-if="type === 'arriveManage'">
         <!-- <div>
           <span>到貨日期</span>
-          <el-input :value="arriveDate" style="width: 95%" disabled />
-        </div> -->
+          <el-input :value="arriveDate" style="width: 95%" readonly />
+        </div>
         <div>
           <span>截止領取天數</span>
           <el-input
@@ -256,5 +257,18 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-row-gap: 16px;
+  } */
+
+  .datePicker{
+    height:20px;
+  }
+  :deep(.el-input.el-input--prefix.el-input--suffix.el-date-editor.el-date-editor--date.datePicker.el-tooltip__trigger.el-tooltip__trigger){
+    width:95%
+  }
+  :deep(.el-input__inner){
+    padding:10px;
+  }
+  /* :deep(.el-input__wrapper){
+    height:20px;
   } */
 </style>

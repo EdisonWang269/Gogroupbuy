@@ -38,10 +38,9 @@
           <textarea v-model="content"></textarea>
         </div>
         <div class="buttons">
-          <store-button :action="'確認上架'" class="button" @click="submit" />
-          <button class="button" id="delete" @click="deleteAll">
-            全部刪除
-          </button>
+
+          <store-button :action="'確認上架'" class="button" @click="uploadProduct()"/>
+          <button class="button" id="delete" @click="deleteAll">全部刪除</button>
         </div>
       </div>
     </transition>
@@ -49,56 +48,124 @@
 </template>
 
 <script setup>
-  import { useStore } from "vuex";
-  import { ref } from "vue";
-  import StoreButton from "../components/StoreButton.vue";
+import { useStore } from 'vuex';
+import { ref } from 'vue';
+import { ElMessage } from 'element-plus'
+import StoreButton from '../components/StoreButton.vue';
 
-  const name = ref("");
-  const price = ref("");
-  const supplier = ref("");
-  const file = ref();
-  const encodeFile = ref("");
-  const content = ref("");
-  const endDate = ref("");
-  const formVisible = ref(true);
+const store = useStore();
+const name = ref("");
+const productPrice = ref("");
+const price = ref("");
+const supplier = ref("");
+const file = ref([]);
+const encodeFile = ref();
+const content = ref("");
+const endDate = ref("");
+const formVisible = ref(true);
+const unit = ref("");
+const form= new FormData();
 
-  //FIXME: 改成陳宣瑜的版本，還要加上fetch
-  const onfile = (event) => {
-    const file = event.target.files[0];
-    const fileReader = new FileReader();
+//const onfile = (event) => {
+  //  const file = event.target.files[0];
+  //  const fileReader = new FileReader();
 
-    fileReader.readAsDataURL(file);
-    fileReader.addEventListener("load", () => {
-      const mimeType = file.type;
-      const base64Data = fileReader.result.split(",")[1];
-      const encodedFile = `data:${mimeType};base64,${base64Data}`; // 添加 MIME 類型前綴
+  //  fileReader.readAsDataURL(file);
+  //  fileReader.addEventListener("load", () => {
+  //    const mimeType = file.type;
+  //    const base64Data = fileReader.result.split(",")[1];
+  //    const encodedFile = `data:${mimeType};base64,${base64Data}`; // 添加 MIME 類型前綴
 
-      encodeFile.value = encodedFile;
+  //    encodeFile.value = encodedFile;
+  //  });
+  //};
+
+
+const onfile = (event) =>{
+  file.value = event.target.files[0];
+  form.append('photo', file.value);  // return form;
+  
+};
+
+const uploadProduct = async () => {
+  if(isNull()){
+    ElMessage({
+      message: '尚未輸入完整上架訊息',
+      type: 'warning',
+    })
+  }
+  else{
+    const part = price.value.split('/');
+    productPrice.value = part[0];
+    unit.value = part[1];
+
+    console.log(form.value);
+
+    form.append('price', productPrice.value);
+    form.append('product_describe', content.value);
+    form.append('product_name', name.value);
+    form.append('supplier_name', supplier.value);
+    form.append('unit', unit.value);
+
+    const response = await fetch(`/api/product`, {
+      method: "POST",
+      headers: {
+        // 'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${store.state.manager.token}`,
+      },
+      body:form,
     });
+    clearAll();
+    console.log(response);
+    ElMessage({
+      message: '已成功新增商品',
+      type: 'success',
+    });  
+    
+  }
+  
   };
 
-  const deleteAll = () => {
-    formVisible.value = false;
+  const clearAll = () =>{
+    name.value = "";
+    price.value = "";
+    supplier.value = "";
+    file.value = "";
+    content.value = "";
+    endDate.value = "";
+  }
+const deleteAll = () => {
+  formVisible.value = false; 
 
-    setTimeout(() => {
-      name.value = "";
-      price.value = "";
-      supplier.value = "";
-      file.value = "";
-      content.value = "";
-      endDate.value = "";
+  setTimeout(() => {
+    name.value = "";
+    price.value = "";
+    supplier.value = "";
+    file.value = "";
+    content.value = "";
+    endDate.value = "";
 
-      formVisible.value = true;
-    }, 500);
-  };
+    formVisible.value = true;
+  }, 500); 
+};
 
-  const handleBeforeLeave = (el) => {
-    el.style.opacity = 1;
-  };
+const handleBeforeLeave = (el) => {
+  el.style.opacity = 1;
+};
 
-  const submit = () => {
-    console.log(encodeFile);
-  };
+const isNull = () => {
+  if(name.value == "" || price.value == "" || supplier.value == "" || file.value == [] || content.value == "" || endDate.value == ""){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+// const submit = () =>{
+//   console.log(encodeFile);
+// };
+
 </script>
 
 <style scoped>

@@ -1,5 +1,6 @@
 import { formatOrder, changeDate } from "../utils";
-
+import { base64ToBlob, getImgURL } from "../utils";
+import { Base64 } from "js-base64";
 const state = {
   items: [],
   orders: [],
@@ -69,6 +70,7 @@ const mutations = {
     state.userPhone = userPhone;
   },
   setItems(state, items) {
+
     items.forEach((item) => {
       try {
         let decodedImage = atob(item.product_picture);

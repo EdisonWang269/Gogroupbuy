@@ -100,15 +100,22 @@
   const currItemName = computed(
     () => store.state.manager.currItem.product_name
   );
+  
+  const formatDate = () =>{
 
-  const formateDate = () => {
     const receive = computed(() => store.state.manager.currItem.statement_date);
-    const unformattedDate = new Date(receive);
-    const formatted = String(unformattedDate.value);
-    return formatted;
-  };
-  const endDate = formateDate();
+    const unformattedDate = new Date(receive.value);
+    // const formatted = unformattedDate.value;
 
+    const year = unformattedDate.getFullYear();
+    const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // 月份从0开始，因此需要+1
+    const day = String(unformattedDate.getDate()).padStart(2, '0');
+
+    const formatted = `${year}/${month}/${day}`;
+    return formatted;
+  }
+  const endDate = computed(formatDate);
+  
   const customerName = computed(() => {
     const names = new Set();
     store.state.manager.orders
