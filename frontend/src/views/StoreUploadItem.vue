@@ -49,7 +49,7 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ElMessage } from 'element-plus'
 import StoreButton from '../components/StoreButton.vue';
 
@@ -65,21 +65,6 @@ const endDate = ref("");
 const formVisible = ref(true);
 const unit = ref("");
 const form= new FormData();
-
-//const onfile = (event) => {
-  //  const file = event.target.files[0];
-  //  const fileReader = new FileReader();
-
-  //  fileReader.readAsDataURL(file);
-  //  fileReader.addEventListener("load", () => {
-  //    const mimeType = file.type;
-  //    const base64Data = fileReader.result.split(",")[1];
-  //    const encodedFile = `data:${mimeType};base64,${base64Data}`; // 添加 MIME 類型前綴
-
-  //    encodeFile.value = encodedFile;
-  //  });
-  //};
-
 
 const onfile = (event) =>{
   file.value = event.target.files[0];
@@ -107,7 +92,7 @@ const uploadProduct = async () => {
     form.append('supplier_name', supplier.value);
     form.append('unit', unit.value);
 
-    const response = await fetch(`/api/product`, {
+    const response1 = await fetch(`/api/product`, {
       method: "POST",
       headers: {
         // 'Content-Type': 'multipart/form-data',
@@ -116,11 +101,39 @@ const uploadProduct = async () => {
       body:form,
     });
     clearAll();
-    console.log(response);
+    console.log(response1);
     ElMessage({
       message: '已成功新增商品',
       type: 'success',
     });  
+
+    const response = await fetch(`/api/product/product_name`, {
+      headers: {
+        Authorization: `Bearer ${store.state.manager.token}`,
+      },
+    });
+    const dataUnload = await response.json();
+    store.commit("manager/setUnloadItems", dataUnload);
+
+    const item = computed(() => {
+      const items = store.state.manager.unloadItems;
+      return items.length > 0 ? items[items.length - 1] : null;
+    });
+    console.log(item);
+
+    const response2 = await fetch(`/api/product/ontheshelves`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${store.state.manager.token}`,
+      },
+      body: JSON.stringify({
+        launch_date: new Date(),
+        product_id: item.value.product_id,
+        statement_date: endDate.value,
+      })  
+    });
+    const data = await response2.json();
+    console.log(data);
     
   }
   

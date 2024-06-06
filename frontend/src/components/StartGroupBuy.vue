@@ -3,10 +3,25 @@
     <div class="card">
       <h3>選擇團購商品</h3>
       <div class="products">
-        <div v-for="item in props.items" :key="item.order_id">
-          <span>{{ item.product_name }}</span>
-          <el-checkbox checked="checked" size="large" class="checkbox" />
-        </div>
+        <el-col :span="8">
+      <el-dropdown trigger="click">
+        <span class="el-dropdown-link">
+          選擇上架團購商品<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item v-for="item in items" :key="item.id" @click="setItem(item.product_name, item.product_id)">{{ item.product_name }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </el-col>
+        <el-date-picker
+            v-model="date"
+            type="date"
+            placeholder="Select date and time"
+            class="datePicker"
+          />
+
       </div>
 
       <div class="buttons">
@@ -30,26 +45,34 @@
 </template>
 
 <script setup>
-  import { ref, defineProps, defineEmits } from "vue";
+  import { ref, defineProps, defineEmits, computed } from "vue";
   import StoreButton from "./StoreButton.vue";
-  const emit = defineEmits(["isCanceled", "isChecked", "check"]);
-  const props = defineProps(["items"]);
-  
+  import { useStore } from "vuex";
 
+  const store = useStore();
+  const emit = defineEmits(["isCanceled", "isChecked", "check"]);
+  const items = computed(() => store.state.manager.unloadItems);
+
+  const item = {
+    itemName: "",
+    id: "",
+  }
+  const date = ref("");
+  
   const products = ref("");
   const checked = ref(false);
 
-  const getProducts = () => {
-    const checked = props.items.filter((item) => item.status === true);
+  // const getProducts = () => {
+  //   const checked = props.items.filter((item) => item.status === true);
 
-    products.value = checked
-      .map((check, index) => {
-        return index === 0
-          ? `「${check.itemName}」`
-          : `、「${check.itemName}」`;
-      })
-      .join("");
-  };
+  //   products.value = checked
+  //     .map((check, index) => {
+  //       return index === 0
+  //         ? `「${check.itemName}」`
+  //         : `、「${check.itemName}」`;
+  //     })
+  //     .join("");
+  // };
 
   const closed = () => {
     emit("isClosed", false);
@@ -61,12 +84,26 @@
   };
 
   const check = () => {
-    getProducts();
+    // getProducts();
     checked.value = true;
   };
 
-  const confirm = () => {
+  const confirm = async () => {
     closed();
+    // const response = await fetch(`/api/product/ontheshelves`, {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization: `Bearer ${store.state.manager.token}`,
+    //   },
+    //   body: JSON.stringify({
+    //     launch_date: new Date(),
+    //     product_id: item.id,
+    //     statement_date: date.value,
+    //   })  
+    // });
+    // const data = await response.json();
+    // store.commit("manager/setUnloadItems", data);
+    // console.log(store.state.manager.unloadItems);
   };
 </script>
 

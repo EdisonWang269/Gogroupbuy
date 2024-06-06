@@ -102,9 +102,17 @@
     isSubMenuOn.value = false;
     store.commit("manager/setStep", "銷售數據");
   };
-  const startGroupBuy = () => {
+  const startGroupBuy = async () => {
     isSubMenuOn.value = false;
     emit("start", true);
+    const response = await fetch(`/api/product/product_name`, {
+      headers: {
+        Authorization: `Bearer ${store.state.manager.token}`,
+      },
+    });
+    const data = await response.json();
+    store.commit("manager/setUnloadItems", data);
+    console.log(store.state.manager.unloadItems);
   };
 </script>
 
