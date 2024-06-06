@@ -877,16 +877,20 @@ def get_all_groupbuying_products_by_storeid():
       - APIKeyHeader: []
     responses:
       200:
-        description: Get all groupbuying products by storeid successfully
+        description: Get all product_name by storeid successfully
         schema:
           type: object
           properties:
             product_name:
               type: string
               example: 衣服
+            product_id:
+              type: int
+              example: 1
         examples:
           application/json:
             product_name: 衣服
+            product_id: 1
       403:
         description: 權限不足
         schema:
@@ -905,7 +909,7 @@ def get_all_groupbuying_products_by_storeid():
           properties:
             message:
               type: string
-              example: Fail to get all groupbuying products by store_id
+              example: Fail to get all product_name by store_id
     """
     identity = get_jwt_identity()
     store_id = identity.get("store_id")
@@ -932,4 +936,4 @@ def get_all_groupbuying_products_by_storeid():
               "product_id" : product[1]
               })
         return jsonify(data), 200
-    return jsonify({"message": "Fail to get all groupbuying products by store_id"}), 404
+    return jsonify({"message": "Fail to get all product_name by store_id"}), 404
