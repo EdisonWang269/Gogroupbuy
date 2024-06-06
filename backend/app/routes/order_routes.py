@@ -129,17 +129,6 @@ def get_all_orders_by_userid(userid):
               due_date: 2021-06-02
               receive_status: 1
               product_picture: product2.jpg
-      403:
-          description: 權限不足
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: 權限不足
-          examples:
-            application/json:
-              message: 權限不足
       404:
         description: Fail to get all orders by userid
         schema:
@@ -155,11 +144,6 @@ def get_all_orders_by_userid(userid):
     try:
         identity = get_jwt_identity()
         store_id = identity.get("store_id")
-
-        # claims = get_jwt()
-        # role = claims["role"]
-        # if role != 'merchant':
-        #     return jsonify({"message":"權限不足"}), 403
 
         query = """
                   SELECT 
@@ -188,7 +172,6 @@ def get_all_orders_by_userid(userid):
                 arrival_date = order[1]
                 due_days = order[2]
 
-                # TODO: 測試資料欄位填寫不完整
                 if due_days is not None:
                     due_date = arrival_date + datetime.timedelta(days=due_days)
                 else:
@@ -329,7 +312,11 @@ def get_all_orders_by_phone(phone):
         for order in orders:
             arrival_date = order[5]
             due_days = order[6]
-            due_date = arrival_date + datetime.timedelta(days=due_days)
+            if due_days is not None:
+                due_date = arrival_date + datetime.timedelta(days=due_days)
+            else:
+                due_date = None
+            # due_date = arrival_date + datetime.timedelta(days=due_days)
             data.append(
                 {
                     "user_name": order[0],
@@ -343,7 +330,6 @@ def get_all_orders_by_phone(phone):
         return jsonify(data), 200
 
     return jsonify({"message": "Fail to get all orders by phone"}), 404
-
 
 # 給storeid回傳所有Order
 @order_bp.route("/api/order", methods=["GET"])
@@ -465,7 +451,6 @@ def get_order_by_storeid():
                 arrival_date = order[2]
                 due_days = order[3]
 
-                # TODO: 測試資料欄位填寫不完整
                 if due_days is not None:
                     due_date = arrival_date + datetime.timedelta(days=due_days)
                 else:
@@ -485,7 +470,6 @@ def get_order_by_storeid():
             return jsonify(data), 200
     except Exception as e:
         return jsonify({"message": str(e)}), 404
-
 
 # 一鍵通知該團購所有未取貨的顧客
 @order_bp.route("/api/order/notify/<int:group_buying_id>", methods=["GET"])
@@ -567,7 +551,11 @@ def get_userid_by_group_buying_id(group_buying_id):
         quantity = result[3]
         arrival_date = result[4]
         due_days = result[5]
-        due_date = arrival_date + datetime.timedelta(days=due_days)
+        if due_days is not None:
+            due_date = arrival_date + datetime.timedelta(days=due_days)
+        else:
+            due_date = None
+        # due_date = arrival_date + datetime.timedelta(days=due_days)
         message = f"您訂購的{product_name}已到貨，請備妥${price*quantity}，於{due_date}前來店內取貨，謝謝。"
 
         send_message(userid, message)

@@ -84,14 +84,10 @@ def get_all_products_by_storeid():
         data = []
         if products:
             for product in products:
-                # 將LONGBLOB數據轉換為Base64字符串，用utf-8編碼
                 if product[7]:
-                    product_picture_base64 = base64.b64encode(product[7]).decode(
-                        "utf-8"
-                    )
+                    product_picture_base64 = base64.b64encode(product[7]).decode("utf-8")
                 else:
                     product_picture_base64 = None
-
                 data.append(
                     {
                         "group_buying_id": product[0],
