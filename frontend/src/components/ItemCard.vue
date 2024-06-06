@@ -1,6 +1,12 @@
 <template>
   <div class="card">
-    <img :src="product_picture" alt="image" class="card-img-top" />
+    <div class="wrapper">
+      <div class="imgContainer">
+        <img :src="product_picture" alt="image" class="card-img-top" />
+      </div>
+    </div>
+    
+    
     <div class="card-body">
       <p class="card-title">{{ product_name }}</p>
       <p class="card-text">
@@ -32,13 +38,24 @@
     border-radius: 20px;
     border: none;
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);
+    /* text-align: center; */
   }
-
+  .wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .imgContainer{
+    width: 120px;
+    height: 120px;
+    
+  }
   .card-img-top {
     margin: 5% auto -3%;
-    width: 90%;
-    height: auto;
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
+    object-fit: cover;
   }
 
   .card-body {

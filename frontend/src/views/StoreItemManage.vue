@@ -6,7 +6,7 @@
     :type="type"
     :customerName="customerName"
     @isCanceled="cancel"
-    @check="setEndDate"
+    @check="checkAction"
     @isChecked="check"
     v-show="popShow"
   />
@@ -17,7 +17,7 @@
         <h1>{{ currItemName }}</h1>
         <span
           >結單日期：{{ endDate }}
-          <!-- <i class="bi bi-pencil" @click="editDate"></i> -->
+          <i class="bi bi-pencil" @click="editDate"></i>
         </span>
       </div>
 
@@ -124,11 +124,11 @@
     return Array.from(names);
   });
 
-  // const editDate = () => {
-  //   topic.value = "更改結單日期";
-  //   popShow.value = true;
-  //   type.value = "editDate";
-  // };
+  const editDate = () => {
+    topic.value = "更改結單日期";
+    popShow.value = true;
+    type.value = "editDate";
+  };
   const notify = (value) => {
     if (typeof value === "string") {
       topic.value = "通知";
@@ -148,11 +148,62 @@
   const check = (value) => {
     popShow.value = value;
   };
-  const setEndDate = (date) => {
-    console.log(date);
-    if (date != "") {
-      endDate.value = date;
+  const checkAction = async (updated) => {
+    if(type.value === "addCus"){
+      const response = await fetch(`/api/product/instore_shopping/${store.state.manager.currItem.product_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${store.state.manager.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        instore_purchase_quantity: updated,
+      }),
+    });
+    console.log(response);
+    } else if(type.value === "endOrder"){
+      const response = await fetch(`/api/product/${store.state.manager.currItem.product_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${store.state.manager.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cost: updated[0],
+        purchase_quantity: updated[1],
+      }),
+    });
+    console.log(updated[0]+ " "+ updated[1]);
+    console.log(response);
+    } else if (type.value === "arriveManage"){
+      const response = await fetch(`/api/product/arrival/${store.state.manager.currItem.product_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${store.state.manager.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        arrival_date: updated[0],
+        due_days: updated[1],
+      }),
+    });
+    console.log(updated[0]+ " "+ updated[1]);
+    console.log(response);
+    }else if (type.value === "editDate"){
+      const response = await fetch(`/api/product/changedate/${store.state.manager.currItem.product_id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${store.state.manager.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        new_statement_date: updated
+      }),
+    });
+    console.log(updated);
+    console.log(response);
     }
+    
   };
   const addCustomer = () => {
     topic.value = "增加現場購買顧客";

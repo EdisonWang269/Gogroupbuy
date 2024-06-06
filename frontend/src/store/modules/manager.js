@@ -65,7 +65,7 @@ const actions = {
       headers: {
         Authorization: `Bearer ${state.token}`,
       },
-    });
+    });``
     const data = await response.json();
     commit("setItems", data);
     commit("setCurrItem", data[0]);

@@ -34,6 +34,7 @@
   import StoreButton from "./StoreButton.vue";
   const emit = defineEmits(["isCanceled", "isChecked", "check"]);
   const props = defineProps(["items"]);
+  
 
   const products = ref("");
   const checked = ref(false);

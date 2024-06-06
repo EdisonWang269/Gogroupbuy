@@ -9,8 +9,10 @@
         <br /><b>{{ dueDate }} </b> <br />訂單狀態：<br /><b>{{ status }}</b>
       </p>
     </div>
-
-    <img :src="product_picture" class="card-img-top" alt="image" />
+    <div class="imgContainer">
+      <img :src="product_picture" class="card-img-top" alt="image" />
+    </div>
+    
   </div>
 </template>
 
@@ -33,6 +35,12 @@
     box-shadow: 0px 3px 8px 2px rgba(180, 180, 180, 0.5);
     /* max-height: 200px; */
   }
+  .imgContainer{
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+  
   .card-body {
     flex: 1;
     padding: 0;
@@ -48,7 +56,8 @@
 
   img {
     width: 50%;
-    height: auto;
+    height: 80%;
+    object-fit: cover;
   }
 
   .card-title span {
