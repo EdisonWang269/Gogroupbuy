@@ -120,20 +120,6 @@ const uploadProduct = async () => {
       return items.length > 0 ? items[items.length - 1] : null;
     });
     console.log(item);
-
-    const response2 = await fetch(`/api/product/ontheshelves`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${store.state.manager.token}`,
-      },
-      body: JSON.stringify({
-        launch_date: new Date(),
-        product_id: item.value.product_id,
-        statement_date: endDate.value,
-      })  
-    });
-    const data = await response2.json();
-    console.log(data);
     
   }
   
