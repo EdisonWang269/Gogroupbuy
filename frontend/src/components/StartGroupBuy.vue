@@ -80,7 +80,9 @@
         })  
       });
       console.log(response);
-      console.log("Date:" + new Date() + " product_id:" + item.value.product_id + " statement_date:" + props.date);
+      await store.dispatch('manager/fetchItems');
+      await store.dispatch('manager/fetchOrders');
+      await store.dispatch('user/fetchItems');
     } else {
       console.error('No item available to post');
     }
