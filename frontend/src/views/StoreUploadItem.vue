@@ -1,5 +1,5 @@
 <template>
-  <start-group-buy v-show="checked" :item="item" :date="endDate" @isClosed="close"></start-group-buy>
+  <start-group-buy v-if="checked" :date="endDate" @isClosed="close"></start-group-buy>
   <div class="all">
     <div class="header">
       <h1>上架商品</h1>
@@ -62,11 +62,10 @@ const price = ref("");
 const supplier = ref("");
 const file = ref([]);
 const content = ref("");
-const endDate = ref("");
+const endDate = ref();
 const formVisible = ref(true);
 const unit = ref("");
 const form= new FormData();
-const item = ref({});
 
 const onfile = (event) =>{
   file.value = event.target.files[0];
@@ -106,21 +105,8 @@ const uploadProduct = async () => {
       body:form,
     });
     console.log(response1);
+    await store.dispatch('manager/fetchUnloadItems');
     
-    //獲取商品 id 跟名字
-    const response = await fetch(`/api/product/product_name`, {
-      headers: {
-        Authorization: `Bearer ${store.state.manager.token}`,
-      },
-    });
-    const dataUnload = await response.json();
-    store.commit("manager/setUnloadItems", dataUnload);
-
-    item.value = computed(() => {
-      const items = store.state.manager.unloadItems;
-      return items.length > 0 ? items[items.length - 1] : null;
-    });
-    console.log(item.value);
   }
   };
 
