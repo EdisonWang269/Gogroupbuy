@@ -47,12 +47,12 @@
             </template>
           </el-menu-item>
 
-          <el-menu-item index="5" @click="startGroupBuy">
+          <!-- <el-menu-item index="5" @click="startGroupBuy">
             <template #title>
               <i class="bi bi-star-fill"></i>
               <span>開啟團購</span>
             </template>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-col>
     </el-row>

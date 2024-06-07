@@ -1,5 +1,5 @@
 <template>
-  <start-group-buy v-show="checked" :item="item"></start-group-buy>
+  <start-group-buy v-show="checked" :item="item" :date="endDate" @isClosed="close"></start-group-buy>
   <div class="all">
     <div class="header">
       <h1>上架商品</h1>
@@ -61,7 +61,6 @@ const productPrice = ref("");
 const price = ref("");
 const supplier = ref("");
 const file = ref([]);
-const encodeFile = ref();
 const content = ref("");
 const endDate = ref("");
 const formVisible = ref(true);
@@ -72,7 +71,6 @@ const item = ref({});
 const onfile = (event) =>{
   file.value = event.target.files[0];
   form.append('photo', file.value);  // return form;
-  
 };
 
 const checked = ref(false);
@@ -93,14 +91,12 @@ const uploadProduct = async () => {
     productPrice.value = part[0];
     unit.value = part[1];
 
-    console.log(form.value);
-
     form.append('price', productPrice.value);
     form.append('product_describe', content.value);
     form.append('product_name', name.value);
     form.append('supplier_name', supplier.value);
     form.append('unit', unit.value);
-
+    //新增商品
     const response1 = await fetch(`/api/product`, {
       method: "POST",
       headers: {
@@ -109,13 +105,9 @@ const uploadProduct = async () => {
       },
       body:form,
     });
-    clearAll();
     console.log(response1);
-    ElMessage({
-      message: '已成功新增商品',
-      type: 'success',
-    });  
-
+    
+    //獲取商品 id 跟名字
     const response = await fetch(`/api/product/product_name`, {
       headers: {
         Authorization: `Bearer ${store.state.manager.token}`,
@@ -130,7 +122,6 @@ const uploadProduct = async () => {
     });
     console.log(item.value);
   }
-  
   };
 
   const clearAll = () =>{
@@ -148,7 +139,7 @@ const deleteAll = () => {
     name.value = "";
     price.value = "";
     supplier.value = "";
-    file.value = "";
+    file.value = [];
     content.value = "";
     endDate.value = "";
 
@@ -169,9 +160,10 @@ const isNull = () => {
   }
 }
 
-// const submit = () =>{
-//   console.log(encodeFile);
-// };
+const close = (value) =>{
+  checked.value = value;
+  clearAll();
+};
 
 </script>
 

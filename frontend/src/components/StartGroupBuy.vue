@@ -3,12 +3,12 @@
     <div class="subOverlay">
       <div class="subCard">
         <h3>團購確認</h3>
-        <span>已開啟團購</span>
+        <span>是否確認上架？</span>
         <!-- <div>{{ products }}</div> -->
 
         <div class="buttons">
           <store-button :action="'確認'" class="button" @click="confirm" />
-          <button class="buttonCancel" @click="closeSub">取消</button>
+          <button class="buttonCancel" @click="closed">取消</button>
         </div>
       </div>
     </div>
@@ -19,52 +19,39 @@
   import { ref, defineProps, defineEmits, computed } from "vue";
   import StoreButton from "./StoreButton.vue";
   import { useStore } from "vuex";
+  import { ElMessage } from "element-plus";
 
   const store = useStore();
   const emit = defineEmits(["isCanceled", "isChecked", "check"]);
-  const props = defineProps(["item"]);
-  // const items = computed(() => store.state.manager.unloadItems);
-
-  // const item =  {
-  //   itemName: items.value[items.value.length-1].product_name,
-  //   id: items.value[items.value.length-1].product_id,
-  // }
-  const date = ref("");
-  
-  // const products = ref("");
+  const props = defineProps(["item", "date"]);
   const checked = ref(false);
 
   const closed = () => {
     emit("isClosed", false);
-    closeSub();
-  };
-
-  const closeSub = () => {
-    checked.value = false;
-  };
-
-  const check = () => {
-    // getProducts();
-    checked.value = true;
   };
 
   const confirm = async () => {
+    ElMessage({
+      message: '已成功新增商品',
+      type: 'success',
+    }); 
     closed();
+    emit("checked", false);
     console.log(props.item);
     const response = await fetch(`/api/product/ontheshelves`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${store.state.manager.token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        launch_date: new Date(),
+        launch_date: new Date().toUTCString(),
         product_id: props.item.value.id,
-        statement_date: date.value,
+        statement_date: props.date.value,
       })  
     });
-    const data = await response.json();
-    store.commit("manager/setUnloadItems", data);
-    console.log(store.state.manager.unloadItems);
+    console.log(response);
+    console.log("Date:" + new Date()+"product_id:"+ props.item.value.id+"statement_date:"+ props.date.value,);
   };
 </script>
 
