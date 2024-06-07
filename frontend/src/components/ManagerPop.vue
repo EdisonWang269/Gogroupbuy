@@ -148,6 +148,7 @@
         else if(props.type === "arriveManage"){
           emit("check", [arriveDate.value, dueDays.value]);
         }
+
       };
 
       const notify = () => {
