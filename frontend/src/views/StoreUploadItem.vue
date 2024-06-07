@@ -1,5 +1,5 @@
 <template>
-  <start-group-buy v-show="checked"></start-group-buy>
+  <start-group-buy v-show="checked" :item="item"></start-group-buy>
   <div class="all">
     <div class="header">
       <h1>上架商品</h1>
@@ -67,6 +67,7 @@ const endDate = ref("");
 const formVisible = ref(true);
 const unit = ref("");
 const form= new FormData();
+const item = ref({});
 
 const onfile = (event) =>{
   file.value = event.target.files[0];
@@ -123,7 +124,7 @@ const uploadProduct = async () => {
     const dataUnload = await response.json();
     store.commit("manager/setUnloadItems", dataUnload);
 
-    const item = computed(() => {
+    item.value = computed(() => {
       const items = store.state.manager.unloadItems;
       return items.length > 0 ? items[items.length - 1] : null;
     });

@@ -22,15 +22,16 @@
 
   const store = useStore();
   const emit = defineEmits(["isCanceled", "isChecked", "check"]);
-  const items = computed(() => store.state.manager.unloadItems);
+  const props = defineProps(["item"]);
+  // const items = computed(() => store.state.manager.unloadItems);
 
-  const item =  {
-    itemName: items.value[items.value.length-1].product_name,
-    id: items.value[items.value.length-1].product_id,
-  }
+  // const item =  {
+  //   itemName: items.value[items.value.length-1].product_name,
+  //   id: items.value[items.value.length-1].product_id,
+  // }
   const date = ref("");
   
-  const products = ref("");
+  // const products = ref("");
   const checked = ref(false);
 
   const closed = () => {
@@ -49,7 +50,7 @@
 
   const confirm = async () => {
     closed();
-    console.log(items);
+    console.log(props.item);
     const response = await fetch(`/api/product/ontheshelves`, {
       method: "POST",
       headers: {
@@ -57,7 +58,7 @@
       },
       body: JSON.stringify({
         launch_date: new Date(),
-        product_id: item.id,
+        product_id: props.item.value.id,
         statement_date: date.value,
       })  
     });
