@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-  import { ref, defineEmits, computed } from "vue";
+  import { ref, defineEmits, computed, watch } from "vue";
   import { useStore } from "vuex";
   import { useRouter } from "vue-router";
 
@@ -73,6 +73,12 @@
   const managerName = ref("賴巧忍");
   const managerMail = ref("choco@gmail.com");
   const items = computed(() => store.getters["manager/getItems"]);
+
+  watch(items, (newItems) => {
+    if (items.value !== newItems) {
+      items.value = [...newItems]; 
+    } 
+  }, { immediate: true });
 
   const toItem = (item) => {
     isSubMenuOn.value = true;
