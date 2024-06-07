@@ -1,4 +1,5 @@
 <template>
+  <start-group-buy v-show="checked"></start-group-buy>
   <div class="all">
     <div class="header">
       <h1>上架商品</h1>
@@ -52,6 +53,7 @@ import { useStore } from 'vuex';
 import { computed, ref } from 'vue';
 import { ElMessage } from 'element-plus'
 import StoreButton from '../components/StoreButton.vue';
+import StartGroupBuy from '@/components/StartGroupBuy.vue';
 
 const store = useStore();
 const name = ref("");
@@ -72,6 +74,11 @@ const onfile = (event) =>{
   
 };
 
+const checked = ref(false);
+const check = () =>{
+  checked.value = true;
+}
+
 const uploadProduct = async () => {
   if(isNull()){
     ElMessage({
@@ -80,6 +87,7 @@ const uploadProduct = async () => {
     })
   }
   else{
+    check();
     const part = price.value.split('/');
     productPrice.value = part[0];
     unit.value = part[1];
@@ -119,8 +127,7 @@ const uploadProduct = async () => {
       const items = store.state.manager.unloadItems;
       return items.length > 0 ? items[items.length - 1] : null;
     });
-    console.log(item);
-    
+    console.log(item.value);
   }
   
   };
