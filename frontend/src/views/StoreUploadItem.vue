@@ -1,4 +1,5 @@
 <template>
+  <start-group-buy v-show="checked" :item="item" :date="endDate" @isClosed="close"></start-group-buy>
   <div class="all">
     <div class="header">
       <h1>上架商品</h1>
@@ -49,9 +50,10 @@
 
 <script setup>
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { ElMessage } from 'element-plus'
 import StoreButton from '../components/StoreButton.vue';
+import StartGroupBuy from '@/components/StartGroupBuy.vue';
 
 const store = useStore();
 const name = ref("");
@@ -59,33 +61,22 @@ const productPrice = ref("");
 const price = ref("");
 const supplier = ref("");
 const file = ref([]);
-const encodeFile = ref();
 const content = ref("");
 const endDate = ref("");
 const formVisible = ref(true);
 const unit = ref("");
 const form= new FormData();
-
-//const onfile = (event) => {
-  //  const file = event.target.files[0];
-  //  const fileReader = new FileReader();
-
-  //  fileReader.readAsDataURL(file);
-  //  fileReader.addEventListener("load", () => {
-  //    const mimeType = file.type;
-  //    const base64Data = fileReader.result.split(",")[1];
-  //    const encodedFile = `data:${mimeType};base64,${base64Data}`; // 添加 MIME 類型前綴
-
-  //    encodeFile.value = encodedFile;
-  //  });
-  //};
-
+const item = ref({});
 
 const onfile = (event) =>{
   file.value = event.target.files[0];
   form.append('photo', file.value);  // return form;
-  
 };
+
+const checked = ref(false);
+const check = () =>{
+  checked.value = true;
+}
 
 const uploadProduct = async () => {
   if(isNull()){
@@ -95,19 +86,18 @@ const uploadProduct = async () => {
     })
   }
   else{
+    check();
     const part = price.value.split('/');
     productPrice.value = part[0];
     unit.value = part[1];
-
-    console.log(form.value);
 
     form.append('price', productPrice.value);
     form.append('product_describe', content.value);
     form.append('product_name', name.value);
     form.append('supplier_name', supplier.value);
     form.append('unit', unit.value);
-
-    const response = await fetch(`/api/product`, {
+    //新增商品
+    const response1 = await fetch(`/api/product`, {
       method: "POST",
       headers: {
         // 'Content-Type': 'multipart/form-data',
@@ -115,15 +105,23 @@ const uploadProduct = async () => {
       },
       body:form,
     });
-    clearAll();
-    console.log(response);
-    ElMessage({
-      message: '已成功新增商品',
-      type: 'success',
-    });  
+    console.log(response1);
     
+    //獲取商品 id 跟名字
+    const response = await fetch(`/api/product/product_name`, {
+      headers: {
+        Authorization: `Bearer ${store.state.manager.token}`,
+      },
+    });
+    const dataUnload = await response.json();
+    store.commit("manager/setUnloadItems", dataUnload);
+
+    item.value = computed(() => {
+      const items = store.state.manager.unloadItems;
+      return items.length > 0 ? items[items.length - 1] : null;
+    });
+    console.log(item.value);
   }
-  
   };
 
   const clearAll = () =>{
@@ -141,7 +139,7 @@ const deleteAll = () => {
     name.value = "";
     price.value = "";
     supplier.value = "";
-    file.value = "";
+    file.value = [];
     content.value = "";
     endDate.value = "";
 
@@ -162,9 +160,10 @@ const isNull = () => {
   }
 }
 
-// const submit = () =>{
-//   console.log(encodeFile);
-// };
+const close = (value) =>{
+  checked.value = value;
+  clearAll();
+};
 
 </script>
 

@@ -8,10 +8,10 @@ import "bootstrap";
 import { initializeLiff } from "./liff";
 import store from "./store";
 import { Base64 } from "js-base64";
-const app = createApp(App);
+// const app = createApp(App);
 
 
-initializeLiff().then(() => {
+// initializeLiff().then(() => {
   // Create Vue app after LIFF initialization
   const app = createApp(App);
   app.use(store);
@@ -24,4 +24,4 @@ initializeLiff().then(() => {
 //   .then(() => {})
 //   .catch((error) => {
 //     console.error("Failed to initialize LIFF", error);
-});
+// });

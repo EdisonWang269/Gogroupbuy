@@ -60,25 +60,6 @@
 
     <item-table @singleNotify="notify($event)" :searchInput="searchInput" />
 
-    <!-- <div class="pages">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </div> -->
   </div>
 </template>
 
@@ -101,12 +82,9 @@
     () => store.state.manager.currItem.product_name
   );
   
-  const formatDate = () =>{
-
-    const receive = computed(() => store.state.manager.currItem.statement_date);
-    const unformattedDate = new Date(receive.value);
-    // const formatted = unformattedDate.value;
-
+  const receive = computed(() => store.state.manager.currItem.statement_date);
+  const formatDate = (date) =>{
+    const unformattedDate = new Date(date);
     const year = unformattedDate.getFullYear();
     const month = String(unformattedDate.getMonth() + 1).padStart(2, '0'); // 月份从0开始，因此需要+1
     const day = String(unformattedDate.getDate()).padStart(2, '0');
@@ -114,7 +92,9 @@
     const formatted = `${year}/${month}/${day}`;
     return formatted;
   }
-  const endDate = computed(formatDate);
+  const endDate = computed(() => {
+      return formatDate(receive.value);
+  });
   
   const customerName = computed(() => {
     const names = new Set();
@@ -190,6 +170,8 @@
     console.log(updated[0]+ " "+ updated[1]);
     console.log(response);
     }else if (type.value === "editDate"){
+      endDate.value = formatDate(updated);
+
       const response = await fetch(`/api/product/changedate/${store.state.manager.currItem.product_id}`, {
       method: "PUT",
       headers: {

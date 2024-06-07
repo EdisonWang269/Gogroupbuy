@@ -10,12 +10,15 @@ const state = {
   uncheckedNum: 0,
   step: "商品管理",
   token: "",
-  uploadItem: {},
+  unloadItems: {},
 };
 
 const getters = {
   getItems: (state) => {
     return state.items.map((item) => formatItem(item));
+  },
+  getUnloadItem(state){
+    return state.unloadItems;
   },
 };
 
@@ -41,6 +44,9 @@ const mutations = {
       .filter((order) => order.user_name)
       .map((order) => formatOrder(order));
     state.orders = orders;
+  },
+  setUnloadItems(state, items){
+    state.unloadItems = items;
   },
   setCheckedNum(state) {
     const checkedNum = state.orders.filter(
@@ -69,6 +75,16 @@ const actions = {
     const data = await response.json();
     commit("setItems", data);
     commit("setCurrItem", data[0]);
+  },
+  
+  async fetchUnloadItems({ commit, state }) {
+    const response = await fetch(`/api/product/product_name`, {
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+      },
+    });
+    const data = await response.json();
+    commit("setUnloadItems", data);
   },
 
   async fetchOrders({ commit, state }) {

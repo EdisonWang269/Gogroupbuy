@@ -1,28 +1,14 @@
 <template>
   <div class="overlay">
-    <div class="card">
-      <h3>選擇團購商品</h3>
-      <div class="products">
-        <div v-for="item in props.items" :key="item.order_id">
-          <span>{{ item.product_name }}</span>
-          <el-checkbox checked="checked" size="large" class="checkbox" />
-        </div>
-      </div>
-
-      <div class="buttons">
-        <store-button :action="'確認'" class="button" @click="check" />
-        <button class="buttonCancel" @click="closed">取消</button>
-      </div>
-    </div>
-    <div class="subOverlay" v-show="checked">
+    <div class="subOverlay">
       <div class="subCard">
         <h3>團購確認</h3>
-        <span>已開啟團購</span>
+        <span>是否確認上架？</span>
         <!-- <div>{{ products }}</div> -->
 
         <div class="buttons">
           <store-button :action="'確認'" class="button" @click="confirm" />
-          <button class="buttonCancel" @click="closeSub">取消</button>
+          <button class="buttonCancel" @click="closed">取消</button>
         </div>
       </div>
     </div>
@@ -30,43 +16,42 @@
 </template>
 
 <script setup>
-  import { ref, defineProps, defineEmits } from "vue";
+  import { ref, defineProps, defineEmits, computed } from "vue";
   import StoreButton from "./StoreButton.vue";
+  import { useStore } from "vuex";
+  import { ElMessage } from "element-plus";
+
+  const store = useStore();
   const emit = defineEmits(["isCanceled", "isChecked", "check"]);
-  const props = defineProps(["items"]);
-  
-
-  const products = ref("");
+  const props = defineProps(["item", "date"]);
   const checked = ref(false);
-
-  const getProducts = () => {
-    const checked = props.items.filter((item) => item.status === true);
-
-    products.value = checked
-      .map((check, index) => {
-        return index === 0
-          ? `「${check.itemName}」`
-          : `、「${check.itemName}」`;
-      })
-      .join("");
-  };
 
   const closed = () => {
     emit("isClosed", false);
-    closeSub();
   };
 
-  const closeSub = () => {
-    checked.value = false;
-  };
-
-  const check = () => {
-    getProducts();
-    checked.value = true;
-  };
-
-  const confirm = () => {
+  const confirm = async () => {
+    ElMessage({
+      message: '已成功新增商品',
+      type: 'success',
+    }); 
     closed();
+    emit("checked", false);
+    console.log(props.item);
+    const response = await fetch(`/api/product/ontheshelves`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${store.state.manager.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        launch_date: new Date().toUTCString(),
+        product_id: props.item.value.id,
+        statement_date: props.date.value,
+      })  
+    });
+    console.log(response);
+    console.log("Date:" + new Date()+"product_id:"+ props.item.value.id+"statement_date:"+ props.date.value,);
   };
 </script>
 

@@ -11,6 +11,7 @@ const state = {
   token: "",
   userName: "",
   userImg: "",
+  unloadItems: [],
 };
 
 const getters = {
@@ -62,8 +63,19 @@ const mutations = {
     state.token = token;
   },
   setOrders(state, orders) {
+    
+    orders.forEach((order) => {
+      try {
+        let decodedImage = atob(order.product_picture);
+        let base64Image = "data:image/jpeg;base64," + decodedImage;
+        order.product_picture = base64Image;
+      } catch (e) {
+        console.error("Error decoding base64 string: ", e);
+      }
+    });
     state.orders = orders;
   },
+  
   setUserPhone(state, userPhone) {
     state.userPhone = userPhone;
   },
@@ -80,6 +92,7 @@ const mutations = {
     });
     state.items = items;
   },
+  
   setCurrItemID(state, itemID) {
     state.currItemID = itemID;
   },
@@ -111,6 +124,7 @@ const actions = {
     const data = await response.json();
     commit("setOrders", data);
   },
+
 
   async fetchToken({ commit, state }) {
     const response = await fetch(`/api/user`, {
