@@ -16,15 +16,42 @@
 </template>
 
 <script setup>
-  import { ref, defineProps, defineEmits, computed } from "vue";
+  import { ref, defineProps, defineEmits, computed, watch, onMounted } from "vue";
   import StoreButton from "./StoreButton.vue";
   import { useStore } from "vuex";
   import { ElMessage } from "element-plus";
 
   const store = useStore();
-  const emit = defineEmits(["isCanceled", "isChecked", "check"]);
-  const props = defineProps(["item", "date"]);
-  const checked = ref(false);
+  const emit = defineEmits(["isClosed", "isChecked", "checked"]);
+  const props = defineProps(['date']);
+  
+  const items = computed(() => store.getters["manager/getUnloadItem"]);
+  const item = ref(null);
+
+  const updateItem = () => {
+  if (items.value && items.value.length > 0) {
+    item.value = items.value[items.value.length - 1];
+  } else {
+    item.value = null;
+  }
+};
+
+  const loadItems = async () => {
+    await store.dispatch('manager/fetchUnloadItems');
+    updateItem();
+  };
+
+  onMounted(() => {
+    loadItems();
+  });
+
+  watch(items, (newItems) => {
+    if (newItems.length > 0) {
+      item.value = newItems[newItems.length - 1];
+    } else {
+      item.value = null;
+    }
+  }, { immediate: true });
 
   const closed = () => {
     emit("isClosed", false);
@@ -34,24 +61,29 @@
     ElMessage({
       message: '已成功新增商品',
       type: 'success',
-    }); 
+    });
     closed();
     emit("checked", false);
-    console.log(props.item);
-    const response = await fetch(`/api/product/ontheshelves`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${store.state.manager.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        launch_date: new Date().toUTCString(),
-        product_id: props.item.value.id,
-        statement_date: props.date.value,
-      })  
-    });
-    console.log(response);
-    console.log("Date:" + new Date()+"product_id:"+ props.item.value.id+"statement_date:"+ props.date.value,);
+    console.log(items.value);
+    // 確保 item 不為 null
+    if (item.value) {
+      const response = await fetch(`/api/product/ontheshelves`, {
+        method: "POST",
+        headers: {
+          'Authorization': `Bearer ${store.state.manager.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          launch_date: new Date().toUTCString(),
+          product_id: item.value.product_id,
+          statement_date: props.date ,
+        })  
+      });
+      console.log(response);
+      console.log("Date:" + new Date() + " product_id:" + item.value.product_id + " statement_date:" + props.date);
+    } else {
+      console.error('No item available to post');
+    }
   };
 </script>
 

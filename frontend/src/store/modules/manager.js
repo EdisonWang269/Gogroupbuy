@@ -10,7 +10,7 @@ const state = {
   uncheckedNum: 0,
   step: "商品管理",
   token: "",
-  unloadItems: {},
+  unloadItems: [],
 };
 
 const getters = {

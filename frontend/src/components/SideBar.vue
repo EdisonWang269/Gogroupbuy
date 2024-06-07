@@ -46,13 +46,6 @@
               <span>銷售數據</span>
             </template>
           </el-menu-item>
-
-          <!-- <el-menu-item index="5" @click="startGroupBuy">
-            <template #title>
-              <i class="bi bi-star-fill"></i>
-              <span>開啟團購</span>
-            </template>
-          </el-menu-item> -->
         </el-menu>
       </el-col>
     </el-row>
@@ -101,18 +94,6 @@
   const toChart = () => {
     isSubMenuOn.value = false;
     store.commit("manager/setStep", "銷售數據");
-  };
-  const startGroupBuy = async () => {
-    isSubMenuOn.value = false;
-    emit("start", true);
-    const response = await fetch(`/api/product/product_name`, {
-      headers: {
-        Authorization: `Bearer ${store.state.manager.token}`,
-      },
-    });
-    const data = await response.json();
-    store.commit("manager/setUnloadItems", data);
-    console.log(store.state.manager.unloadItems);
   };
 </script>
 
