@@ -23,6 +23,9 @@ const getters = {
 };
 
 const mutations = {
+  setUpdatedDate(state, updatedDate){
+    state.currItem.statement_date = updatedDate;
+  },
   setOrderStatus(state, payload) {
     const { order_id, status } = payload;
     const index = state.orders.findIndex(
@@ -41,7 +44,7 @@ const mutations = {
   },
   setOrders(state, orders) {
     orders = orders
-      .filter((order) => order.user_name)
+      // .filter((order) => order.user_name)
       .map((order) => formatOrder(order));
     state.orders = orders;
   },

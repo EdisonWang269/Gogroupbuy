@@ -109,6 +109,7 @@
     popShow.value = true;
     type.value = "editDate";
   };
+
   const notify = (value) => {
     if (typeof value === "string") {
       topic.value = "通知";
@@ -137,10 +138,11 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        instore_purchase_quantity: updated,
+        instore_purchase_quantity: parseInt(updated),
       }),
     });
     console.log(response);
+    await store.dispatch("manager/fetchOrders");
     } else if(type.value === "endOrder"){
       const response = await fetch(`/api/product/${store.state.manager.currItem.product_id}`, {
       method: "PUT",
@@ -182,7 +184,7 @@
         new_statement_date: updated
       }),
     });
-    console.log(updated);
+    store.commit("manager/setUpdatedDate", updated);
     console.log(response);
     }
     

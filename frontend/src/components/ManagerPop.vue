@@ -132,7 +132,7 @@
         notify();
         emit("isChecked", false);
         if(props.type === "addCus"){
-            emit("check", addNum);
+            emit("check", addNum.value);
         }
         else if (props.type === "editDate") {
           console.log(props.type);
