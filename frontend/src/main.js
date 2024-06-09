@@ -11,7 +11,7 @@ import { Base64 } from "js-base64";
 // const app = createApp(App);
 
 
-// initializeLiff().then(() => {
+initializeLiff().then(() => {
   // Create Vue app after LIFF initialization
   const app = createApp(App);
   app.use(store);
@@ -24,4 +24,4 @@ import { Base64 } from "js-base64";
 //   .then(() => {})
 //   .catch((error) => {
 //     console.error("Failed to initialize LIFF", error);
-// });
+});

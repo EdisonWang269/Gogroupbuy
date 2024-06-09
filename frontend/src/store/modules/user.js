@@ -2,7 +2,8 @@ import { formatOrder, changeDate } from "../utils";
 const state = {
   items: [],
   orders: [],
-  storeID: "store1",
+  // storeID: "sdf",
+  storeID: "sdf",
   userID: "customer1",
   currItemID: "",
   currItemNum: 0,

@@ -53,6 +53,7 @@
         product_picture: item.value.product_picture,
       }),
     });
+    store.dispatch("manager/fetchOrder");
   };
 </script>
 

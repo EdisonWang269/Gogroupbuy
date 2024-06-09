@@ -15,6 +15,7 @@
             type="date"
             placeholder="Select date and time"
             class="datePicker"
+            :disabled-date="disabledDate"
           />
           <span id="alert" v-show="alertShow">請輸入新的結單日期</span>
         </div>
@@ -117,6 +118,9 @@
       const addNum = ref();
       const store = useStore();
 
+      const disabledDate = (time) =>{
+        return time.getTime() < Date.now() - 8.64e7;
+      }
       const alert = () => {
         if (updated.value == "") {
           alertShow.value = true;
@@ -132,7 +136,7 @@
         notify();
         emit("isChecked", false);
         if(props.type === "addCus"){
-            emit("check", addNum);
+            emit("check", addNum.value);
         }
         else if (props.type === "editDate") {
           console.log(props.type);
@@ -175,6 +179,7 @@
         cost,
         arriveDate,
         dueDays,
+        disabledDate,
       };
     },
   };
