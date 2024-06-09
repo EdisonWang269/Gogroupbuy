@@ -69,6 +69,7 @@
   import StoreButton from "../components/StoreButton.vue";
   import ItemTable from "@/components/ItemTable.vue";
   import ManagerPop from "../components/ManagerPop.vue";
+  import { ElMessage } from 'element-plus';
 
   const store = useStore();
 
@@ -142,6 +143,12 @@
       }),
     });
     console.log(response);
+    if(!response.success) {
+      ElMessage({
+        message: '現場存貨數量不足',
+        type: 'warning',
+    })
+    }
     await store.dispatch("manager/fetchOrders");
     } else if(type.value === "endOrder"){
       const response = await fetch(`/api/product/${store.state.manager.currItem.product_id}`, {

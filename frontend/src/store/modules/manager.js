@@ -1,8 +1,8 @@
 import { formatOrder, formatItem } from "../utils";
 
 const state = {
-  storeID: "store1",
-  userID: "merchant1",
+  storeID: "sdf",
+  userID: "U026def3d18d5a00766ece3255e9eccf8",
   orders: [],
   items: [],
   currItem: {},

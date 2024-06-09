@@ -23,7 +23,7 @@ export const initializeLiff = async () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                store_id: "store1",
+                store_id: store.state.manager.storeID,
                 userid: store.state.user.userID,
               }),
             });
