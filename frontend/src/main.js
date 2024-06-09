@@ -10,18 +10,16 @@ import store from "./store";
 import { Base64 } from "js-base64";
 // const app = createApp(App);
 
-initializeLiff().then(() => {
-  // Create Vue app after LIFF initialization
-  const app = createApp(App);
-  app.use(store);
-  app.use(router);
-  app.use(ElementPlus);
-  app.use(Base64);
-  app.mount("#app");
-
-  initializeLiff()
-    .then(() => {})
-    .catch((error) => {
-      console.error("Failed to initialize LIFF", error);
-    });
-});
+initializeLiff()
+  .then(() => {
+    // Create Vue app after LIFF initialization
+    const app = createApp(App);
+    app.use(store);
+    app.use(router);
+    app.use(ElementPlus);
+    app.use(Base64);
+    app.mount("#app");
+  })
+  .catch((error) => {
+    console.error("Error in initializeLiff:", error);
+  });
