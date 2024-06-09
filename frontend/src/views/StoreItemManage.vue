@@ -69,6 +69,7 @@
   import StoreButton from "../components/StoreButton.vue";
   import ItemTable from "@/components/ItemTable.vue";
   import ManagerPop from "../components/ManagerPop.vue";
+  import { ElMessage } from 'element-plus';
 
   const store = useStore();
 
@@ -109,6 +110,7 @@
     popShow.value = true;
     type.value = "editDate";
   };
+
   const notify = (value) => {
     if (typeof value === "string") {
       topic.value = "通知";
@@ -137,10 +139,17 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        instore_purchase_quantity: updated,
+        instore_purchase_quantity: parseInt(updated),
       }),
     });
     console.log(response);
+    if(!response.success) {
+      ElMessage({
+        message: '現場存貨數量不足',
+        type: 'warning',
+    })
+    }
+    await store.dispatch("manager/fetchOrders");
     } else if(type.value === "endOrder"){
       const response = await fetch(`/api/product/${store.state.manager.currItem.product_id}`, {
       method: "PUT",
@@ -182,7 +191,7 @@
         new_statement_date: updated
       }),
     });
-    console.log(updated);
+    store.commit("manager/setUpdatedDate", updated);
     console.log(response);
     }
     

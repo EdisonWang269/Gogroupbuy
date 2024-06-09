@@ -28,7 +28,13 @@ export function formatOrder(order) {
   if (order.due_date !== "未到貨") {
     order.due_date = changeDate(order.due_date);
   }
-  order.receive_status = changeStatus(order.receive_status);
+  
+  if(order.user_name === null){
+    order.receive_status = "已領取";
+  }
+  else{
+    order.receive_status = changeStatus(order.receive_status);
+  }
   return order;
 }
 
